@@ -1,5 +1,609 @@
 # 算法
 
+## algorithmbasic2020
+
+### class28
+
+#### Manacher
+
+- 链接：https://leetcode.cn/problems/longest-palindromic-substring/description/（类似）
+
+- 内容：
+
+  > 给你一个字符串 `s`，找到 `s` 中最长的 回文子串的长度。
+  >
+  > example:
+  >
+  > ​    babad->bab,aba->3
+
+- 思路：
+
+  > manacher算法：
+  >
+  > ​	将原始字符串的左右加上一个特殊字符标识，如#字符
+  >
+  > ​	将之前的位置的能扩到的位置记下来，即i+R（i为下标，R为回文字符串的最大半径）
+  >
+  > ​	当i与i+R(下面统一用**R**表示)有不同的值时，有下面四种情况：
+  >
+  > ​	1》当i>**R**时，i只要向两侧扩展即可，暴力
+  >
+  > ​	2》当i<**R**时，存在三种情况
+  >
+  > ​		1》当【2*i - C】的左右都在【L，R】中时，i此时的值与【2*i - C】一样，可直接跳过
+  >
+  > ​		2》当【2i-C】的左边超过【L,R】时，i此时至少半径为【R-i】，直接从i+R处开始扩展
+  >
+  > ​        3》当【2i-C】的左边刚好压到L时，i此时半径为【R-i】
+
+- 代码：
+
+  ```java
+  	public static int manacher(String s) {
+  		if (s == null || s.length() == 0) {
+  			return 0;
+  		}
+  		// "12132" -> "#1#2#1#3#2#"
+  		char[] str = manacherString(s);
+  		// 回文半径的大小
+  		int[] pArr = new int[str.length];
+  		int C = -1;
+  		// 讲述中：R代表最右的扩成功的位置
+  		// coding：最右的扩成功位置的，再下一个位置
+  		int R = -1;
+  		int max = Integer.MIN_VALUE;
+  		for (int i = 0; i < str.length; i++) { // 0 1 2
+  			// R第一个违规的位置，i>= R
+  			// i位置扩出来的答案，i位置扩的区域，至少是多大。
+  			pArr[i] = R > i ? Math.min(pArr[2 * C - i], R - i) : 1;
+              // 统一都走这个地方，当不满足时，进去一次就直接跳出了
+  			while (i + pArr[i] < str.length && i - pArr[i] > -1) {
+  				if (str[i + pArr[i]] == str[i - pArr[i]])
+  					pArr[i]++;
+  				else {
+  					break;
+  				}
+  			}
+              // 更新R的值，及使R更新的C的值
+  			if (i + pArr[i] > R) {
+  				R = i + pArr[i];
+  				C = i;
+  			}
+              // 记录最大的回文串的半径长度
+  			max = Math.max(max, pArr[i]);
+  		}
+          // 半径长度-1就等于所求的原回文串的长度
+  		return max - 1;
+  	}
+  
+  	public static char[] manacherString(String str) {
+  		char[] charArr = str.toCharArray();
+  		char[] res = new char[str.length() * 2 + 1];
+  		int index = 0;
+  		for (int i = 0; i != res.length; i++) {
+  			res[i] = (i & 1) == 0 ? '#' : charArr[index++];
+  		}
+  		return res;
+  	}
+  ```
+
+  
+
+#### AddShortestEnd
+
+- 链接：暂无
+
+- 内容：
+
+  > 在给定的任一字符串中的后面加入一个字符串，使得此字符串变成回文字符串。
+  >
+  > 求能使其变成回文的长度最小的字符串为什么？
+
+- 思路：
+
+  > 任意一个字符串，只有回文子串的右边界刚好是最后一个字符时，所有添加的字符串最少
+  >
+  > ab123 ->21ba即可
+  >
+  > 可以将题意转化为求右边界为最后一个字符时的回文子串的回文半径的长度
+  >
+  > manacher算法求
+
+- 代码：
+
+  ```java
+  public static String shortestEnd(String s) {
+  		if (s == null || s.length() == 0) {
+  			return null;
+  		}
+  		char[] str = manacherString(s);
+  		int[] pArr = new int[str.length];
+  		int C = -1;
+  		int R = -1;
+  		int maxContainsEnd = -1;
+  		for (int i = 0; i != str.length; i++) {
+  			pArr[i] = R > i ? Math.min(pArr[2 * C - i], R - i) : 1;
+  			while (i + pArr[i] < str.length && i - pArr[i] > -1) {
+  				if (str[i + pArr[i]] == str[i - pArr[i]])
+  					pArr[i]++;
+  				else {
+  					break;
+  				}
+  			}
+  			if (i + pArr[i] > R) {
+  				R = i + pArr[i];
+  				C = i;
+  			}
+  			if (R == str.length) {
+                  // 当最右压住了最后一个字符时，返回
+  				maxContainsEnd = pArr[i];
+  				break;
+  			}
+  		}
+          // 返回去除原回文半径的长度的长度的子串
+  		char[] res = new char[s.length() - maxContainsEnd + 1];
+          // 将需要添加的字符从回文串的最左侧的上一个逆序添加
+  		for (int i = 0; i < res.length; i++) {
+  			res[res.length - 1 - i] = str[i * 2 + 1];
+  		}
+  		return String.valueOf(res);
+  	}
+  
+  	public static char[] manacherString(String str) {
+  		char[] charArr = str.toCharArray();
+  		char[] res = new char[str.length() * 2 + 1];
+  		int index = 0;
+  		for (int i = 0; i != res.length; i++) {
+  			res[i] = (i & 1) == 0 ? '#' : charArr[index++];
+  		}
+  		return res;
+  	}
+  ```
+
+### class29
+
+#### findMinKth
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个混乱数组，求这个数组中的第k小的数
+
+- 思路：
+
+  > 思路1：全体排序，取第k小，略 O(NlogN)
+  >
+  > 思路2：利用大根堆（小根堆） O(NlogN)
+  >
+  > 思路3：改写快排（递归，迭代） O(N)
+  >
+  > 思路4：bfprt算法（同思路3，不过取flag值使用的是bfprt，使概率随机变成可计算）O(N)
+
+- 代码：
+
+  ```java
+  	public static class MaxHeapComparator implements Comparator<Integer> {
+  
+  		@Override
+  		public int compare(Integer o1, Integer o2) {
+  			return o2 - o1;
+  		}
+  
+  	}
+  
+  	// 利用大根堆，时间复杂度O(N*logK)
+  	public static int minKth1(int[] arr, int k) {
+  		PriorityQueue<Integer> maxHeap = new PriorityQueue<>(new MaxHeapComparator());
+  		for (int i = 0; i < k; i++) {
+  			maxHeap.add(arr[i]);
+  		}
+  		for (int i = k; i < arr.length; i++) {
+  			if (arr[i] < maxHeap.peek()) {
+  				maxHeap.poll();
+  				maxHeap.add(arr[i]);
+  			}
+  		}
+  		return maxHeap.peek();
+  	}
+  // 改写快排，时间复杂度O(N)
+  	// k >= 1
+  	public static int minKth2(int[] array, int k) {
+  		int[] arr = copyArray(array);
+  		return process2(arr, 0, arr.length - 1, k - 1);
+  	}
+  
+  	public static int[] copyArray(int[] arr) {
+  		int[] ans = new int[arr.length];
+  		for (int i = 0; i != ans.length; i++) {
+  			ans[i] = arr[i];
+  		}
+  		return ans;
+  	}
+  
+  	// arr 第k小的数
+  	// process2(arr, 0, N-1, k-1)
+  	// arr[L..R]  范围上，如果排序的话(不是真的去排序)，找位于index的数
+  	// index [L..R]
+  	public static int process2(int[] arr, int L, int R, int index) {
+  		if (L == R) { // L = =R ==INDEX
+  			return arr[L];
+  		}
+  		// 不止一个数  L +  [0, R -L]
+  		int pivot = arr[L + (int) (Math.random() * (R - L + 1))];
+  		int[] range = partition(arr, L, R, pivot);
+  		if (index >= range[0] && index <= range[1]) {
+  			return arr[index];
+  		} else if (index < range[0]) {
+  			return process2(arr, L, range[0] - 1, index);
+  		} else {
+  			return process2(arr, range[1] + 1, R, index);
+  		}
+  	}
+  
+  	public static int[] partition(int[] arr, int L, int R, int pivot) {
+  		int less = L - 1;
+  		int more = R + 1;
+  		int cur = L;
+  		while (cur < more) {
+  			if (arr[cur] < pivot) {
+  				swap(arr, ++less, cur++);
+  			} else if (arr[cur] > pivot) {
+  				swap(arr, cur, --more);
+  			} else {
+  				cur++;
+  			}
+  		}
+  		return new int[] { less + 1, more - 1 };
+  	}
+  
+  	public static void swap(int[] arr, int i1, int i2) {
+  		int tmp = arr[i1];
+  		arr[i1] = arr[i2];
+  		arr[i2] = tmp;
+  	}
+  // 利用bfprt算法，时间复杂度O(N)
+  	public static int minKth3(int[] array, int k) {
+  		int[] arr = copyArray(array);
+  		return bfprt(arr, 0, arr.length - 1, k - 1);
+  	}
+  
+  	// arr[L..R]  如果排序的话，位于index位置的数，是什么，返回
+  	public static int bfprt(int[] arr, int L, int R, int index) {
+  		if (L == R) {
+  			return arr[L];
+  		}
+  		// L...R  每五个数一组
+  		// 每一个小组内部排好序
+  		// 小组的中位数组成新数组
+  		// 这个新数组的中位数返回
+  		int pivot = medianOfMedians(arr, L, R);
+  		int[] range = partition(arr, L, R, pivot);
+  		if (index >= range[0] && index <= range[1]) {
+  			return arr[index];
+  		} else if (index < range[0]) {
+  			return bfprt(arr, L, range[0] - 1, index);
+  		} else {
+  			return bfprt(arr, range[1] + 1, R, index);
+  		}
+  	}
+  
+  	// arr[L...R]  五个数一组
+  	// 每个小组内部排序
+  	// 每个小组中位数领出来，组成marr
+  	// marr中的中位数，返回
+  	public static int medianOfMedians(int[] arr, int L, int R) {
+  		int size = R - L + 1;
+  		int offset = size % 5 == 0 ? 0 : 1;
+  		int[] mArr = new int[size / 5 + offset];
+  		for (int team = 0; team < mArr.length; team++) {
+  			int teamFirst = L + team * 5;
+  			// L ... L + 4
+  			// L +5 ... L +9
+  			// L +10....L+14
+  			mArr[team] = getMedian(arr, teamFirst, Math.min(R, teamFirst + 4));
+  		}
+  		// marr中，找到中位数
+  		// marr(0, marr.len - 1,  mArr.length / 2 )
+  		return bfprt(mArr, 0, mArr.length - 1, mArr.length / 2);
+  	}
+  
+  	public static int getMedian(int[] arr, int L, int R) {
+  		insertionSort(arr, L, R);
+  		return arr[(L + R) / 2];
+  	}
+  
+  	public static void insertionSort(int[] arr, int L, int R) {
+  		for (int i = L + 1; i <= R; i++) {
+  			for (int j = i - 1; j >= L && arr[j] > arr[j + 1]; j--) {
+  				swap(arr, j, j + 1);
+  			}
+  		}
+  	}
+  ```
+
+  
+
+#### maxTopK
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个混乱数组，查找当前的前K个大的的数字，并按从大到小的顺序返回
+
+- 思路：
+
+  > 思路1：排序+收集，时间复杂度(O(N*logN))
+  >
+  > 思路2：大根堆+收集 时间复杂度(O(N + k*logN))
+  >
+  > 思路3：bfprt+排序收集 时间复杂度(O(N+k*logk))
+  >
+  > ​	先得到N-K小的数（findMinKth)
+  >
+  > ​	再遍历数组将所有的大于N-K小的数收集
+  >
+  > ​	在长度为k的数组长度中进行排序
+  >
+  > ​	返回
+
+- 代码：
+
+  ```java
+  	// 时间复杂度O(N*logN)
+  	// 排序+收集
+  	public static int[] maxTopK1(int[] arr, int k) {
+  		if (arr == null || arr.length == 0) {
+  			return new int[0];
+  		}
+  		int N = arr.length;
+  		k = Math.min(N, k);
+  		Arrays.sort(arr);
+  		int[] ans = new int[k];
+  		for (int i = N - 1, j = 0; j < k; i--, j++) {
+  			ans[j] = arr[i];
+  		}
+  		return ans;
+  	}
+  
+  	// 方法二，时间复杂度O(N + K*logN)
+  	// 解释：堆
+  	public static int[] maxTopK2(int[] arr, int k) {
+  		if (arr == null || arr.length == 0) {
+  			return new int[0];
+  		}
+  		int N = arr.length;
+  		k = Math.min(N, k);
+  		// 从底向上建堆，时间复杂度O(N)
+  		for (int i = N - 1; i >= 0; i--) {
+  			heapify(arr, i, N);
+  		}
+  		// 只把前K个数放在arr末尾，然后收集，O(K*logN)
+  		int heapSize = N;
+  		swap(arr, 0, --heapSize);
+  		int count = 1;
+  		while (heapSize > 0 && count < k) {
+  			heapify(arr, 0, heapSize);
+  			swap(arr, 0, --heapSize);
+  			count++;
+  		}
+  		int[] ans = new int[k];
+  		for (int i = N - 1, j = 0; j < k; i--, j++) {
+  			ans[j] = arr[i];
+  		}
+  		return ans;
+  	}
+  
+  	public static void heapInsert(int[] arr, int index) {
+  		while (arr[index] > arr[(index - 1) / 2]) {
+  			swap(arr, index, (index - 1) / 2);
+  			index = (index - 1) / 2;
+  		}
+  	}
+  
+  	public static void heapify(int[] arr, int index, int heapSize) {
+  		int left = index * 2 + 1;
+  		while (left < heapSize) {
+  			int largest = left + 1 < heapSize && arr[left + 1] > arr[left] ? left + 1 : left;
+  			largest = arr[largest] > arr[index] ? largest : index;
+  			if (largest == index) {
+  				break;
+  			}
+  			swap(arr, largest, index);
+  			index = largest;
+  			left = index * 2 + 1;
+  		}
+  	}
+  
+  	public static void swap(int[] arr, int i, int j) {
+  		int tmp = arr[i];
+  		arr[i] = arr[j];
+  		arr[j] = tmp;
+  	}
+  
+  	// 方法三，时间复杂度O(n + k * logk)
+  	public static int[] maxTopK3(int[] arr, int k) {
+  		if (arr == null || arr.length == 0) {
+  			return new int[0];
+  		}
+  		int N = arr.length;
+  		k = Math.min(N, k);
+  		// O(N)
+  		int num = minKth(arr, N - k);
+  		int[] ans = new int[k];
+  		int index = 0;
+  		for (int i = 0; i < N; i++) {
+  			if (arr[i] > num) {
+  				ans[index++] = arr[i];
+  			}
+  		}
+  		for (; index < k; index++) {
+  			ans[index] = num;
+  		}
+  		// O(k*logk)
+  		Arrays.sort(ans);
+  		for (int L = 0, R = k - 1; L < R; L++, R--) {
+  			swap(ans, L, R);
+  		}
+  		return ans;
+  	}
+  
+  	// 时间复杂度O(N)
+  	public static int minKth(int[] arr, int index) {
+  		int L = 0;
+  		int R = arr.length - 1;
+  		int pivot = 0;
+  		int[] range = null;
+  		while (L < R) {
+  			pivot = arr[L + (int) (Math.random() * (R - L + 1))];
+  			range = partition(arr, L, R, pivot);
+  			if (index < range[0]) {
+  				R = range[0] - 1;
+  			} else if (index > range[1]) {
+  				L = range[1] + 1;
+  			} else {
+  				return pivot;
+  			}
+  		}
+  		return arr[L];
+  	}
+  
+  	public static int[] partition(int[] arr, int L, int R, int pivot) {
+  		int less = L - 1;
+  		int more = R + 1;
+  		int cur = L;
+  		while (cur < more) {
+  			if (arr[cur] < pivot) {
+  				swap(arr, ++less, cur++);
+  			} else if (arr[cur] > pivot) {
+  				swap(arr, cur, --more);
+  			} else {
+  				cur++;
+  			}
+  		}
+  		return new int[] { less + 1, more - 1 };
+  	}
+  }
+  ```
+
+  
+
+#### reservoirSampling
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个数据输入流，要让当前及之前的所有的数据都要以同样的概率放入袋子中，假设此袋子的长度为k，当前数为n，则1~n的每个数据都要以相同概率进入，等价于n个数据选入10个数据。
+
+- 思路：
+
+  > 先让前k个数据直接入袋
+  >
+  > 当前数据为i,以k/i的概率决定要不要入袋，如果不入，则进入下一个i+1数据进行判断
+  >
+  > 如果进入，以1/k的概率选中要进入哪个位置
+  >
+  > 即此数据以k/i * 1/k的概率要入袋，即1/i的概率要入袋，前1~i的数据均是如此。
+
+- 代码：
+
+  ```java
+  public static class RandomBox {
+  		private int[] bag;
+  		private int N;
+  		private int count;
+  
+  		public RandomBox(int capacity) {
+  			bag = new int[capacity];
+  			N = capacity;
+  			count = 0;
+  		}
+  
+  		private int rand(int max) {
+  			return (int) (Math.random() * max) + 1;
+  		}
+  
+  		public void add(int num) {
+  			count++;
+  			if (count <= N) {
+  				bag[count - 1] = num;
+  			} else {
+  				if (rand(count) <= N) {
+  					bag[rand(N) - 1] = num;
+  				}
+  			}
+  		}
+  
+  		public int[] choices() {
+  			int[] ans = new int[N];
+  			for (int i = 0; i < N; i++) {
+  				ans[i] = bag[i];
+  			}
+  			return ans;
+  		}
+  
+  	}
+  
+  	// 请等概率返回1~i中的一个数字
+  	public static int random(int i) {
+  		return (int) (Math.random() * i) + 1;
+  	}
+  
+  	public static void main(String[] args) {
+  		System.out.println("hello");
+  		int test = 10000;
+  		int ballNum = 17;
+  		int[] count = new int[ballNum + 1];
+  		for (int i = 0; i < test; i++) {
+  			int[] bag = new int[10];
+  			int bagi = 0;
+  			for (int num = 1; num <= ballNum; num++) {
+  				if (num <= 10) {
+  					bag[bagi++] = num;
+  				} else { // num > 10
+  					if (random(num) <= 10) { // 一定要把num球入袋子
+  						bagi = (int) (Math.random() * 10);
+  						bag[bagi] = num;
+  					}
+  				}
+  
+  			}
+  			for (int num : bag) {
+  				count[num]++;
+  			}
+  		}
+  		for (int i = 0; i <= ballNum; i++) {
+  			System.out.println(count[i]);
+  		}
+  
+  		System.out.println("hello");
+  		int all = 100;
+  		int choose = 10;
+  		int testTimes = 50000;
+  		int[] counts = new int[all + 1];
+  		for (int i = 0; i < testTimes; i++) {
+  			RandomBox box = new RandomBox(choose);
+  			for (int num = 1; num <= all; num++) {
+  				box.add(num);
+  			}
+  			int[] ans = box.choices();
+  			for (int j = 0; j < ans.length; j++) {
+  				counts[ans[j]]++;
+  			}
+  		}
+  
+  		for (int i = 0; i < counts.length; i++) {
+  			System.out.println(i + " times : " + counts[i]);
+  		}
+  
+  	}
+  }
+  ```
+
+  
+
 ## coding-for-great-offer
 
 ### class35
@@ -2043,7 +2647,7 @@
   >  4) 如果选择“使用”当前牌，那么当前牌的分数*3，加到总分上去，但是只有当前轮，下一轮，下下轮生效，之后轮效果消失。
   >  5) 每一轮总分大的人获胜
   >  假设小明知道每一轮对手做出选择之后的总分，返回小明在每一轮都赢的情况下，最终的最大分是多少
-  >   如果小明怎么都无法保证每一轮都赢，返回-1
+  >     如果小明怎么都无法保证每一轮都赢，返回-1
 
 - 思路：
 
