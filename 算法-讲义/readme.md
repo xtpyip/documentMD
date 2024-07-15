@@ -604,6 +604,647 @@
 
   
 
+### class30
+
+#### morrisTraversal
+
+- 链接：暂无
+
+- 内容：
+
+  > mirrors遍历二叉树
+
+- 思路：
+
+  > 1、当前cur无左子树，cur = cur.right
+  >
+  > 2、当前cur有左子树，找到cur左子树的最右节点mostRight
+  >
+  > ​	1、若mostRight.right == null,令mostRight.right = cur,cur=cur.left
+  >
+  > ​	2、若mostRight.right != null,令cur=cur.right,mostRight=null
+
+- 代码：
+
+  ```java
+  	public static void morris(Node head) {
+  		if (head == null) {
+  			return;
+  		}
+  		Node cur = head;
+  		Node mostRight = null;
+  		while (cur != null) {
+  			mostRight = cur.left;
+  			if (mostRight != null) {
+  				while (mostRight.right != null && mostRight.right != cur) {
+  					mostRight = mostRight.right;
+  				}
+  				if (mostRight.right == null) {
+  					mostRight.right = cur;
+  					cur = cur.left;
+  					continue;
+  				} else {
+  					mostRight.right = null;
+  				}
+  			}
+  			cur = cur.right;
+  		}
+  	}
+  ```
+
+##### morrisPre
+
+- 链接：暂无
+
+- 内容：morris实现前序遍历
+
+- 思路：
+
+  > 第一次出现则打印
+
+- 代码：
+
+  ```java
+  public static void morrisPre(Node head) {
+  		if (head == null) {
+  			return;
+  		}
+  		Node cur = head;
+  		Node mostRight = null;
+  		while (cur != null) {
+  			mostRight = cur.left;
+  			if (mostRight != null) {
+  				while (mostRight.right != null && mostRight.right != cur) {
+  					mostRight = mostRight.right;
+  				}
+  				if (mostRight.right == null) {
+  					System.out.print(cur.value + " ");
+  					mostRight.right = cur;
+  					cur = cur.left;
+  					continue;
+  				} else {
+  					mostRight.right = null;
+  				}
+  			} else {
+  				System.out.print(cur.value + " ");
+  			}
+  			cur = cur.right;
+  		}
+  		System.out.println();
+  	}
+  ```
+
+  
+
+##### morrisIn
+
+- 链接：暂无
+
+- 内容：morris实现中序遍历
+
+- 思路：
+
+  > 无左子树或第二次返回时就打印
+
+- 代码：
+
+  ```java
+  public static void morrisIn(Node head) {
+  		if (head == null) {
+  			return;
+  		}
+  		Node cur = head;
+  		Node mostRight = null;
+  		while (cur != null) {
+  			mostRight = cur.left;
+  			if (mostRight != null) {
+  				while (mostRight.right != null && mostRight.right != cur) {
+  					mostRight = mostRight.right;
+  				}
+  				if (mostRight.right == null) {
+  					mostRight.right = cur;
+  					cur = cur.left;
+  					continue;
+  				} else {
+  					mostRight.right = null;
+  				}
+  			}
+  			System.out.print(cur.value + " ");
+  			cur = cur.right;
+  		}
+  		System.out.println();
+  	}
+  ```
+
+  
+
+##### morrisPos
+
+- 链接：暂无
+
+- 内容：morris实现后序遍历
+
+- 思路：
+
+  > 第二次时，将其左子树节点到最右节点的数据逆序打印
+  >
+  > 再逆序打印根节点到最右节点的数据
+
+- 代码：
+
+  ```java
+  public static void morrisPos(Node head) {
+  		if (head == null) {
+  			return;
+  		}
+  		Node cur = head;
+  		Node mostRight = null;
+  		while (cur != null) {
+  			mostRight = cur.left;
+  			if (mostRight != null) {
+  				while (mostRight.right != null && mostRight.right != cur) {
+  					mostRight = mostRight.right;
+  				}
+  				if (mostRight.right == null) {
+  					mostRight.right = cur;
+  					cur = cur.left;
+  					continue;
+  				} else {
+  					mostRight.right = null;
+  					printEdge(cur.left);
+  				}
+  			}
+  			cur = cur.right;
+  		}
+  		printEdge(head);
+  		System.out.println();
+  	}
+  
+  	public static void printEdge(Node head) {
+  		Node tail = reverseEdge(head);
+  		Node cur = tail;
+  		while (cur != null) {
+  			System.out.print(cur.value + " ");
+  			cur = cur.right;
+  		}
+  		reverseEdge(tail);
+  	}
+  
+  	public static Node reverseEdge(Node from) {
+  		Node pre = null;
+  		Node next = null;
+  		while (from != null) {
+  			next = from.right;
+  			from.right = pre;
+  			pre = from;
+  			from = next;
+  		}
+  		return pre;
+  	}
+  ```
+
+  
+
+##### isBST
+
+- 链接：https://leetcode.cn/problems/validate-binary-search-tree/description/
+
+- 内容：
+
+  > 给定一个节点，判断其是否为二叉搜索树
+
+- 思路：
+
+  > morris遍历，将前一个数据记录下来，判断
+  >
+  > 注：要将所有的节点的指定全部复原才能返回
+
+- 代码：
+
+  ```java
+      public static boolean isValidBST(Node head) {
+          if(head == null) return true;
+          Node cur = head,mostRight = null,pre = null;
+          boolean ans = true;
+          while (cur != null) {
+              mostRight = cur.left;
+              if(mostRight != null){
+                  while (mostRight.right != null && mostRight.right != cur){
+                      mostRight = mostRight.right;
+                  }
+                  if(mostRight.right == null){
+                      mostRight.right = cur;
+                      cur = cur.left;
+                      continue;
+                  }else{
+                      mostRight.right = null;
+                  }
+              }
+              if(pre != null && pre.value >= cur.value){
+                  ans = false;
+              }
+              pre = cur;
+              cur = cur.right;
+          }
+          return ans;
+      }
+  ```
+
+  
+
+#### minDepth
+
+- 链接：https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/
+
+- 内容：
+
+  > 求根节点到叶节点的最小深度
+
+- 思路：
+
+  > 思路一：二叉树的递归套路
+  >
+  > 思路二：morris遍历
+  >
+  > ​	计算level与mostRightSize，当为叶节点时进行结算和level的修正
+  >
+  > ​	最后计算根到最右节点的这一条边的长度
+  >
+  > ​	汇总，得到最小长度
+
+- 代码：
+
+  ```java
+  public static int minDepth1(TreeNode head) {
+          if (head == null) {
+              return 0;
+          }
+          return p(head);
+      }
+  
+      // 返回x为头的树，最小深度是多少
+      public static int p(TreeNode x) {
+          if (x.left == null && x.right == null) {
+              return 1;
+          }
+          // 左右子树起码有一个不为空
+          int leftH = Integer.MAX_VALUE;
+          if (x.left != null) {
+              leftH = p(x.left);
+          }
+          int rightH = Integer.MAX_VALUE;
+          if (x.right != null) {
+              rightH = p(x.right);
+          }
+          return 1 + Math.min(leftH, rightH);
+      }
+  
+      // 下面的方法是morris遍历的解
+      public static int minDepth2(TreeNode head) {
+          if (head == null) {
+              return 0;
+          }
+          TreeNode cur = head;
+          TreeNode mostRight = null;
+          int curLevel = 0;
+          int minHeight = Integer.MAX_VALUE;
+          while (cur != null) {
+              mostRight = cur.left;
+              if (mostRight != null) {
+                  int rightBoardSize = 1;
+                  while (mostRight.right != null && mostRight.right != cur) {
+                      rightBoardSize++;
+                      mostRight = mostRight.right;
+                  }
+                  if (mostRight.right == null) { // 第一次到达
+                      curLevel++;
+                      mostRight.right = cur;
+                      cur = cur.left;
+                      continue;
+                  } else { // 第二次到达
+                      if (mostRight.left == null) { // 叶子节点
+                          minHeight = Math.min(minHeight, curLevel);
+                      }
+                      curLevel -= rightBoardSize; // 重复计算的数据
+                      mostRight.right = null;
+                  }
+              } else { // 只有一次到达
+                  curLevel++;
+              }
+              cur = cur.right;
+          }
+          int finalRight = 1;
+          cur = head;
+          while (cur.right != null) {
+              finalRight++;
+              cur = cur.right;
+          }
+          if (cur.left == null && cur.right == null) {
+              minHeight = Math.min(minHeight, finalRight);
+          }
+          return minHeight;
+      }
+  ```
+
+  
+
+### class31
+
+#### segmentTree
+
+- 链接：暂无
+
+- 内容：
+
+  > 在指定范围内的添加，更新，查找的时间复杂度都为logn级别
+
+- 思路：
+
+  > 使用线段树
+  >
+  > 流程：
+  >
+  > ​	创建：数组下标0不使用，直接使用build(1,N,1)进行递归创建，更新sum,lazy,update,change数组
+  >
+  > ​	添加：
+  >
+  > ​		1、若此任务包含当前的范围，sum与lazy信息数据更改
+  >
+  > ​		2、若此任务不包含当前的范围，将当前范围内的数据更新与lazy信息先下放一层
+  >
+  > ​		3、将任务分解为下一层的此任务的添加
+  >
+  > ​		4、将下面的添加后的数据往上更新sum数组
+  >
+  > ​	更新：
+  >
+  > ​		1、若此任务包含当前的范围，sum与lazy信息数据更改并进行数据更新
+  >
+  > ​		2、若此任务不包含当前的范围，将当前范围内的数据更新与lazy信息先下放一层
+  >
+  > ​		3、将任务分解为下一层的此任务的更新
+  >
+  > ​		4、将下面的添加后的数据往上更新sum数组
+  >
+  > ​	查询：
+  >
+  > ​		1、若此任务包含当前的范围，返回sum的信息
+  >
+  > ​		2、若此任务不包含当前的范围，将当前范围内的数据更新与lazy信息先下放一层
+  >
+  > ​		3、将任务分解为下一层的此任务的查询
+  >
+  > ​		4、将下面的查询后的数据往上更新sum数组
+
+- 代码：
+
+  ```java
+      public static class SegmentTree{
+          // arr[] 为原序列的信息从0开始，但在arr里是从1开始的
+          // sum[] 模拟线段树维护区间的和
+          // lazy[] 为累加和懒惰标记
+          // change[] 为更新的值
+          // update[] 为更新懒惰标记
+          private int MAX;
+          private int[] arr;
+          private int[] sum;
+          private int[] lazy;
+          private int[] change;
+          private boolean[] update;
+  
+          public SegmentTree(int[] origin){
+              MAX = origin.length + 1;
+              arr = new int[MAX]; // arr[0] 不使用
+              for (int i = 1; i < MAX; i++) {
+                  arr[i] = origin[i-1];
+              }
+              sum= new int[MAX << 2]; // 用来支持脑补概念中，某一个范围的累加和信息
+              lazy = new int[MAX << 2];
+              change = new int[MAX << 2];
+              update = new boolean[MAX << 2];
+          }
+          public void pushUp(int rt){
+              sum[rt] = sum[rt << 1] + sum[rt << 1 | 1];
+          }
+          // 之前的，所有懒增加，和懒更新，从父范围，发给左右两个子范围
+          // 分发策略是什么
+          // ln表示左子树元素结点个数，rn表示右子树结点个数
+          private void pushDown(int rt, int ln, int rn) {
+              if(update[rt]){
+                  update[rt << 1] = true;
+                  update[rt << 1 | 1] = true;
+                  change[rt << 1] = change[rt];
+                  change[rt << 1 | 1] = change[rt];
+                  lazy[rt << 1] = 0;
+                  lazy[rt << 1 | 1] = 0;
+                  sum[rt << 1] = change[rt] * ln;
+                  sum[rt << 1 | 1] = change[rt] * rn;
+                  update[rt] = false;
+              }
+              if(lazy[rt] != 0){
+                  lazy[rt << 1] += lazy[rt];
+                  sum[rt << 1] += lazy[rt] * ln;
+                  lazy[rt << 1 | 1] += lazy[rt];
+                  sum[rt << 1 | 1] += lazy[rt] * rn;
+                  lazy[rt] = 0;
+              }
+          }
+          // 在初始化阶段，先把sum数组，填好
+          // 在arr[l~r]范围上，去build，1~N，
+          // rt : 这个范围在sum中的下标
+          public void build(int l,int r,int rt){
+              if(l == r){
+                  sum[rt] = arr[l];
+                  return;
+              }
+              int mid = (l+r)>>1;
+              build(l,mid,rt<<1);
+              build(mid+1,r,rt<<1|1);
+              pushUp(rt);
+          }
+  
+          // L~R  所有的值变成C
+          // l~r  rt
+          public void update(int L,int R,int C,int l,int r,int rt){
+              if(L <= l && r <= R){
+                  update[rt] = true;
+                  change[rt] = C;
+                  sum[rt] = C * (r-l+1);
+                  lazy[rt] = 0;
+                  return;
+              }
+              // 当前任务躲不掉，无法懒更新，要往下发
+              int mid = (r + l) >> 1;
+              pushDown(rt,mid - l + 1, r - mid);
+              if(L <= mid){
+                  update(L,R,C,l,mid,rt << 1);
+              }
+              if(R > mid){
+                  update(L,R,C,mid+1,r,rt << 1 | 1);
+              }
+              pushUp(rt);
+          }
+          // L~R, C 任务！
+          // rt，l~r
+          public void add(int L,int R,int C,int l,int r,int rt){
+              // 任务如果把此时的范围全包了！
+              if (L <= l && r <= R) {
+                  sum[rt] += C * (r - l + 1);
+                  lazy[rt] += C;
+                  return;
+              }
+              // 任务没有把你全包！
+              // l  r  mid = (l+r)/2
+              int mid = (l + r) >> 1;
+              pushDown(rt,mid - l + 1,r - mid);
+              // L~R
+              if(L <= mid){
+                  add(L,R,C,l,mid,rt << 1);
+              }
+              if(R > mid){
+                  add(L,R,C,mid+1,R,rt << 1 | 1);
+              }
+              pushUp(rt);
+          }
+  
+          // 1~6 累加和是多少？ 1~8 rt
+          public long query(int L, int R, int l, int r, int rt) {
+              if(L <= l && r <= R){
+                  return sum[rt];
+              }
+              int mid = (l+r) >> 1;
+              pushDown(rt,mid - l + 1,r - mid);
+              long ans = 0;
+              if(L <= mid){
+                  ans += query(L,R,l,mid,rt << 1);
+              }
+              if(R > mid){
+                  ans += query(L,R,mid+1,r,rt<<1 | 1);
+              }
+              return ans;
+          }
+      }
+  ```
+
+#### fallingSquares
+
+- 链接：暂无
+
+- 内容：
+
+  > 给一个二维数组，第一维i是第几个掉下的正方形，第二维的下标0表示沿哪个坐标下去，下标1表示此正方形的连长，返回一个长度为第一维长度的list集合，表示在各个位置的最大高度
+  >
+  > 注: 【0，1】的坐标轴是前闭后开的，可以转化为【0，【0】+【1】-1】的坐标轴
+
+- 思路：
+
+  >使用线段树，将sum改为max,无需要更新操作，只要指定范围内的添加和查询操作
+
+- 代码：
+
+  ```java
+  public static class SegmentTree {
+  		private int[] max;
+  		private int[] change;
+  		private boolean[] update;
+  
+  		public SegmentTree(int size) {
+  			int N = size + 1;
+  			max = new int[N << 2];
+  
+  			change = new int[N << 2];
+  			update = new boolean[N << 2];
+  		}
+  
+  		private void pushUp(int rt) {
+  			max[rt] = Math.max(max[rt << 1], max[rt << 1 | 1]);
+  		}
+  
+  		// ln表示左子树元素结点个数，rn表示右子树结点个数
+  		private void pushDown(int rt, int ln, int rn) {
+  			if (update[rt]) {
+  				update[rt << 1] = true;
+  				update[rt << 1 | 1] = true;
+  				change[rt << 1] = change[rt];
+  				change[rt << 1 | 1] = change[rt];
+  				max[rt << 1] = change[rt];
+  				max[rt << 1 | 1] = change[rt];
+  				update[rt] = false;
+  			}
+  		}
+  
+  		public void update(int L, int R, int C, int l, int r, int rt) {
+  			if (L <= l && r <= R) {
+  				update[rt] = true;
+  				change[rt] = C;
+  				max[rt] = C;
+  				return;
+  			}
+  			int mid = (l + r) >> 1;
+  			pushDown(rt, mid - l + 1, r - mid);
+  			if (L <= mid) {
+  				update(L, R, C, l, mid, rt << 1);
+  			}
+  			if (R > mid) {
+  				update(L, R, C, mid + 1, r, rt << 1 | 1);
+  			}
+  			pushUp(rt);
+  		}
+  
+  		public int query(int L, int R, int l, int r, int rt) {
+  			if (L <= l && r <= R) {
+  				return max[rt];
+  			}
+  			int mid = (l + r) >> 1;
+  			pushDown(rt, mid - l + 1, r - mid);
+  			int left = 0;
+  			int right = 0;
+  			if (L <= mid) {
+  				left = query(L, R, l, mid, rt << 1);
+  			}
+  			if (R > mid) {
+  				right = query(L, R, mid + 1, r, rt << 1 | 1);
+  			}
+  			return Math.max(left, right);
+  		}
+  
+  	}
+  
+  	public HashMap<Integer, Integer> index(int[][] positions) {
+  		TreeSet<Integer> pos = new TreeSet<>();
+  		for (int[] arr : positions) {
+  			pos.add(arr[0]);
+  			pos.add(arr[0] + arr[1] - 1);
+  		}
+  		HashMap<Integer, Integer> map = new HashMap<>();
+  		int count = 0;
+  		for (Integer index : pos) {
+  			map.put(index, ++count);
+  		}
+  		return map;
+  	}
+  
+  	public List<Integer> fallingSquares(int[][] positions) {
+  		HashMap<Integer, Integer> map = index(positions);
+  		int N = map.size();
+  		SegmentTree segmentTree = new SegmentTree(N);
+  		int max = 0;
+  		List<Integer> res = new ArrayList<>();
+  		// 每落一个正方形，收集一下，所有东西组成的图像，最高高度是什么
+  		for (int[] arr : positions) {
+  			int L = map.get(arr[0]);
+  			int R = map.get(arr[0] + arr[1] - 1);
+  			int height = segmentTree.query(L, R, 1, N, 1) + arr[1];
+  			max = Math.max(max, height);
+  			res.add(max);
+  			segmentTree.update(L, R, height, 1, N, 1);
+  		}
+  		return res;
+  	}
+  ```
+
+  
+
 ## coding-for-great-offer
 
 ### class35
