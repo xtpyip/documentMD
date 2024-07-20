@@ -751,7 +751,9 @@ vi index.html
 
 ③ 设置MySQL密码
 
-`docker run --name mysql5.7 -e MYSQL_ROOT_PASSWORD=10086 -v /tmp/mysql/conf/hmy.conf:/etc/mysql/conf.d/hmy.conf -v /tmp/mysql/data:/var/lib/mysql -p 3306:3306 -d mysql:5.7.25 `
+```dockerfile
+docker run --name mysql5.7 -e MYSQL_ROOT_PASSWORD=10086 -v /tmp/mysql/conf/hmy.conf:/etc/mysql/conf.d/hmy.conf -v /tmp/mysql/data:/var/lib/mysql -p 3306:3306 -d mysql:5.7.25
+```
 
 
 

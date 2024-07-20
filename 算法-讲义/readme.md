@@ -2,6 +2,435 @@
 
 ## algorithmbasic2020
 
+### class01
+
+#### selectSort
+
+- 链接：暂无
+
+- 内容：
+
+  > 将指定的数组排序
+
+- 思路：
+
+  >第一轮，查找1~N的最小值与0位置交换
+  >
+  >第二轮，查找2~N的最小值与1位置交换
+  >
+  >...
+  >
+  >第n-1轮，查找n-1~N的最小值与n-2位置交换
+
+- 代码：
+
+  ```java
+  // 选择排序
+      public static void selectSort(int[] arr){
+          if(arr == null || arr.length < 2)
+              return;
+  
+          for (int i = 0; i < arr.length-1; i++) {
+               int minIndex = i;
+              for (int j = minIndex+1; j < arr.length; j++) {
+                  minIndex = arr[j] < arr[minIndex] ? j : minIndex;
+              }
+              swap(arr,minIndex,i);
+          }
+      }
+      public static void swap(int[] arr,int i,int j){
+          int temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
+      }
+  ```
+
+  
+
+#### bubbleSort
+
+- 链接：暂无
+
+- 内容：
+
+  > 将指定数组排序
+
+- 思路：
+
+  > 第一轮：从0~N-1,当i<i+1 且num[i]>num[i+1] 时,i与j对应的值相交换
+  >
+  > ....
+
+- 代码：
+
+  ```java
+  // 冒泡排序
+  public static void bubbleSort(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return;
+  		}
+  		// 0 ~ N-1
+  		// 0 ~ N-2
+  		// 0 ~ N-3
+  		for (int e = arr.length - 1; e > 0; e--) { // 0 ~ e
+  			for (int i = 0; i < e; i++) {
+  				if (arr[i] > arr[i + 1]) {
+  					swap(arr, i, i + 1);
+  				}
+  			}
+  		}
+  	}
+  ```
+
+  
+
+#### insertSort
+
+- 链接：暂无
+
+- 内容：
+
+  > 将指定数组排序
+
+- 思路：
+
+  > 将当前数据与前面已经排好序的数据进行处理，插入进指定位置
+
+- 代码：
+
+  ```java
+  public static void insertionSort(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return;
+  		}
+  		// 不只1个数
+  		for (int i = 1; i < arr.length; i++) { // 0 ~ i 做到有序
+  			for (int j = i - 1; j >= 0 && arr[j] > arr[j + 1]; j--) {
+  				swap(arr, j, j + 1);
+  			}
+  		}
+  	}
+  ```
+
+  
+
+#### BSExist
+
+- 链接：暂无
+
+- 内容：
+
+  > 有序数组中是否存在num
+
+- 思路：
+
+  > 迭代搜索查找
+
+- 代码：
+
+  ```java
+  public static boolean exist(int[] sortedArr, int num) {
+  		if (sortedArr == null || sortedArr.length == 0) {
+  			return false;
+  		}
+  		int L = 0;
+  		int R = sortedArr.length - 1;
+  		int mid = 0;
+  		// L..R
+  		while (L < R) { // L..R 至少两个数的时候
+  			mid = L + ((R - L) >> 1);
+  			if (sortedArr[mid] == num) {
+  				return true;
+  			} else if (sortedArr[mid] > num) {
+  				R = mid - 1;
+  			} else {
+  				L = mid + 1;
+  			}
+  		}
+  		return sortedArr[L] == num;
+  	}
+  ```
+
+  
+
+#### BSNearLeft
+
+- 链接：暂无
+
+- 内容：
+
+  > 在有序arr上，找满足>=value的最左位置
+
+- 思路：
+
+  > 迭代遍历
+
+- 代码：
+
+  ```java
+  	public static int nearestIndex(int[] arr, int value) {
+  		int L = 0;
+  		int R = arr.length - 1;
+  		int index = -1; // 记录最左的对号
+  		while (L <= R) { // 至少一个数的时候
+  			int mid = L + ((R - L) >> 1);
+  			if (arr[mid] >= value) {
+  				index = mid;
+  				R = mid - 1;
+  			} else {
+  				L = mid + 1;
+  			}
+  		}
+  		return index;
+  	}
+  ```
+
+  
+
+#### BSNearRight
+
+- 链接：暂无
+
+- 内容：
+
+  > 在有序arr上，找满足<=value的最右位置
+
+- 思路：
+
+  > 迭代遍历
+
+- 代码：
+
+  ```java
+  	public static int nearestIndex(int[] arr, int value) {
+  		int L = 0;
+  		int R = arr.length - 1;
+  		int index = -1; // 记录最右的对号
+  		while (L <= R) {
+  			int mid = L + ((R - L) >> 1);
+  			if (arr[mid] <= value) {
+  				index = mid;
+  				L = mid + 1;
+  			} else {
+  				R = mid - 1;
+  			}
+  		}
+  		return index;
+  	}
+  ```
+
+  
+
+#### BSAwesome
+
+- 链接：暂无
+
+- 内容：
+
+  > 返回局部最小值所在的下标，此下标的值小于左右值（存在）
+
+- 思路：
+
+  > 判断两端是否存在，若存在则返回
+  >
+  > 对左右进行迭代遍历，取得当前的mid
+  >
+  > ​	若【mid】> 【mid-1】则【L,mid-1】一定有局部最小值
+  >
+  > ​	若【mid】> 【mid+1】则【mid+1,R】一定有局部最小值
+  >
+  > ​    否则【mid】< 【mid-1】且【mid】<【mid+1】,返回mid
+
+- 代码：
+
+  ```java
+  public static int getLessIndex(int[] arr) {
+  		if (arr == null || arr.length == 0) {
+  			return -1;
+  		}
+  		if (arr.length == 1 || arr[0] < arr[1]) {
+  			return 0;
+  		}
+  		if (arr[arr.length - 1] < arr[arr.length - 2]) {
+  			return arr.length - 1;
+  		}
+  		int left = 1;
+  		int right = arr.length - 2;
+  		int mid = 0;
+  		while (left < right) {
+  			mid = (left + right) / 2;
+  			if (arr[mid] > arr[mid - 1]) {
+  				right = mid - 1;
+  			} else if (arr[mid] > arr[mid + 1]) {
+  				left = mid + 1;
+  			} else {
+  				return mid;
+  			}
+  		}
+  		return left;
+  	}
+  ```
+
+
+
+### class02
+
+#### swap
+
+- 链接：暂无
+
+- 内容：
+
+  > 给两个数字a与b,要求a与b的值相互交换
+
+- 思路：
+
+  > 思路1：使用临时变量
+  >
+  > 思路2：异或
+  >
+  > ​	原a,b
+  >
+  > ​	a = a^b
+  >
+  > ​	b = a^b=(a^b)^b=a
+  >
+  > ​	a = a^b=(a^b)^(a^b^b)=b
+
+- 代码：
+
+  ```java
+  public static void swap (int[] arr, int i, int j) {
+  		// arr[0] = arr[0] ^ arr[0];
+  		int temp  = arr[j];
+  		arr[j]  = arr[i];
+  		arr[i]  = temp;
+  	}
+  public static void swap (int[] arr, int i, int j) {
+  		// arr[0] = arr[0] ^ arr[0];
+  		arr[i]  = arr[i] ^ arr[j];
+  		arr[j]  = arr[i] ^ arr[j];
+  		arr[i]  = arr[i] ^ arr[j];
+  	}
+  ```
+
+  
+
+#### evenTimesOddTimes
+
+##### oneOdd
+
+- 链接：暂无
+
+- 内容
+
+  > arr中，只有一种数，出现奇数次，求这个数字
+
+- 思路：
+
+  > 异或，异或的性质为同为0，且无关顺序
+
+- 代码：
+
+  ```java
+  public static void printOddTimesNum1(int[] arr) {
+  		int eor = 0;
+  		for (int i = 0; i < arr.length; i++) {
+  			eor ^= arr[i];
+  		}
+  		System.out.println(eor);
+  	}
+  ```
+
+  
+
+##### twoOdd
+
+- 链接：暂无
+
+- 内容
+
+  > arr中，只有两种数，出现奇数次，求这两个数字
+
+- 思路：
+
+  > 异或，异或的性质为同为0，且无关顺序
+  >
+  > ​	遍历整个数组，异或后的结果实际上等价于这两个出现奇数次的数字异或的结果
+  >
+  > ​	这个结果肯定不等于0（两种数），那么这个数的32位上肯定有等于1的存在
+  >
+  > ​	把某一位上是否等于1的数字可以把arr划分成两组，且这两组刚好各包含一个不同的出现奇数次的数字
+  >
+  > ​	把问题转化为了oneOdd
+
+- 代码：
+
+  ```java
+  // arr中，有两种数，出现奇数次
+  	public static void printOddTimesNum2(int[] arr) {
+  		int eor = 0;
+  		for (int i = 0; i < arr.length; i++) {
+  			eor ^= arr[i];
+  		}
+  		// a 和 b是两种数
+  		// eor != 0
+  		// eor最右侧的1，提取出来
+  		// eor :     00110010110111000
+  		// rightOne :00000000000001000
+  		int rightOne = eor & (-eor); // 提取出最右的1
+  		int onlyOne = 0; // eor'
+  		for (int i = 0 ; i < arr.length;i++) {
+  			//  arr[1] =  111100011110000
+  			// rightOne=  000000000010000
+  			if ((arr[i] & rightOne) != 0) {
+  				onlyOne ^= arr[i];
+  			}
+  		}
+  		System.out.println(onlyOne + " " + (eor ^ onlyOne));
+  	}
+  ```
+
+#### KM
+
+- 链接：暂无
+
+- 内容：
+
+  >  输入一定能够保证，数组中所有的数都出现了M次，只有一种数出现了K次，且1 <= K < M
+  >
+  >  返回这种数
+
+- 思路：
+
+  > 遍历数组，把数组中的数字对应位数值为1的数据+1
+  >
+  > 任意位数数值%M不等于0的表明要返回的这种数在这个位置上有1这个值
+  >
+  > 统计32位所有的数据，返回
+
+- 代码：
+
+  ```java
+  	public static int km(int[] arr, int k, int m) {
+  		int[] help = new int[32];
+  		for (int num : arr) {
+  			for (int i = 0; i < 32; i++) {
+  				help[i] += (num >> i) & 1;
+  			}
+  		}
+  		int ans = 0;
+  		for (int i = 0; i < 32; i++) {
+  			help[i] %= m;
+  			if (help[i] != 0) {
+  				ans |= 1 << i;
+  			}
+  		}
+  		return ans;
+  	}
+  
+  ```
+
 ### class28
 
 #### Manacher
@@ -1244,6 +1673,1956 @@
   ```
 
   
+
+### class32
+
+#### indexTree
+
+- 链接：暂无
+
+- 内容：
+
+  > 求单点添加（更新）与范围和
+
+- 思路：
+
+  > 创建一个indexTree,下标0弃而不用
+  >
+  > arr[0...n-1]->arr[1...n]
+  >
+  > indexSum[1..n],下标i所对应的值是arr中的某些值
+  >
+  > 如i为7-> 111 -> 111~111 7
+  >
+  > ​         16-> 1 0000 -> 0 0001 ~ 1 0000 
+  >
+  > 添加操作：
+  >
+  > ​	影响到当前i，与i只取二进制最后一位+i ... <=n
+  >
+  > 求各操作：
+  >
+  > ​	原下标  indexSum下标    代表范围
+  >
+  > ​	31	      indexSum[31]   1 1111~1 1111
+  >
+  > ​	29,30	indexSum[30]	1 1110 ~ 1 1101          
+  >
+  > ​    25,26,27,28   indexSum[28] 1 1100~1 1001
+  >
+  > ​	17~24     indexSum[24]   1 1000 ~ 1 0001
+  >
+  > ​	16~1        index[16]       1 0000 ~ 0 0001
+
+- 代码：
+
+  ```java
+  // 下标从1开始！
+  	public static class IndexTree {
+  
+  		private int[] tree;
+  		private int N;
+  
+  		// 0位置弃而不用！
+  		public IndexTree(int size) {
+  			N = size;
+  			tree = new int[N + 1];
+  		}
+  
+  		// 1~index 累加和是多少？
+  		public int sum(int index) {
+  			int ret = 0;
+  			while (index > 0) {
+  				ret += tree[index];
+  				index -= index & -index;
+  			}
+  			return ret;
+  		}
+  
+  		// index & -index : 提取出index最右侧的1出来
+  		// index :           0011001000
+  		// index & -index :  0000001000
+  		public void add(int index, int d) {
+  			while (index <= N) {
+  				tree[index] += d;
+  				index += index & -index;
+  			}
+  		}
+  	}
+  
+  ```
+
+#### indexTree2D
+
+- 链接：https://leetcode.com/problems/range-sum-query-2d-mutable
+
+- 内容：
+
+  > 实现一个二维的indexTree,能够更新，求和，及范围和
+
+- 思路：
+
+  > 思路同一维实现，不过加了一个维度 数量i*数量j
+
+- 代码：
+
+  ```java
+  public class Code02_IndexTree2D {
+      private int[][] tree, nums;
+      private int N, M;
+  
+      public Code02_IndexTree2D(int[][] matrix) {
+          N = matrix.length;
+          M = matrix[0].length;
+          tree = new int[N + 1][M + 1];
+          nums = new int[N][M];
+          for (int i = 0; i < N; i++) {
+              for (int j = 0; j < M; j++) {
+                  update(i,j,matrix[i][j]);
+              }
+          }
+      }
+  
+      private int sum(int row, int col) {
+          int sum = 0;
+          for (int i = row + 1; i <= N; i += i & -i) {
+              for (int j = col + 1; j <= M; j += j & -j) {
+                  sum += tree[i][j];
+              }
+          }
+          return sum;
+      }
+  
+      public void update(int row, int col, int val) {
+          if (N == 0 || M == 0) return;
+          int add = val - nums[row][col];
+          nums[row][col] = val;
+          for (int i = row + 1; i <= N; i += i & -i) {
+              for (int j = col + 1; j <= M; j += j & -j) {
+                  tree[i][j] += add;
+              }
+          }
+      }
+  
+      public int sumRegion(int row1, int col1, int row2, int col2) {
+          if(N == 0 || M == 0)
+              return 0;
+          return sum(row2,col2) - sum(row1-1,col2) - sum(row2,col1-1) + sum(row1-1,col1-1);
+      }
+  }
+  ```
+
+  
+
+#### AC-前置(前缀树)
+
+- 链接：暂无
+
+- 内容
+
+  > AC自动机，
+
+- 思路：
+
+  > 先创建一个前缀树
+  >
+  > 使用**fail指针指向为其路径上的字符串的最后一个字符结尾的最长的字符串的位置**
+  >
+  > 默认头指空，第一级子节点fail指向头
+  >
+  > 如：abc d bc c，如下所示
+  >
+  > 使用队列层序遍历
+  >
+  > 第一次完整入队 a d b c 
+  >
+  > b->b , c->c  
+  >
+  > 第二次完整入队 b c
+  >
+  > c->c   
+  >
+  > 第三次完整入队 c
+  >
+  > 无
+
+  ![](img/a2020_32_ac.png)
+
+- 代码：
+
+  ```java
+  	public static class Node {
+  		public int end; // 有多少个字符串以该节点结尾
+  		public Node fail;
+  		public Node[] nexts;
+  
+  		public Node() {
+  			end = 0;
+  			fail = null;
+  			nexts = new Node[26];
+  		}
+  	}
+  
+  	public static class ACAutomation {
+  		private Node root;
+  
+  		public ACAutomation() {
+  			root = new Node();
+  		}
+  
+  		// 你有多少个匹配串，就调用多少次insert
+  		public void insert(String s) {
+  			char[] str = s.toCharArray();
+  			Node cur = root;
+  			int index = 0;
+  			for (int i = 0; i < str.length; i++) {
+  				index = str[i] - 'a';
+  				if (cur.nexts[index] == null) {
+  					Node next = new Node();
+  					cur.nexts[index] = next;
+  				}
+  				cur = cur.nexts[index];
+  			}
+  			cur.end++;
+  		}
+  
+  		public void build() {
+  			Queue<Node> queue = new LinkedList<>();
+  			queue.add(root);
+  			Node cur = null;
+  			Node cfail = null;
+  			while (!queue.isEmpty()) {
+  				cur = queue.poll(); // 父
+  				for (int i = 0; i < 26; i++) { // 下级所有的路
+  					if (cur.nexts[i] != null) { // 该路下有子节点
+  						cur.nexts[i].fail = root; // 初始时先设置一个值
+  						cfail = cur.fail;
+  						while (cfail != null) { // cur不是头节点
+  							if (cfail.nexts[i] != null) {
+  								cur.nexts[i].fail = cfail.nexts[i];
+  								break;
+  							}
+  							cfail = cfail.fail;
+  						}
+  						queue.add(cur.nexts[i]);
+  					}
+  				}
+  			}
+  		}
+  
+  		public int containNum(String content) {
+  			char[] str = content.toCharArray();
+  			Node cur = root;
+  			Node follow = null;
+  			int index = 0;
+  			int ans = 0;
+  			for (int i = 0; i < str.length; i++) {
+  				index = str[i] - 'a';
+  				while (cur.nexts[index] == null && cur != root) {
+  					cur = cur.fail;
+  				}
+  				cur = cur.nexts[index] != null ? cur.nexts[index] : root;
+  				follow = cur;
+  				while (follow != root) {
+  					if (follow.end == -1) {
+  						break;
+  					}
+  					{ // 不同的需求，在这一段{ }之间修改
+  						ans += follow.end;
+  						follow.end = -1;
+  					} // 不同的需求，在这一段{ }之间修改
+  					follow = follow.fail;
+  				}
+  			}
+  			return ans;
+  		}
+      }
+  ```
+
+  
+
+#### AC2
+
+- 链接：
+
+- 内容：
+
+  > 记录在一个文章中出现了哪些违规词，假设已知道所有的违规词
+
+- 思路：
+
+  > 使用ac自动机，添加所有的节点，并将所有的违规节点都标记一下
+  >
+  > 对文章遍历，如果进入，则按层遍历所有节点的fail，直到空，中途有违规节点添加
+  >
+  > 直接文章遍历结束
+
+- 代码：
+
+  ```java
+  // 前缀树的节点
+  	public static class Node {
+  		// 如果一个node，end为空，不是结尾
+  		// 如果end不为空，表示这个点是某个字符串的结尾，end的值就是这个字符串
+  		public String end;
+  		// 只有在上面的end变量不为空的时候，endUse才有意义
+  		// 表示，这个字符串之前有没有加入过答案
+  		public boolean endUse;
+  		public Node fail;
+  		public Node[] nexts;
+  
+  		public Node() {
+  			endUse = false;
+  			end = null;
+  			fail = null;
+  			nexts = new Node[26];
+  		}
+  	}
+  
+  	public static class ACAutomation {
+  		private Node root;
+  
+  		public ACAutomation() {
+  			root = new Node();
+  		}
+  
+  		public void insert(String s) {
+  			char[] str = s.toCharArray();
+  			Node cur = root;
+  			int index = 0;
+  			for (int i = 0; i < str.length; i++) {
+  				index = str[i] - 'a';
+  				if (cur.nexts[index] == null) {
+  					cur.nexts[index] = new Node();
+  				}
+  				cur = cur.nexts[index];
+  			}
+  			cur.end = s;
+  		}
+  
+  		public void build() {
+  			Queue<Node> queue = new LinkedList<>();
+  			queue.add(root);
+  			Node cur = null;
+  			Node cfail = null;
+  			while (!queue.isEmpty()) {
+  				// 某个父亲，cur
+  				cur = queue.poll();
+  				for (int i = 0; i < 26; i++) { // 所有的路
+  					// cur -> 父亲  i号儿子，必须把i号儿子的fail指针设置好！
+  					if (cur.nexts[i] != null) { // 如果真的有i号儿子
+  						cur.nexts[i].fail = root;
+  						cfail = cur.fail;
+  						while (cfail != null) {
+  							if (cfail.nexts[i] != null) {
+  								cur.nexts[i].fail = cfail.nexts[i];
+  								break;
+  							}
+  							cfail = cfail.fail;
+  						}
+  						queue.add(cur.nexts[i]);
+  					}
+  				}
+  			}
+  		}
+  
+  		// 大文章：content
+  		public List<String> containWords(String content) {
+  			char[] str = content.toCharArray();
+  			Node cur = root;
+  			Node follow = null;
+  			int index = 0;
+  			List<String> ans = new ArrayList<>();
+  			for (int i = 0; i < str.length; i++) {
+  				index = str[i] - 'a'; // 路
+  				// 如果当前字符在这条路上没配出来，就随着fail方向走向下条路径
+  				while (cur.nexts[index] == null && cur != root) {
+  					cur = cur.fail;
+  				}
+  				// 1) 现在来到的路径，是可以继续匹配的
+  				// 2) 现在来到的节点，就是前缀树的根节点
+  				cur = cur.nexts[index] != null ? cur.nexts[index] : root;
+  				follow = cur;
+  				while (follow != root) {
+  					if (follow.endUse) {
+  						break;
+  					}
+  					// 不同的需求，在这一段之间修改
+  					if (follow.end != null) {
+  						ans.add(follow.end);
+  						follow.endUse = true;
+  					}
+  					// 不同的需求，在这一段之间修改
+  					follow = follow.fail;
+  				}
+  			}
+  			return ans;
+  		}
+  
+  	}
+  ```
+
+  
+
+### class33
+
+#### hash
+
+- hash函数是一个把长度大的入参数据转化为长度小的出参数据的一个函数方法
+
+- 具有两个性质，**离散性与均匀性**
+
+- 内容：
+
+  > hash的底层是一个数组+链表（树结构）实现的，当查询速度慢了（或者其中一个数组的数据太长，超过范围了），会进行扩容操作，将数组扩充，并使用新的hash函数将原数据进行填充。
+  >
+  > 例如，当数据达到 2 4 8 16 ... log_2n时会进行数据扩充，扩充的代价则是一个等比数列
+  > $$
+  > W = a_0*(1-r^n)/(1-r) = 2*{(1-2^k)}/{(1-2)}
+  > $$
+  > k = log_2n
+  > $$
+  > W = 2*(1-2^{log_{2}n})/(1-2) = 2*(1-n)/(1-2) = 2*(n-1)
+  > $$
+  > 因为此时扩充的代价是O(N)，不同的扩充策略会影响常数时间，不会影响复杂度的级别
+  >
+  > 查询或添加了N个，所以查询的时间复杂度平均是O(N)/N = O(1)
+
+#### 布隆过滤器
+
+- 特点
+
+  - 利用哈希函数的性质
+  - 每一条数据提取特征
+  - 加入描黑库
+
+- 作用
+
+  - 对指定的数据添加黑名单
+  - 有误判率（不可避免）(只要是添加过的黑名单，不会误报，只会有一定概率把正确的误报成黑名单)
+
+- 重要公式：
+
+  - **假设数据量为n,预期失误率为p(布隆过滤器大小和样本的大小无关)**
+
+  - 根据n和p,算出布隆过滤器需要的bit位，向上取整记为m
+
+  - 根据m和n,算出布隆过滤器需要多少个哈希函数，向上取整，记为k
+
+  - 根据修正公式，算出真实的失误率p_true
+
+    ![](img/a2020_32_bloom.png)
+
+  - 根据两个不同的hash函数，可以使用2*h1+h2,3h1+h2等构造出多个不相同的hash函数
+
+- 应用
+
+  - hdfs（HDFS（Hadoop Distributed File System）是Hadoop生态系统中的分布式文件系统，用于存储和处理大规模数据集），查找文件
+  - url判断（黑名单）
+
+#### 一致性哈希
+
+- 分布式存储结构常见的结构 
+  - 哈希域变环设计
+    - 成环，然后加节点，顺时针的那部分交由另一个节点管理
+  - 虚拟节点技术
+    - 每个物理空间set管理一个环上的n个节点
+    - 添加一个物理空间set,之前的物理空间set管理的节点分给新的set,使所有的set数据量几乎相等
+
+### class34
+
+#### 资源限制类型技巧汇总
+
+- 1)布隆过滤器用于集合的建立与查询，并可以节省大量空间
+- 2)一致性哈希解决数据服务器的负载管理问题
+- 3)利用并查集结构做岛问题的并行计算
+- 4)哈希函数可以把数据按照种类均匀分流
+- 5)位图解决某一范围上数字的出现情况，并可以节省大量空间
+- 6)利用分段统计思想、并进一步节省大量空间
+- 7)利用堆、外排序来做多个处理单元的结果合并
+
+#### 题目一
+- 内容：
+
+  > 32位无符号整数的范围是0~4,294,967,295,现在有一个正好包含40亿个无符号整数的文件，可以使用最多1GB的内存，怎么找到出现次数最多的数?
+
+- 思路：
+
+  **哈希函数可以把数据按照种类均匀分流**
+
+  > 分流：一个hash数据占用8字节的数据内存，key与value均为4字节。
+  >
+  > 那么1GB的内存最多只能有1GB/8B=1G=125,000,000（条）
+  >
+  > 最多只有1亿多条数据，但是hash表内部还有索引等占据的内存空间，这里直接保守估计只能存1千万条数据。
+  >
+  > 总共只有40亿个无符号整数，那可以使用这1千万条数据内存空间进行分流。
+  >
+  > 因为**hash函数的离散性与均匀性**，我们假设使用了一个hash函数对这源40亿个无符号整数进行数据处理，%400后的结果表示进入哪个桶中，（桶是只有一个的，但我们可以先找出所有在0中的桶后进行一些处理后记录其中出现次数最多的数，释放资源后，再把所有要进1中的数据同样处理...），**这样每个桶中估计刚好有1千万条数据**。
+  >
+  > 因为**同一个无符号整数使用同一个哈希函数得出的结果是一样的**，不会因这个整数所在的位置的不同。
+  >
+  > **从桶0记录出现最大的值及其数量，释放桶0资源，记录桶1与之前最大的值及其数量比较，直到结束。（桶0和桶1...是同一个内存空间，不过是在不同过程的不同称呼而已**）
+
+- 进阶：**当一个哈希函数无法满足时，可以使用两个哈希函数对数据进行依次处理，过程同一个哈希函数。**
+
+#### 题目二
+- 内容：
+
+  > 32位无符号整数的范围是0~4,294,967,295,现在有一个正好包含40亿个无符号整数的文件，所以在整个范围中必然存在没出现过的数。可以使用最多1GB的内存，怎么找到所有未出现过的数?
+
+- 思路：
+
+  **位图解决某一范围上数字的出现情况，并可以节省大量空间**
+
+  > 我们可以联想一下布隆过滤器，它是把一个url(数字)映射到bit位上(一位或多位)，如果这些位上同时存在，则表明数据存在。
+  >
+  > 我们可以使用同样的方法，但不使用哈希函数，因为它有误判率
+  >
+  > 我们可以申请长度为4,294,967,296/32=134,217,728长度(向上取整)的int数组，这个长度为134,217,728，所占空间为536,870,912B空间，1GB所占1,000,000,000B空间，远远小于1GB空间。
+  >
+  > 我们**对任意一个无符号整数S的处理策略是，先定位S所在的数组下标i,i=S/32,再找到S对应的哪位k,k=S%32,对任意一个S，把arr[i]这个数据的k位，使用1<<(S%32)变成1(原先为0则变，原先为1则不变)**
+  >
+  > 把所有的数据全过一遍后，对于**位上为0的数据所代表的无符号整数即是没有的，收集所有。**
+
+- 【进阶】
+
+  > 内存限制为3KB，但是只用找到一个没出现过的数即可
+
+- 【进阶】思路
+
+  **利用分段统计思想、并进一步节省大量空间**
+
+  > 3KB = 3000KB ,一个无符号数据占4字节，3000/4=750个
+  >
+  > 找到小于750的最大的二的次幂，512
+  >
+  > **0~2^32-1**一共有2^32个数据，可以分512份，每一份有2^(32-9)=2^23个数据
+  >
+  > arr = int[512] 
+  >
+  > arr[0]表示0~2^23-1这个范围内的数据的数量，arr[1]表示2^23~2^24-1这个范围内的数量
+  >
+  > 当有一个arr[i] 的数量不等于2^23时，说明其内至少有一个无符号位数字不存在。
+  >
+  > 然后在**i * 2^23~(i+1) * 2^23-1**这个范围内继续分512份，找到数量不等于其范围的区间
+  >
+  > 继续重复上述过程
+  >
+  > 直到找到为止。
+
+- 【进阶】
+
+  > 内存限制为几个变量，但是只用找到一个没出现过的数即可
+
+- 【进阶】思路
+
+  > 二分
+  >
+  > 找到0~2^31-1,2^31~2^32-1这两个区间的数量，然后查找不符合的那个区间
+  >
+  > 以这个区间再继续二分
+  >
+  > 直到找到了要找的不存在的值。
+
+#### 题目三
+- 内容
+
+  > 有一个包含100亿个URL的大文件，假设每个URL占用64B，请找出其中所有重复的URL
+
+- 思路
+
+  > 思路一：布隆过滤器，但有失误率
+  >
+  > 思路二：哈希分流
+  >
+  > 把大文件通过哈希分为小文件，若需要再把小文件分为小小文件...
+  >
+  > 若有重复的肯定会进入同一个小....文件中,即可找到所有重复的url
+
+- 【进阶】
+
+  > 某搜索公司一天的用户搜索词汇是海量的(百亿数据量)，请设计一种求出每天热门Top100词汇的可行办法
+
+- 【进阶】思路
+
+  > 哈希分流+100容量的小根堆
+
+#### 题目四
+- 内容
+
+  > 32位无符号整数的范围是0~4294967295,现在有40亿个无符号整数,可以使用最多1GB的内存，找出所有出现了两次的数。
+
+- 思路
+
+  > 使用位图
+  >
+  > 每两位表示一个数据出现的次数，00表示未出现 ，01表示出现1次，10表示出现2次，11表示出现3次及以上
+  >
+  > 需要的空间2^32个数，每个数占2位，共占据2^34bit，一共要占据2^31B空间
+  >
+  > 1GB = 1,000,000,000B，2^31B = 1,073,741,824 空间不够
+  >
+  > 先分段，再计算
+  >
+  > 第一段计算所有0~2^31-1的数据的出现两次重复的数
+  >
+  > 第二段计算所有2^31~2^32-1的数据的出现两次重复的数
+
+#### 题目五
+- 内容
+
+  > 32位无符号整数的范围是0~4294967295，现在有40亿个无符号整数可以使用最多10MB的内存，怎么找到这40亿个整数的中位数?
+
+- 思路
+
+  > 10MB, 10MB/4B = 10^7/4 = 2.5 * 10^7 = 25,000,000
+  >
+  > 保守估计能申请134217728(2^27)长度的int数组
+  >
+  > 计算每个arr[i]的值，则能定位到哪个arr[i]包含中位数
+  >
+  > 继续在arr[i]所代表的范围中进行求第几个数
+  >
+  > 再进行分段
+  >
+  > 直到结束。
+
+- 【进阶】
+
+  > 只有3KB
+
+- 【进阶】思路
+
+  > 同上，不过要多进行几次分段处理
+
+#### 题目六
+- 内容
+
+  > 32位无符号整数的范围是0~4294967295,有一个10G大小的文件，每一行都装着这种类型的数字，整个文件是无序的，给你5G的内存空间，请你输出一个10G大小的文件，就是原文件所有数字排序的结果
+
+- 思路
+
+  > 利用堆，使用5G的内存空间的堆，记录这个内存下的小的值及其次数，然后写入文件中。
+  >
+  > 再利用堆，把除了上一次的最大值以下的值添加入堆，然后写入文件中。
+  >
+  > 直到所有的数据都完成了排序并写入了文件中。
+
+### class35
+
+#### AVLTree
+
+- 链接：暂无
+
+- 内容：
+
+  > avl树的创建，添加节点与删除节点
+  >
+  > 
+
+- 思路：
+
+  > avl树的创建，初始化
+  >
+  > 一个avl树在初始是，头是null,且size=0
+  >
+  > avl树的节点内包含自己的key与value值，left与right指针，还有自己的高度（叶子节点为1）
+
+  - 添加节点
+
+    > 添加节点与BST是一样的，不过要加一个补丁，该补丁是对avl树的补充
+    >
+    > 保证avl树任一节点的左右子树之差不超过1
+    >
+    > 且在添加节点的位置直到根节点都要对高度进行处理
+
+    ```java
+    private AVLNode<K, V> add(AVLNode<K, V> cur, K key, V value) {
+    			if (cur == null) {
+    				return new AVLNode<K, V>(key, value);
+    			} else {
+    				if (key.compareTo(cur.k) < 0) { // 要放在左边
+    					cur.l = add(cur.l, key, value);
+    				} else {
+    					cur.r = add(cur.r, key, value); // 要放在右边
+    				}
+    				cur.h = Math.max(cur.l != null ? cur.l.h : 0, cur.r != null ? cur.r.h : 0) + 1;
+    				return maintain(cur);
+    			}
+    		}
+    ```
+
+  - 删除节点
+
+    > 删除节点同BST,存在四种情况，每一种情况都要对沿途树进行处理
+    >
+    > 1、删除节点左右子树均不存在，直接删除
+    >
+    > 2、删除节点左子树不存在，用右子树代替删除节点
+    >
+    > 3、删除节点右子树不存在，用左子树代替删除节点
+    >
+    > 4、删除节点左右子树均存在，使用删除节点的前驱或后继替代
+
+    ```java
+    	private AVLNode<K, V> delete(AVLNode<K, V> cur, K key) {
+    			if (key.compareTo(cur.k) > 0) {
+    				cur.r = delete(cur.r, key);
+    			} else if (key.compareTo(cur.k) < 0) {
+    				cur.l = delete(cur.l, key);
+    			} else {
+    				if (cur.l == null && cur.r == null) {
+    					cur = null;
+    				} else if (cur.l == null && cur.r != null) {
+    					cur = cur.r;
+    				} else if (cur.l != null && cur.r == null) {
+    					cur = cur.l;
+    				} else {
+    					AVLNode<K, V> des = cur.r;
+    					while (des.l != null) {
+    						des = des.l;
+    					}
+    					cur.r = delete(cur.r, des.k);
+    					des.l = cur.l;
+    					des.r = cur.r;
+    					cur = des;
+    				}
+    			}
+    			if (cur != null) {
+    				cur.h = Math.max(cur.l != null ? cur.l.h : 0, cur.r != null ? cur.r.h : 0) + 1;
+    			}
+    			return maintain(cur);
+    		}
+    ```
+
+- 代码：
+
+  - 左旋与右旋
+
+    ```java
+    // LL
+    private AVLNode<K, V> rightRotate(AVLNode<K, V> cur) {
+    			AVLNode<K, V> left = cur.l;
+    			cur.l = left.r;
+    			left.r = cur;
+    			cur.h = Math.max((cur.l != null ? cur.l.h : 0), (cur.r != null ? cur.r.h : 0)) + 1;
+    			left.h = Math.max((left.l != null ? left.l.h : 0), (left.r != null ? left.r.h : 0)) + 1;
+    			return left;
+    		}
+    // RR
+    		private AVLNode<K, V> leftRotate(AVLNode<K, V> cur) {
+    			AVLNode<K, V> right = cur.r;
+    			cur.r = right.l;
+    			right.l = cur;
+    			cur.h = Math.max((cur.l != null ? cur.l.h : 0), (cur.r != null ? cur.r.h : 0)) + 1;
+    			right.h = Math.max((right.l != null ? right.l.h : 0), (right.r != null ? right.r.h : 0)) + 1;
+    			return right;
+    		}
+    ```
+
+  - maintain补丁
+
+    ```java
+    	private AVLNode<K, V> maintain(AVLNode<K, V> cur) {
+    			if (cur == null) {
+    				return null;
+    			}
+    			int leftHeight = cur.l != null ? cur.l.h : 0;
+    			int rightHeight = cur.r != null ? cur.r.h : 0;
+    			if (Math.abs(leftHeight - rightHeight) > 1) {
+    				if (leftHeight > rightHeight) {
+    					int leftLeftHeight = cur.l != null && cur.l.l != null ? cur.l.l.h : 0;
+    					int leftRightHeight = cur.l != null && cur.l.r != null ? cur.l.r.h : 0;
+    					if (leftLeftHeight >= leftRightHeight) {
+                            // LL与LR同时出现（删除节点时），一定要使用LL
+                            // LL
+    						cur = rightRotate(cur);
+    					} else {
+                            // LR
+    						cur.l = leftRotate(cur.l);
+    						cur = rightRotate(cur);
+    					}
+    				} else {
+    					int rightLeftHeight = cur.r != null && cur.r.l != null ? cur.r.l.h : 0;
+    					int rightRightHeight = cur.r != null && cur.r.r != null ? cur.r.r.h : 0;
+    					if (rightRightHeight >= rightLeftHeight) {
+                            // RR
+    						cur = leftRotate(cur);
+    					} else {
+                            // RL 
+    						cur.r = rightRotate(cur.r);
+    						cur = leftRotate(cur);
+    					}
+    				}
+    			}
+    			return cur;
+    		}
+    ```
+
+- 相关api
+
+  ```java
+  	private AVLNode<K, V> findLastIndex(K key) {
+  			AVLNode<K, V> pre = root;
+  			AVLNode<K, V> cur = root;
+  			while (cur != null) {
+  				pre = cur;
+  				if (key.compareTo(cur.k) == 0) {
+  					break;
+  				} else if (key.compareTo(cur.k) < 0) {
+  					cur = cur.l;
+  				} else {
+  					cur = cur.r;
+  				}
+  			}
+  			return pre;
+  		}
+  
+  	private AVLNode<K, V> findLastNoSmallIndex(K key) {
+  			AVLNode<K, V> ans = null;
+  			AVLNode<K, V> cur = root;
+  			while (cur != null) {
+  				if (key.compareTo(cur.k) == 0) {
+  					ans = cur;
+  					break;
+  				} else if (key.compareTo(cur.k) < 0) {
+  					ans = cur;
+  					cur = cur.l;
+  				} else {
+  					cur = cur.r;
+  				}
+  			}
+  			return ans;
+  		}
+  	private AVLNode<K, V> findLastNoBigIndex(K key) {
+  			AVLNode<K, V> ans = null;
+  			AVLNode<K, V> cur = root;
+  			while (cur != null) {
+  				if (key.compareTo(cur.k) == 0) {
+  					ans = cur;
+  					break;
+  				} else if (key.compareTo(cur.k) < 0) {
+  					cur = cur.l;
+  				} else {
+  					ans = cur;
+  					cur = cur.r;
+  				}
+  			}
+  			return ans;
+  		}
+  ```
+
+  
+
+### class36
+
+#### sizeBalancedTree
+
+- 链接：暂无
+
+- 内容：
+
+  > sb树，任何的子树的节点个数不能超过其叔叔为根的子树节点个数
+
+- 思路：
+
+  > 同avl树，出现ll,rr,lr,rl时，要进行旋转操作
+  >
+  > 但这里是递归调用，而不是avl的有限几个看看是否平衡
+  >
+  > 且，sb树在删除时不会进行补丁操作
+
+- 代码：
+
+  ```java
+  public static class SizeBalancedTreeMap<K extends Comparable<K>, V> {
+  		private SBTNode<K, V> root;
+  
+  		private SBTNode<K, V> rightRotate(SBTNode<K, V> cur) {
+  			SBTNode<K, V> leftNode = cur.l;
+  			cur.l = leftNode.r;
+  			leftNode.r = cur;
+  			leftNode.size = cur.size;
+  			cur.size = (cur.l != null ? cur.l.size : 0) + (cur.r != null ? cur.r.size : 0) + 1;
+  			return leftNode;
+  		}
+  
+  		private SBTNode<K, V> leftRotate(SBTNode<K, V> cur) {
+  			SBTNode<K, V> rightNode = cur.r;
+  			cur.r = rightNode.l;
+  			rightNode.l = cur;
+  			rightNode.size = cur.size;
+  			cur.size = (cur.l != null ? cur.l.size : 0) + (cur.r != null ? cur.r.size : 0) + 1;
+  			return rightNode;
+  		}
+  
+  		private SBTNode<K, V> maintain(SBTNode<K, V> cur) {
+  			if (cur == null) {
+  				return null;
+  			}
+  			int leftSize = cur.l != null ? cur.l.size : 0;
+  			int leftLeftSize = cur.l != null && cur.l.l != null ? cur.l.l.size : 0;
+  			int leftRightSize = cur.l != null && cur.l.r != null ? cur.l.r.size : 0;
+  			int rightSize = cur.r != null ? cur.r.size : 0;
+  			int rightLeftSize = cur.r != null && cur.r.l != null ? cur.r.l.size : 0;
+  			int rightRightSize = cur.r != null && cur.r.r != null ? cur.r.r.size : 0;
+  			if (leftLeftSize > rightSize) {
+  				cur = rightRotate(cur);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			} else if (leftRightSize > rightSize) {
+  				cur.l = leftRotate(cur.l);
+  				cur = rightRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			} else if (rightRightSize > leftSize) {
+  				cur = leftRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur = maintain(cur);
+  			} else if (rightLeftSize > leftSize) {
+  				cur.r = rightRotate(cur.r);
+  				cur = leftRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			}
+  			return cur;
+  		}
+  		// 现在，以cur为头的树上，新增，加(key, value)这样的记录
+  		// 加完之后，会对cur做检查，该调整调整
+  		// 返回，调整完之后，整棵树的新头部
+  		private SBTNode<K, V> add(SBTNode<K, V> cur, K key, V value) {
+  			if (cur == null) {
+  				return new SBTNode<K, V>(key, value);
+  			} else {
+  				cur.size++;
+  				if (key.compareTo(cur.key) < 0) {
+  					cur.l = add(cur.l, key, value);
+  				} else {
+  					cur.r = add(cur.r, key, value);
+  				}
+  				return maintain(cur);
+  			}
+  		}
+  
+  		// 在cur这棵树上，删掉key所代表的节点
+  		// 返回cur这棵树的新头部
+  		private SBTNode<K, V> delete(SBTNode<K, V> cur, K key) {
+  			cur.size--;
+  			if (key.compareTo(cur.key) > 0) {
+  				cur.r = delete(cur.r, key);
+  			} else if (key.compareTo(cur.key) < 0) {
+  				cur.l = delete(cur.l, key);
+  			} else { // 当前要删掉cur
+  				if (cur.l == null && cur.r == null) {
+  					// free cur memory -> C++
+  					cur = null;
+  				} else if (cur.l == null && cur.r != null) {
+  					// free cur memory -> C++
+  					cur = cur.r;
+  				} else if (cur.l != null && cur.r == null) {
+  					// free cur memory -> C++
+  					cur = cur.l;
+  				} else { // 有左有右
+  					SBTNode<K, V> pre = null;
+  					SBTNode<K, V> des = cur.r;
+  					des.size--;
+  					while (des.l != null) {
+  						pre = des;
+  						des = des.l;
+  						des.size--;
+  					}
+  					if (pre != null) {
+  						pre.l = des.r;
+  						des.r = cur.r;
+  					}
+  					des.l = cur.l;
+  					des.size = des.l.size + (des.r == null ? 0 : des.r.size) + 1;
+  					// free cur memory -> C++
+  					cur = des;
+  				}
+  			}
+  			// cur = maintain(cur);
+  			return cur;
+  		}
+  }
+  ```
+
+#### skipList
+
+- 链接：暂无
+
+- 内容：
+
+  > 跳表
+
+- 思路：
+
+  > 跳表的实质是使用概率事件来完成对数据的分级
+
+- 代码：
+
+  ```java
+  // 跳表的节点定义
+  	public static class SkipListNode<K extends Comparable<K>, V> {
+  		public K key;
+  		public V val;
+  		public ArrayList<SkipListNode<K, V>> nextNodes;
+  
+  		public SkipListNode(K k, V v) {
+  			key = k;
+  			val = v;
+  			nextNodes = new ArrayList<SkipListNode<K, V>>();
+  		}
+  
+  		// 遍历的时候，如果是往右遍历到的null(next == null), 遍历结束
+  		// 头(null), 头节点的null，认为最小
+  		// node  -> 头，node(null, "")  node.isKeyLess(!null)  true
+  		// node里面的key是否比otherKey小，true，不是false
+  		public boolean isKeyLess(K otherKey) {
+  			//  otherKey == null -> false 
+  			return otherKey != null && (key == null || key.compareTo(otherKey) < 0);
+  		}
+  
+  		public boolean isKeyEqual(K otherKey) {
+  			return (key == null && otherKey == null)
+  					|| (key != null && otherKey != null && key.compareTo(otherKey) == 0);
+  		}
+  
+  	}
+  
+  	public static class SkipListMap<K extends Comparable<K>, V> {
+  		private static final double PROBABILITY = 0.5; // < 0.5 继续做，>=0.5 停
+  		private SkipListNode<K, V> head;
+  		private int size;
+  		private int maxLevel;
+  
+  		public SkipListMap() {
+  			head = new SkipListNode<K, V>(null, null);
+  			head.nextNodes.add(null); // 0
+  			size = 0;
+  			maxLevel = 0;
+  		}
+  
+  		// 从最高层开始，一路找下去，
+  		// 最终，找到第0层的<key的最右的节点
+  		private SkipListNode<K, V> mostRightLessNodeInTree(K key) {
+  			if (key == null) {
+  				return null;
+  			}
+  			int level = maxLevel;
+  			SkipListNode<K, V> cur = head;
+  			while (level >= 0) { // 从上层跳下层
+  				//  cur  level  -> level-1
+  				cur = mostRightLessNodeInLevel(key, cur, level--);
+  			}
+  			return cur;
+  		}
+  
+  		// 在level层里，如何往右移动
+  		// 现在来到的节点是cur，来到了cur的level层，在level层上，找到<key最后一个节点并返回
+  		private SkipListNode<K, V> mostRightLessNodeInLevel(K key, 
+  				SkipListNode<K, V> cur, 
+  				int level) {
+  			SkipListNode<K, V> next = cur.nextNodes.get(level);
+  			while (next != null && next.isKeyLess(key)) {
+  				cur = next;
+  				next = cur.nextNodes.get(level);
+  			}
+  			return cur;
+  		}
+  
+  		public boolean containsKey(K key) {
+  			if (key == null) {
+  				return false;
+  			}
+  			SkipListNode<K, V> less = mostRightLessNodeInTree(key);
+  			SkipListNode<K, V> next = less.nextNodes.get(0);
+  			return next != null && next.isKeyEqual(key);
+  		}
+  
+  		// 新增、改value
+  		public void put(K key, V value) {
+  			if (key == null) {
+  				return;
+  			}
+  			// 0层上，最右一个，< key 的Node -> >key
+  			SkipListNode<K, V> less = mostRightLessNodeInTree(key);
+  			SkipListNode<K, V> find = less.nextNodes.get(0);
+  			if (find != null && find.isKeyEqual(key)) {
+  				find.val = value;
+  			} else { // find == null   8   7   9
+  				size++;
+  				int newNodeLevel = 0;
+  				while (Math.random() < PROBABILITY) {
+  					newNodeLevel++;
+  				}
+  				// newNodeLevel
+  				while (newNodeLevel > maxLevel) {
+  					head.nextNodes.add(null);
+  					maxLevel++;
+  				}
+  				SkipListNode<K, V> newNode = new SkipListNode<K, V>(key, value);
+  				for (int i = 0; i <= newNodeLevel; i++) {
+  					newNode.nextNodes.add(null);
+  				}
+  				int level = maxLevel;
+  				SkipListNode<K, V> pre = head;
+  				while (level >= 0) {
+  					// level 层中，找到最右的 < key 的节点
+  					pre = mostRightLessNodeInLevel(key, pre, level);
+  					if (level <= newNodeLevel) {
+  						newNode.nextNodes.set(level, pre.nextNodes.get(level));
+  						pre.nextNodes.set(level, newNode);
+  					}
+  					level--;
+  				}
+  			}
+  		}
+  
+  		public V get(K key) {
+  			if (key == null) {
+  				return null;
+  			}
+  			SkipListNode<K, V> less = mostRightLessNodeInTree(key);
+  			SkipListNode<K, V> next = less.nextNodes.get(0);
+  			return next != null && next.isKeyEqual(key) ? next.val : null;
+  		}
+  
+  		public void remove(K key) {
+  			if (containsKey(key)) {
+  				size--;
+  				int level = maxLevel;
+  				SkipListNode<K, V> pre = head;
+  				while (level >= 0) {
+  					pre = mostRightLessNodeInLevel(key, pre, level);
+  					SkipListNode<K, V> next = pre.nextNodes.get(level);
+  					// 1）在这一层中，pre下一个就是key
+  					// 2）在这一层中，pre的下一个key是>要删除key
+  					if (next != null && next.isKeyEqual(key)) {
+  						// free delete node memory -> C++
+  						// level : pre -> next(key) -> ...
+  						pre.nextNodes.set(level, next.nextNodes.get(level));
+  					}
+  					// 在level层只有一个节点了，就是默认节点head
+  					if (level != 0 && pre == head && pre.nextNodes.get(level) == null) {
+  						head.nextNodes.remove(level);
+  						maxLevel--;
+  					}
+  					level--;
+  				}
+  			}
+  		}
+  ```
+
+
+
+### class37
+
+#### countOfRangeSum
+
+- 链接：暂无
+
+- 内容：
+
+  > 给你一个混乱数组，和区间[lower,upper],求这个数组有多少个子数组在这个区间内，包含边界。
+
+- 思路：
+
+  > 改写sb树
+  >
+  > example：[4,5,3,-1,5,7,4,0,4,6]  [6,9]
+  >
+  > ans = 以[0]位置为最后的子数组的数量+以[1]位置为最后的子数组的数量+...+以[n-1]位置为最后的子数组的数量
+  >
+  > 以[n-1]位置为最后的子数组的数量 = 以[0]为开始的子数组在[Sum_(n_1) - 9,Sum_(n-1) - 6]的数量
+  >
+  > ...
+  >
+  > 可以把原始问题转化为
+  >
+  > 当前i的值为arr[i]，求之前所有子数组的和在[Sum_(n_1) - 9,Sum_(n-1) - 6]区间的数量
+  >
+  > 为了使其方便，可以在前面添加一个0
+  >
+  > 如下表
+
+  | 当前下标 | 当前值 | 以0开始的子数组的和        | 前缀和 | 要求的区间（变换） | 满足数量                                         |
+  | -------- | ------ | -------------------------- | ------ | ------------------ | ------------------------------------------------ |
+  | 0        | 4      | 0(开始就添加的)            | 4      | [-5,-2]            | 0(如果4在区间中，那么有一个数字0在，直接能得到1) |
+  | 1        | 5      | 0,4                        | 9      | [0,3]              | 1                                                |
+  | 2        | 3      | 0,4,9                      | 12     | [3,6]              | 1                                                |
+  | ...      | ...    | ...                        | ...    | ...                | ...                                              |
+  | n-1      | 6      | 0,4,9,12,11,16,23,27,27,31 | 37     | [28,31]            | 1                                                |
+
+  >根据上述的流程，我们可以看出，我们要设计一个结构满足以下几个方面
+  >
+  >1、能够添加重复值
+  >
+  >2、可以计算<num的数量
+  >
+  >3、时间复杂度要尽量低
+  >
+  >使用改写sb树的方法
+  >
+  >如下代码，all表示以自己为根的节点的树的节点数量 (all - c.l.all - c.r.all) 为自己这个节点为5的数量
+  >
+  >满足1和3
+  >
+  >计算< num的数量
+  >
+  >​	c.key < num    ans+=c.all - c.r.all
+  >
+  >   c.key == num ans += c.all - c.l.all -c.r.all
+  >
+  >   c.key > num   c = c.left
+  >
+  >  直到结束
+
+  ```java
+  	public static class SBTNode {
+  		public long key;
+  		public SBTNode l;
+  		public SBTNode r;
+  		public long size; // 不同key的size
+  		public long all; // 总的size
+  		public SBTNode(long k) {
+  			key = k;
+  			size = 1;
+  			all = 1;
+  		}
+  	}
+  /**                   5,6
+                   3,2       7,3            
+  **
+  */
+  ```
+
+  
+
+- 代码：
+
+  ```java
+  	public static int countRangeSum1(int[] nums, int lower, int upper) {
+  		int n = nums.length;
+  		long[] sums = new long[n + 1];
+  		for (int i = 0; i < n; ++i)
+  			sums[i + 1] = sums[i] + nums[i];
+  		return countWhileMergeSort(sums, 0, n + 1, lower, upper);
+  	}
+  
+  	private static int countWhileMergeSort(long[] sums, int start, int end, int lower, int upper) {
+  		if (end - start <= 1)
+  			return 0;
+  		int mid = (start + end) / 2;
+  		int count = countWhileMergeSort(sums, start, mid, lower, upper)
+  				+ countWhileMergeSort(sums, mid, end, lower, upper);
+  		int j = mid, k = mid, t = mid;
+  		long[] cache = new long[end - start];
+  		for (int i = start, r = 0; i < mid; ++i, ++r) {
+  			while (k < end && sums[k] - sums[i] < lower)
+  				k++;
+  			while (j < end && sums[j] - sums[i] <= upper)
+  				j++;
+  			while (t < end && sums[t] < sums[i])
+  				cache[r++] = sums[t++];
+  			cache[r] = sums[i];
+  			count += j - k;
+  		}
+  		System.arraycopy(cache, 0, sums, start, t - start);
+  		return count;
+  	}
+  
+  	public static class SBTNode {
+  		public long key;
+  		public SBTNode l;
+  		public SBTNode r;
+  		public long size; // 不同key的size
+  		public long all; // 总的size
+  
+  		public SBTNode(long k) {
+  			key = k;
+  			size = 1;
+  			all = 1;
+  		}
+  	}
+  
+  	public static class SizeBalancedTreeSet {
+  		private SBTNode root;
+  		private HashSet<Long> set = new HashSet<>();
+  
+  		private SBTNode rightRotate(SBTNode cur) {
+  			long same = cur.all - (cur.l != null ? cur.l.all : 0) - (cur.r != null ? cur.r.all : 0);
+  			SBTNode leftNode = cur.l;
+  			cur.l = leftNode.r;
+  			leftNode.r = cur;
+  			leftNode.size = cur.size;
+  			cur.size = (cur.l != null ? cur.l.size : 0) + (cur.r != null ? cur.r.size : 0) + 1;
+  			// all modify
+  			leftNode.all = cur.all;
+  			cur.all = (cur.l != null ? cur.l.all : 0) + (cur.r != null ? cur.r.all : 0) + same;
+  			return leftNode;
+  		}
+  
+  		private SBTNode leftRotate(SBTNode cur) {
+  			long same = cur.all - (cur.l != null ? cur.l.all : 0) - (cur.r != null ? cur.r.all : 0);
+  			SBTNode rightNode = cur.r;
+  			cur.r = rightNode.l;
+  			rightNode.l = cur;
+  			rightNode.size = cur.size;
+  			cur.size = (cur.l != null ? cur.l.size : 0) + (cur.r != null ? cur.r.size : 0) + 1;
+  			// all modify
+  			rightNode.all = cur.all;
+  			cur.all = (cur.l != null ? cur.l.all : 0) + (cur.r != null ? cur.r.all : 0) + same;
+  			return rightNode;
+  		}
+  
+  		private SBTNode maintain(SBTNode cur) {
+  			if (cur == null) {
+  				return null;
+  			}
+  			long leftSize = cur.l != null ? cur.l.size : 0;
+  			long leftLeftSize = cur.l != null && cur.l.l != null ? cur.l.l.size : 0;
+  			long leftRightSize = cur.l != null && cur.l.r != null ? cur.l.r.size : 0;
+  			long rightSize = cur.r != null ? cur.r.size : 0;
+  			long rightLeftSize = cur.r != null && cur.r.l != null ? cur.r.l.size : 0;
+  			long rightRightSize = cur.r != null && cur.r.r != null ? cur.r.r.size : 0;
+  			if (leftLeftSize > rightSize) {
+  				cur = rightRotate(cur);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			} else if (leftRightSize > rightSize) {
+  				cur.l = leftRotate(cur.l);
+  				cur = rightRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			} else if (rightRightSize > leftSize) {
+  				cur = leftRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur = maintain(cur);
+  			} else if (rightLeftSize > leftSize) {
+  				cur.r = rightRotate(cur.r);
+  				cur = leftRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			}
+  			return cur;
+  		}
+  
+  		private SBTNode add(SBTNode cur, long key, boolean contains) {
+  			if (cur == null) {
+  				return new SBTNode(key);
+  			} else {
+  				cur.all++;
+  				if (key == cur.key) {
+  					return cur;
+  				} else { // 还在左滑或者右滑
+  					if (!contains) {
+  						cur.size++;
+  					}
+  					if (key < cur.key) {
+  						cur.l = add(cur.l, key, contains);
+  					} else {
+  						cur.r = add(cur.r, key, contains);
+  					}
+  					return maintain(cur);
+  				}
+  			}
+  		}
+  
+  		public void add(long sum) {
+  			boolean contains = set.contains(sum);
+  			root = add(root, sum, contains);
+  			set.add(sum);
+  		}
+  
+  		public long lessKeySize(long key) {
+  			SBTNode cur = root;
+  			long ans = 0;
+  			while (cur != null) {
+  				if (key == cur.key) {
+  					return ans + (cur.l != null ? cur.l.all : 0);
+  				} else if (key < cur.key) {
+  					cur = cur.l;
+  				} else {
+  					ans += cur.all - (cur.r != null ? cur.r.all : 0);
+  					cur = cur.r;
+  				}
+  			}
+  			return ans;
+  		}
+  
+  		// > 7 8...
+  		// <8 ...<=7
+  		public long moreKeySize(long key) {
+  			return root != null ? (root.all - lessKeySize(key + 1)) : 0;
+  		}
+  
+  	}
+  ```
+
+  
+
+#### slideingWindowMedian
+
+- 链接：暂无
+
+- 内容：
+
+  > 给你一个混乱的数组，窗口的区间为L，R，开始时LR都在最左侧
+  >
+  > 1、L可以向右移动
+  >
+  > 2、R可以向右移动
+  >
+  > 求任意L,R位置的中位数（排序后的那个），奇数返回中间，偶数返回(umid + lmid)/2
+
+- 思路：
+
+  > 我们可以创建一个结构，它满足以下要求
+  >
+  > 1、数据可重复
+  >
+  > 2、可以求出当前第几个位置的数字
+  >
+  > 3、复杂度较低
+  >
+  > 改写sb树
+  >
+  > ​     5,6
+  >
+  > 3,2     7,3
+  >
+  > 表示5有1个数，且左子树为2，右子树为3
+  >
+  > 若位置为4，则（6-3） = 3 ，位置4在右子树 -》以7为根的树找第1个节点
+
+  ```java
+  	public static class SBTNode<K extends Comparable<K>> {
+  		public K key;
+  		public SBTNode<K> l;
+  		public SBTNode<K> r;
+  		public int size;
+  
+  		public SBTNode(K k) {
+  			key = k;
+  			size = 1;
+  		}
+  	}
+  ```
+
+  
+
+- 代码：
+
+  ```java
+  	public static class SBTNode<K extends Comparable<K>> {
+  		public K key;
+  		public SBTNode<K> l;
+  		public SBTNode<K> r;
+  		public int size;
+  
+  		public SBTNode(K k) {
+  			key = k;
+  			size = 1;
+  		}
+  	}
+  
+  	public static class SizeBalancedTreeMap<K extends Comparable<K>> {
+  		private SBTNode<K> root;
+  
+  		private SBTNode<K> rightRotate(SBTNode<K> cur) {
+  			SBTNode<K> leftNode = cur.l;
+  			cur.l = leftNode.r;
+  			leftNode.r = cur;
+  			leftNode.size = cur.size;
+  			cur.size = (cur.l != null ? cur.l.size : 0) + (cur.r != null ? cur.r.size : 0) + 1;
+  			return leftNode;
+  		}
+  
+  		private SBTNode<K> leftRotate(SBTNode<K> cur) {
+  			SBTNode<K> rightNode = cur.r;
+  			cur.r = rightNode.l;
+  			rightNode.l = cur;
+  			rightNode.size = cur.size;
+  			cur.size = (cur.l != null ? cur.l.size : 0) + (cur.r != null ? cur.r.size : 0) + 1;
+  			return rightNode;
+  		}
+  
+  		private SBTNode<K> maintain(SBTNode<K> cur) {
+  			if (cur == null) {
+  				return null;
+  			}
+  			int leftSize = cur.l != null ? cur.l.size : 0;
+  			int leftLeftSize = cur.l != null && cur.l.l != null ? cur.l.l.size : 0;
+  			int leftRightSize = cur.l != null && cur.l.r != null ? cur.l.r.size : 0;
+  			int rightSize = cur.r != null ? cur.r.size : 0;
+  			int rightLeftSize = cur.r != null && cur.r.l != null ? cur.r.l.size : 0;
+  			int rightRightSize = cur.r != null && cur.r.r != null ? cur.r.r.size : 0;
+  			if (leftLeftSize > rightSize) {
+  				cur = rightRotate(cur);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			} else if (leftRightSize > rightSize) {
+  				cur.l = leftRotate(cur.l);
+  				cur = rightRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			} else if (rightRightSize > leftSize) {
+  				cur = leftRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur = maintain(cur);
+  			} else if (rightLeftSize > leftSize) {
+  				cur.r = rightRotate(cur.r);
+  				cur = leftRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			}
+  			return cur;
+  		}
+  
+  		private SBTNode<K> findLastIndex(K key) {
+  			SBTNode<K> pre = root;
+  			SBTNode<K> cur = root;
+  			while (cur != null) {
+  				pre = cur;
+  				if (key.compareTo(cur.key) == 0) {
+  					break;
+  				} else if (key.compareTo(cur.key) < 0) {
+  					cur = cur.l;
+  				} else {
+  					cur = cur.r;
+  				}
+  			}
+  			return pre;
+  		}
+  
+  		private SBTNode<K> add(SBTNode<K> cur, K key) {
+  			if (cur == null) {
+  				return new SBTNode<K>(key);
+  			} else {
+  				cur.size++;
+  				if (key.compareTo(cur.key) < 0) {
+  					cur.l = add(cur.l, key);
+  				} else {
+  					cur.r = add(cur.r, key);
+  				}
+  				return maintain(cur);
+  			}
+  		}
+  
+  		private SBTNode<K> delete(SBTNode<K> cur, K key) {
+  			cur.size--;
+  			if (key.compareTo(cur.key) > 0) {
+  				cur.r = delete(cur.r, key);
+  			} else if (key.compareTo(cur.key) < 0) {
+  				cur.l = delete(cur.l, key);
+  			} else {
+  				if (cur.l == null && cur.r == null) {
+  					// free cur memory -> C++
+  					cur = null;
+  				} else if (cur.l == null && cur.r != null) {
+  					// free cur memory -> C++
+  					cur = cur.r;
+  				} else if (cur.l != null && cur.r == null) {
+  					// free cur memory -> C++
+  					cur = cur.l;
+  				} else {
+  					SBTNode<K> pre = null;
+  					SBTNode<K> des = cur.r;
+  					des.size--;
+  					while (des.l != null) {
+  						pre = des;
+  						des = des.l;
+  						des.size--;
+  					}
+  					if (pre != null) {
+  						pre.l = des.r;
+  						des.r = cur.r;
+  					}
+  					des.l = cur.l;
+  					des.size = des.l.size + (des.r == null ? 0 : des.r.size) + 1;
+  					// free cur memory -> C++
+  					cur = des;
+  				}
+  			}
+  			return cur;
+  		}
+  
+  		private SBTNode<K> getIndex(SBTNode<K> cur, int kth) {
+  			if (kth == (cur.l != null ? cur.l.size : 0) + 1) {
+  				return cur;
+  			} else if (kth <= (cur.l != null ? cur.l.size : 0)) {
+  				return getIndex(cur.l, kth);
+  			} else {
+  				return getIndex(cur.r, kth - (cur.l != null ? cur.l.size : 0) - 1);
+  			}
+  		}
+  
+  		public int size() {
+  			return root == null ? 0 : root.size;
+  		}
+  
+  		public boolean containsKey(K key) {
+  			if (key == null) {
+  				throw new RuntimeException("invalid parameter.");
+  			}
+  			SBTNode<K> lastNode = findLastIndex(key);
+  			return lastNode != null && key.compareTo(lastNode.key) == 0 ? true : false;
+  		}
+  
+  		public void add(K key) {
+  			if (key == null) {
+  				throw new RuntimeException("invalid parameter.");
+  			}
+  			SBTNode<K> lastNode = findLastIndex(key);
+  			if (lastNode == null || key.compareTo(lastNode.key) != 0) {
+  				root = add(root, key);
+  			}
+  		}
+  
+  		public void remove(K key) {
+  			if (key == null) {
+  				throw new RuntimeException("invalid parameter.");
+  			}
+  			if (containsKey(key)) {
+  				root = delete(root, key);
+  			}
+  		}
+  
+  		public K getIndexKey(int index) {
+  			if (index < 0 || index >= this.size()) {
+  				throw new RuntimeException("invalid parameter.");
+  			}
+  			return getIndex(root, index + 1).key;
+  		}
+  
+  	}
+  
+  	public static class Node implements Comparable<Node> {
+  		public int index;
+  		public int value;
+  
+  		public Node(int i, int v) {
+  			index = i;
+  			value = v;
+  		}
+  
+  		@Override
+  		public int compareTo(Node o) {
+  			return value != o.value ? Integer.valueOf(value).compareTo(o.value)
+  					: Integer.valueOf(index).compareTo(o.index);
+  		}
+  	}
+  
+  	public static double[] medianSlidingWindow(int[] nums, int k) {
+  		SizeBalancedTreeMap<Node> map = new SizeBalancedTreeMap<>();
+  		for (int i = 0; i < k - 1; i++) {
+  			map.add(new Node(i, nums[i]));
+  		}
+  		double[] ans = new double[nums.length - k + 1];
+  		int index = 0;
+  		for (int i = k - 1; i < nums.length; i++) {
+  			map.add(new Node(i, nums[i]));
+  			if (map.size() % 2 == 0) {
+  				Node upmid = map.getIndexKey(map.size() / 2 - 1);
+  				Node downmid = map.getIndexKey(map.size() / 2);
+  				ans[index++] = ((double) upmid.value + (double) downmid.value) / 2;
+  			} else {
+  				Node mid = map.getIndexKey(map.size() / 2);
+  				ans[index++] = (double) mid.value;
+  			}
+  			map.remove(new Node(i - k + 1, nums[i - k + 1]));
+  		}
+  		return ans;
+  	}
+  ```
+
+  
+
+#### addRemoveGetIndexGreat
+
+- 链接：暂无
+
+- 内容：
+
+  > 实现arraylist并使其添加删除指定index的时间复杂度最小
+
+- 思路：
+
+  > 使用改写sb树的方法
+  >
+  > sb树的左旋，右旋操作是不会改变sb树的中序遍历顺序的，这也是数组的顺序
+  >
+  > 在指定index中添加或删除后，sb树会进行补丁操作，但它的中序遍历顺序是不变的，这保证了通过下标来get时的准确性。
+
+- 代码：
+
+  ```java
+  public static class SBTNode<V> {
+  		public V value;
+  		public SBTNode<V> l;
+  		public SBTNode<V> r;
+  		public int size;
+  
+  		public SBTNode(V v) {
+  			value = v;
+  			size = 1;
+  		}
+  	}
+  
+  	public static class SbtList<V> {
+  		private SBTNode<V> root;
+  
+  		private SBTNode<V> rightRotate(SBTNode<V> cur) {
+  			SBTNode<V> leftNode = cur.l;
+  			cur.l = leftNode.r;
+  			leftNode.r = cur;
+  			leftNode.size = cur.size;
+  			cur.size = (cur.l != null ? cur.l.size : 0) + (cur.r != null ? cur.r.size : 0) + 1;
+  			return leftNode;
+  		}
+  
+  		private SBTNode<V> leftRotate(SBTNode<V> cur) {
+  			SBTNode<V> rightNode = cur.r;
+  			cur.r = rightNode.l;
+  			rightNode.l = cur;
+  			rightNode.size = cur.size;
+  			cur.size = (cur.l != null ? cur.l.size : 0) + (cur.r != null ? cur.r.size : 0) + 1;
+  			return rightNode;
+  		}
+  
+  		private SBTNode<V> maintain(SBTNode<V> cur) {
+  			if (cur == null) {
+  				return null;
+  			}
+  			int leftSize = cur.l != null ? cur.l.size : 0;
+  			int leftLeftSize = cur.l != null && cur.l.l != null ? cur.l.l.size : 0;
+  			int leftRightSize = cur.l != null && cur.l.r != null ? cur.l.r.size : 0;
+  			int rightSize = cur.r != null ? cur.r.size : 0;
+  			int rightLeftSize = cur.r != null && cur.r.l != null ? cur.r.l.size : 0;
+  			int rightRightSize = cur.r != null && cur.r.r != null ? cur.r.r.size : 0;
+  			if (leftLeftSize > rightSize) {
+  				cur = rightRotate(cur);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			} else if (leftRightSize > rightSize) {
+  				cur.l = leftRotate(cur.l);
+  				cur = rightRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			} else if (rightRightSize > leftSize) {
+  				cur = leftRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur = maintain(cur);
+  			} else if (rightLeftSize > leftSize) {
+  				cur.r = rightRotate(cur.r);
+  				cur = leftRotate(cur);
+  				cur.l = maintain(cur.l);
+  				cur.r = maintain(cur.r);
+  				cur = maintain(cur);
+  			}
+  			return cur;
+  		}
+  
+  		private SBTNode<V> add(SBTNode<V> root, int index, SBTNode<V> cur) {
+  			if (root == null) {
+  				return cur;
+  			}
+  			root.size++;
+  			int leftAndHeadSize = (root.l != null ? root.l.size : 0) + 1;
+  			if (index < leftAndHeadSize) {
+  				root.l = add(root.l, index, cur);
+  			} else {
+  				root.r = add(root.r, index - leftAndHeadSize, cur);
+  			}
+  			root = maintain(root);
+  			return root;
+  		}
+  
+  		private SBTNode<V> remove(SBTNode<V> root, int index) {
+  			root.size--;
+  			int rootIndex = root.l != null ? root.l.size : 0;
+  			if (index != rootIndex) {
+  				if (index < rootIndex) {
+  					root.l = remove(root.l, index);
+  				} else {
+  					root.r = remove(root.r, index - rootIndex - 1);
+  				}
+  				return root;
+  			}
+  			if (root.l == null && root.r == null) {
+  				return null;
+  			}
+  			if (root.l == null) {
+  				return root.r;
+  			}
+  			if (root.r == null) {
+  				return root.l;
+  			}
+  			SBTNode<V> pre = null;
+  			SBTNode<V> suc = root.r;
+  			suc.size--;
+  			while (suc.l != null) {
+  				pre = suc;
+  				suc = suc.l;
+  				suc.size--;
+  			}
+  			if (pre != null) {
+  				pre.l = suc.r;
+  				suc.r = root.r;
+  			}
+  			suc.l = root.l;
+  			suc.size = suc.l.size + (suc.r == null ? 0 : suc.r.size) + 1;
+  			return suc;
+  		}
+  
+  		private SBTNode<V> get(SBTNode<V> root, int index) {
+  			int leftSize = root.l != null ? root.l.size : 0;
+  			if (index < leftSize) {
+  				return get(root.l, index);
+  			} else if (index == leftSize) {
+  				return root;
+  			} else {
+  				return get(root.r, index - leftSize - 1);
+  			}
+  		}
+  
+  		public void add(int index, V num) {
+  			SBTNode<V> cur = new SBTNode<V>(num);
+  			if (root == null) {
+  				root = cur;
+  			} else {
+  				if (index <= root.size) {
+  					root = add(root, index, cur);
+  				}
+  			}
+  		}
+  
+  		public V get(int index) {
+  			SBTNode<V> ans = get(root, index);
+  			return ans.value;
+  		}
+  
+  		public void remove(int index) {
+  			if (index >= 0 && size() > index) {
+  				root = remove(root, index);
+  			}
+  		}
+  
+  		public int size() {
+  			return root == null ? 0 : root.size;
+  		}
+  
+  	}
+  
+  	// 通过以下这个测试，
+  	// 可以很明显的看到LinkedList的插入、删除、get效率不如SbtList
+  	// LinkedList需要找到index所在的位置之后才能插入或者读取，时间复杂度O(N)
+  	// SbtList是平衡搜索二叉树，所以插入或者读取时间复杂度都是O(logN)
+  	public static void main(String[] args) {
+  		// 功能测试
+  		int test = 50000;
+  		int max = 1000000;
+  		boolean pass = true;
+  		ArrayList<Integer> list = new ArrayList<>();
+  		SbtList<Integer> sbtList = new SbtList<>();
+  		for (int i = 0; i < test; i++) {
+  			if (list.size() != sbtList.size()) {
+  				pass = false;
+  				break;
+  			}
+  			if (list.size() > 1 && Math.random() < 0.5) {
+  				int removeIndex = (int) (Math.random() * list.size());
+  				list.remove(removeIndex);
+  				sbtList.remove(removeIndex);
+  			} else {
+  				int randomIndex = (int) (Math.random() * (list.size() + 1));
+  				int randomValue = (int) (Math.random() * (max + 1));
+  				list.add(randomIndex, randomValue);
+  				sbtList.add(randomIndex, randomValue);
+  			}
+  		}
+  		for (int i = 0; i < list.size(); i++) {
+  			if (!list.get(i).equals(sbtList.get(i))) {
+  				pass = false;
+  				break;
+  			}
+  		}
+  		System.out.println("功能测试是否通过 : " + pass);
+  
+  		// 性能测试
+  		test = 500000;
+  		list = new ArrayList<>();
+  		sbtList = new SbtList<>();
+  		long start = 0;
+  		long end = 0;
+  
+  		start = System.currentTimeMillis();
+  		for (int i = 0; i < test; i++) {
+  			int randomIndex = (int) (Math.random() * (list.size() + 1));
+  			int randomValue = (int) (Math.random() * (max + 1));
+  			list.add(randomIndex, randomValue);
+  		}
+  		end = System.currentTimeMillis();
+  		System.out.println("ArrayList插入总时长(毫秒) ： " + (end - start));
+  
+  		start = System.currentTimeMillis();
+  		for (int i = 0; i < test; i++) {
+  			int randomIndex = (int) (Math.random() * (i + 1));
+  			list.get(randomIndex);
+  		}
+  		end = System.currentTimeMillis();
+  		System.out.println("ArrayList读取总时长(毫秒) : " + (end - start));
+  
+  		start = System.currentTimeMillis();
+  		for (int i = 0; i < test; i++) {
+  			int randomIndex = (int) (Math.random() * list.size());
+  			list.remove(randomIndex);
+  		}
+  		end = System.currentTimeMillis();
+  		System.out.println("ArrayList删除总时长(毫秒) : " + (end - start));
+  
+  		start = System.currentTimeMillis();
+  		for (int i = 0; i < test; i++) {
+  			int randomIndex = (int) (Math.random() * (sbtList.size() + 1));
+  			int randomValue = (int) (Math.random() * (max + 1));
+  			sbtList.add(randomIndex, randomValue);
+  		}
+  		end = System.currentTimeMillis();
+  		System.out.println("SbtList插入总时长(毫秒) : " + (end - start));
+  
+  		start = System.currentTimeMillis();
+  		for (int i = 0; i < test; i++) {
+  			int randomIndex = (int) (Math.random() * (i + 1));
+  			sbtList.get(randomIndex);
+  		}
+  		end = System.currentTimeMillis();
+  		System.out.println("SbtList读取总时长(毫秒) :  " + (end - start));
+  
+  		start = System.currentTimeMillis();
+  		for (int i = 0; i < test; i++) {
+  			int randomIndex = (int) (Math.random() * sbtList.size());
+  			sbtList.remove(randomIndex);
+  		}
+  		end = System.currentTimeMillis();
+  		System.out.println("SbtList删除总时长(毫秒) :  " + (end - start));
+  
+  	}
+  ```
+
+  
+
+### class38
+
+
 
 ## coding-for-great-offer
 
