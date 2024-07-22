@@ -3622,9 +3622,1762 @@
 
 ### class38
 
+根据对数器找规律，根据数量猜解法(10^8)
+
+>对数器找规律
+>1）某个面试题，输入参数类型简单，并且只有一个实际参数
+>
+>2）要求的返回值类型也简单，并且只有一个
+>
+>3）用暴力方法，把输入参数对应的返回值，打印出来看看，进而优化code
+
+#### appleMinBags
+
+- 链接：
+
+- 内容：
+
+  > 小虎去买苹果，商店只提供两种类型的塑料袋，每种类型都有任意数量。
+  >
+  > 1)能装下6个苹果的袋子
+  > 2)能装下8个苹果的袋子
+  > 小虎可以自由使用两种袋子来装苹果，但是小虎有强迫症，他要求自己使用的袋子数量必须最少，且使用的每个袋子必须装满。
+  > 给定一个正整数N，返回至少使用多少袋子。如果N无法让使用的每个袋子必须装满,返回-1
+
+- 思路：
+
+  > 一般思维：使用尽量多的8个苹果的袋子，看剩下的是否能被6整除
+  >
+  > 对数器思维：找规律，查看1~199以内的数据的appleMinBags的数量，与6和8的规律
+
+  <details>
+  	<summary>1~199的数量规律</summary>
+  	<pre><code>
+    1 : -1
+    2 : -1
+    3 : -1
+    4 : -1
+    5 : -1
+    6 : 1
+    7 : -1
+    8 : 1
+    9 : -1
+    10 : -1
+    11 : -1
+    12 : 2
+    13 : -1
+    14 : 2
+    15 : -1
+    16 : 2
+    17 : -1
+    18 : 3
+    19 : -1
+    20 : 3
+    21 : -1
+    22 : 3
+    23 : -1
+    24 : 3
+    25 : -1
+    26 : 4
+    27 : -1
+    28 : 4
+    29 : -1
+    30 : 4
+    31 : -1
+    32 : 4
+    33 : -1
+    34 : 5
+    35 : -1
+    36 : 5
+    37 : -1
+    38 : 5
+    39 : -1
+    40 : 5
+    41 : -1
+    42 : 6
+    43 : -1
+    44 : 6
+    45 : -1
+    46 : 6
+    47 : -1
+    48 : 6
+    49 : -1
+    50 : 7
+    51 : -1
+    52 : 7
+    53 : -1
+    54 : 7
+    55 : -1
+    56 : 7
+    57 : -1
+    58 : 8
+    59 : -1
+    60 : 8
+    61 : -1
+    62 : 8
+    63 : -1
+    64 : 8
+    65 : -1
+    66 : 9
+    67 : -1
+    68 : 9
+    69 : -1
+    70 : 9
+    71 : -1
+    72 : 9
+    73 : -1
+    74 : 10
+    75 : -1
+    76 : 10
+    77 : -1
+    78 : 10
+    79 : -1
+    80 : 10
+    81 : -1
+    82 : 11
+    83 : -1
+    84 : 11
+    85 : -1
+    86 : 11
+    87 : -1
+    88 : 11
+    89 : -1
+    90 : 12
+    91 : -1
+    92 : 12
+    93 : -1
+    94 : 12
+    95 : -1
+    96 : 12
+    97 : -1
+    98 : 13
+    99 : -1
+    100 : 13
+    101 : -1
+    102 : 13
+    103 : -1
+    104 : 13
+    105 : -1
+    106 : 14
+    107 : -1
+    108 : 14
+    109 : -1
+    110 : 14
+    111 : -1
+    112 : 14
+    113 : -1
+    114 : 15
+    115 : -1
+    116 : 15
+    117 : -1
+    118 : 15
+    119 : -1
+    120 : 15
+    121 : -1
+    122 : 16
+    123 : -1
+    124 : 16
+    125 : -1
+    126 : 16
+    127 : -1
+    128 : 16
+    129 : -1
+    130 : 17
+    131 : -1
+    132 : 17
+    133 : -1
+    134 : 17
+    135 : -1
+    136 : 17
+    137 : -1
+    138 : 18
+    139 : -1
+    140 : 18
+    141 : -1
+    142 : 18
+    143 : -1
+    144 : 18
+    145 : -1
+    146 : 19
+    147 : -1
+    148 : 19
+    149 : -1
+    150 : 19
+    151 : -1
+    152 : 19
+    153 : -1
+    154 : 20
+    155 : -1
+    156 : 20
+    157 : -1
+    158 : 20
+    159 : -1
+    160 : 20
+    161 : -1
+    162 : 21
+    163 : -1
+    164 : 21
+    165 : -1
+    166 : 21
+    167 : -1
+    168 : 21
+    169 : -1
+    170 : 22
+    171 : -1
+    172 : 22
+    173 : -1
+    174 : 22
+    175 : -1
+    176 : 22
+    177 : -1
+    178 : 23
+    179 : -1
+    180 : 23
+    181 : -1
+    182 : 23
+    183 : -1
+    184 : 23
+    185 : -1
+    186 : 24
+    187 : -1
+    188 : 24
+    189 : -1
+    190 : 24
+    191 : -1
+    192 : 24
+    193 : -1
+    194 : 25
+    195 : -1
+    196 : 25
+    197 : -1
+    198 : 25
+    199 : -1
+  	</code></pre>
+  </details>
+  > 不难看出
+  >
+  > 1、所有的奇数全为-1
+  >
+  > 2、1出现2次，2出现3次，其余都是出现4次
+
+- 代码：
+
+  ```java
+  public static int minBags(int apple) {
+  		if (apple < 0) {
+  			return -1;
+  		}
+  		int bag8 = (apple >> 3);
+  		int rest = apple - (bag8 << 3);
+  		while(bag8 >= 0) {
+  			// rest 个
+  			if(rest % 6 ==0) {
+  				return bag8 + (rest / 6);
+  			} else {
+  				bag8--;
+  				rest += 8;
+  			}
+  		}
+  		return -1;
+  	}
+  
+  public static int minBagAwesome(int apple) {
+  		if ((apple & 1) != 0) { // 如果是奇数，返回-1
+  			return -1;
+  		}
+  		if (apple < 18) {
+  			return apple == 0 ? 0 : (apple == 6 || apple == 8) ? 1
+  					: (apple == 12 || apple == 14 || apple == 16) ? 2 : -1;
+  		}
+  		return (apple - 18) / 8 + 3;
+  	}
+  ```
+  
+  
+
+#### eatGrass
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个正整数N，表示有N份青草统一堆放在仓库里
+  >
+  > 有一只牛和一只羊，牛先吃，羊后吃，它俩轮流吃草
+  >
+  > 不管是牛还是羊，每一轮能吃的草量必须是︰1，4，16,64…(4的某次方)
+  > 谁最先把草吃完，谁获胜
+  > 假设牛和羊都绝顶聪明，都想赢，都会做出理性的决定根据唯一的参数N,返回谁会赢
+
+- 思路：
+
+  > 一般思路：使用递归来判断，当牛决定吃一定数量的草时，如果剩余的草后手能赢，则牛能赢
+  >
+  > 对数器思路：先查看数量与牛或者羊赢之间的规律
+
+  <details>
+  <summary>数量与先手，后手之间的关系</summary>
+  <pre><code>
+  0 : 后手
+  1 : 先手
+  2 : 后手
+  3 : 先手
+  4 : 先手
+  5 : 后手
+  6 : 先手
+  7 : 后手
+  8 : 先手
+  9 : 先手
+  10 : 后手
+  11 : 先手
+  12 : 后手
+  13 : 先手
+  14 : 先手
+  15 : 后手
+  16 : 先手
+  17 : 后手
+  18 : 先手
+  19 : 先手
+  20 : 后手
+  21 : 先手
+  22 : 后手
+  23 : 先手
+  24 : 先手
+  25 : 后手
+  26 : 先手
+  27 : 后手
+  28 : 先手
+  29 : 先手
+  30 : 后手
+  31 : 先手
+  32 : 后手
+  33 : 先手
+  34 : 先手
+  35 : 后手
+  36 : 先手
+  37 : 后手
+  38 : 先手
+  39 : 先手
+  40 : 后手
+  41 : 先手
+  42 : 后手
+  43 : 先手
+  44 : 先手
+  45 : 后手
+  46 : 先手
+  47 : 后手
+  48 : 先手
+  49 : 先手
+  50 : 后手
+  </code></pre>
+  </details>
+
+  > 我们不难发现，0~4是后先后先先，5~9也是后先后先先...
+  >
+  > m%5 == 0 || 2 是羊赢
+  >
+  > m%5 == 1 || 3 || 4是牛赢
+
+- 代码：
+
+  ```java
+  // 如果n份草，最终先手赢，返回"先手"
+  	// 如果n份草，最终后手赢，返回"后手"
+  	public static String whoWin(int n) {
+  		if (n < 5) {
+  			return n == 0 || n == 2 ? "后手" : "先手";
+  		}
+  		// 进到这个过程里来，当前的先手，先选
+  		int want = 1;
+  		while (want <= n) {
+  			if (whoWin(n - want).equals("后手")) {
+  				return "先手";
+  			}
+  			if (want <= (n / 4)) {
+  				want *= 4;
+  			} else {
+  				break;
+  			}
+  		}
+  		return "后手";
+  	}
+  
+  	public static String winner1(int n) {
+  		if (n < 5) {
+  			return (n == 0 || n == 2) ? "后手" : "先手";
+  		}
+  		int base = 1;
+  		while (base <= n) {
+  			if (winner1(n - base).equals("后手")) {
+  				return "先手";
+  			}
+  			if (base > n / 4) { // 防止base*4之后溢出
+  				break;
+  			}
+  			base *= 4;
+  		}
+  		return "后手";
+  	}
+  
+  	public static String winner2(int n) {
+  		if (n % 5 == 0 || n % 5 == 2) {
+  			return "后手";
+  		} else {
+  			return "先手";
+  		}
+  	}
+  ```
+  
+  
+
+#### MSumToN
+
+- 链接：暂无
+
+- 内容：
+
+  > 定义一种数︰可以表示成若干（数量>1）连续正数和的数比如:
+  > 5= 2+3，5就是这样的数
+  > 12 = 3+4+5，12就是这样的数
+  > 1不是这样的数，因为要求数量大于1个、连续正数和2= 1+ 1，2也不是，因为等号右边不是连续正数
+  > 给定一个参数N，返回是不是可以表示成若干连续正数和的数
+
+- 思路：
+
+  > 一般思路：构造1~N的前缀和，当h[j]-h[i]==N时，表示可以（时间复杂度O(N^2)）
+  >
+  > 对数器思路：探索一下数是否可以表示与数之前的关系
+
+  <details>
+  	<summary>数及其是否可以表示</summary>
+  	<pre>
+  		<code>
+  	  1 : false
+        2 : false
+        3 : true
+        4 : false
+        5 : true
+        6 : true
+        7 : true
+        8 : false
+        9 : true
+        10 : true
+        11 : true
+        12 : true
+        13 : true
+        14 : true
+        15 : true
+        16 : false
+        17 : true
+        18 : true
+        19 : true
+        20 : true
+        21 : true
+        22 : true
+        23 : true
+        24 : true
+        25 : true
+        26 : true
+        27 : true
+        28 : true
+        29 : true
+        30 : true
+        31 : true
+        32 : false
+        33 : true
+        34 : true
+        35 : true
+        36 : true
+        37 : true
+        38 : true
+        39 : true
+        40 : true
+        41 : true
+        42 : true
+        43 : true
+        44 : true
+        45 : true
+        46 : true
+        47 : true
+        48 : true
+        49 : true
+        50 : true
+        51 : true
+        52 : true
+        53 : true
+        54 : true
+        55 : true
+        56 : true
+        57 : true
+        58 : true
+        59 : true
+        60 : true
+        61 : true
+        62 : true
+        63 : true
+        64 : false
+        65 : true
+        66 : true
+        67 : true
+        68 : true
+        69 : true
+        70 : true
+        71 : true
+        72 : true
+        73 : true
+        74 : true
+        75 : true
+        76 : true
+        77 : true
+        78 : true
+        79 : true
+        80 : true
+        81 : true
+        82 : true
+        83 : true
+        84 : true
+        85 : true
+        86 : true
+        87 : true
+        88 : true
+        89 : true
+        90 : true
+        91 : true
+        92 : true
+        93 : true
+        94 : true
+        95 : true
+        96 : true
+        97 : true
+        98 : true
+        99 : true
+        100 : true
+        101 : true
+        102 : true
+        103 : true
+        104 : true
+        105 : true
+        106 : true
+        107 : true
+        108 : true
+        109 : true
+        110 : true
+        111 : true
+        112 : true
+        113 : true
+        114 : true
+        115 : true
+        116 : true
+        117 : true
+        118 : true
+        119 : true
+        120 : true
+        121 : true
+        122 : true
+        123 : true
+        124 : true
+        125 : true
+        126 : true
+        127 : true
+        128 : false
+        129 : true
+        130 : true
+        131 : true
+        132 : true
+        133 : true
+        134 : true
+        135 : true
+        136 : true
+        137 : true
+        138 : true
+        139 : true
+        140 : true
+        141 : true
+        142 : true
+        143 : true
+        144 : true
+        145 : true
+        146 : true
+        147 : true
+        148 : true
+        149 : true
+        150 : true
+        151 : true
+        152 : true
+        153 : true
+        154 : true
+        155 : true
+        156 : true
+        157 : true
+        158 : true
+        159 : true
+        160 : true
+        161 : true
+        162 : true
+        163 : true
+        164 : true
+        165 : true
+        166 : true
+        167 : true
+        168 : true
+        169 : true
+        170 : true
+        171 : true
+        172 : true
+        173 : true
+        174 : true
+        175 : true
+        176 : true
+        177 : true
+        178 : true
+        179 : true
+        180 : true
+        181 : true
+        182 : true
+        183 : true
+        184 : true
+        185 : true
+        186 : true
+        187 : true
+        188 : true
+        189 : true
+        190 : true
+        191 : true
+        192 : true
+        193 : true
+        194 : true
+        195 : true
+        196 : true
+        197 : true
+        198 : true
+        199 : true
+  		</code>
+  	</pre>
+  </details>
+
+  > 我们不难看出所有的不可表示的数字全部是2的某次方
+  >
+  > 2的某次方的规律是在32位bit上，有且只有一个1
+
+- 代码：
+
+  ```java
+  	public static boolean isMSum1(int num) {
+  		for (int start = 1; start <= num; start++) {
+  			int sum = start;
+  			for (int j = start + 1; j <= num; j++) {
+  				if (sum + j > num) {
+  					break;
+  				}
+  				if (sum + j == num) {
+  					return true;
+  				}
+  				sum += j;
+  			}
+  		}
+  		return false;
+  	}
+  	public static boolean isMSum2(int num) {
+  //		
+  //		return num == (num & (~num + 1));
+  //		
+  //		return num == (num & (-num));
+  //		
+  //		
+  		return (num & (num - 1)) != 0;
+  	}
+  
+  ```
+  
+  
+
+#### moneyProblem
+
+- 链接：暂无
+
+- 内容：
+
+  > int[]d, d[]: i号怪兽的能力
+  >
+  > int[ p, p]∶ i号怪兽要求的钱
+  >
+  > 开始时你的能力是0，你的目标是从0号怪兽开始，通过所有的怪兽。
+  >
+  > 如果你当前的能力，小于i号怪兽的能力，你必须付出p[i]的钱，贿赂这个怪兽，然后怪兽就会加入你，他的能力直接累加到你的能力上﹔
+  >
+  > 如果你当前的能力，大于等于i号怪兽的能力，你可以选择直接通过，你的能力并不会下降，你也可以选择贿赂这个怪兽，然后怪兽就会加入你，他的能力直接累加到你的能力上。
+  >
+  > 返回通过所有的怪兽，需要花的最小钱数。
+  >
+  > 数据状态不同最优解不同
+
+- 思路：
+
+  > 动态规划（全部是），但i,j表示的内容不相同，dp[i,j]表示的内容不相同
+
+- 代码：
+
+  - 常规递归(要求：ability不能太大，否则构建起来的一个二维的dp表中，index下标为长度为N，ability太大，N*ability会太大，可能会超过O(10^8)
+
+    ```java
+    	public static long func1(int[] d, int[] p) {
+    		return process1(d, p, 0, 0);
+    	}	
+    	// 目前，你的能力是ability，你来到了index号怪兽的面前，如果要通过后续所有的怪兽，
+    	// 请返回需要花的最少钱数
+    	public static long process1(int[] d, int[] p, int ability, int index) {
+    		if (index == d.length) {
+    			return 0;
+    		}
+    		if (ability < d[index]) {
+    			return p[index] + process1(d, p, ability + d[index], index + 1);
+    		} else { // ability >= d[index] 可以贿赂，也可以不贿赂
+    			return Math.min(
+    					p[index] + process1(d, p, ability + d[index], index + 1),
+    					0 + process1(d, p, ability, index + 1));
+    		}
+    	}
+    // 改为dp
+    	public static long func2(int[] d, int[] p) {
+    		int sum = 0;
+    		for (int num : d) {
+    			sum += num;
+    		}
+    		long[][] dp = new long[d.length + 1][sum + 1];
+    		for (int cur = d.length - 1; cur >= 0; cur--) {
+    			for (int hp = 0; hp <= sum; hp++) {
+    				// 如果这种情况发生，那么这个hp必然是递归过程中不会出现的状态
+    				// 既然动态规划是尝试过程的优化，尝试过程碰不到的状态，不必计算
+    				if (hp + d[cur] > sum) {
+    					continue;
+    				}
+    				if (hp < d[cur]) {
+    					dp[cur][hp] = p[cur] + dp[cur + 1][hp + d[cur]];
+    				} else {
+    					dp[cur][hp] = Math.min(p[cur] + dp[cur + 1][hp + d[cur]], dp[cur + 1][hp]);
+    				}
+    			}
+    		}
+    		return dp[0][0];
+    	}
+    ```
+
+  - 当ability数组中的数据都太大时，我们可以使用贿赂的钱数当第二个坐标,此时i代表第i号怪兽，j代表钱数，dp[i,j]代表从0~i怪兽，必须花j元的最大能力值
+
+    ```java
+    // 递归	
+    public static int minMoney2(int[] d, int[] p) {
+    		int allMoney = 0;
+    		for (int i = 0; i < p.length; i++) {
+    			allMoney += p[i];
+    		}
+    		int N = d.length;
+    		for (int money = 0; money < allMoney; money++) {
+    			if (process2(d, p, N - 1, money) != -1) {
+    				return money;
+    			}
+    		}
+    		return allMoney;
+    	}
+    	// 从0....index号怪兽，花的钱，必须严格==money
+    	// 如果通过不了，返回-1
+    	// 如果可以通过，返回能通过情况下的最大能力值
+    	public static long process2(int[] d, int[] p, int index, int money) {
+    		if (index == -1) { // 一个怪兽也没遇到呢
+    			return money == 0 ? 0 : -1;
+    		}
+    		// index >= 0
+    		// 1) 不贿赂当前index号怪兽
+    		long preMaxAbility = process2(d, p, index - 1, money);
+    		long p1 = -1;
+    		if (preMaxAbility != -1 && preMaxAbility >= d[index]) {
+    			p1 = preMaxAbility;
+    		}
+    		// 2) 贿赂当前的怪兽 当前的钱 p[index]
+    		long preMaxAbility2 = process2(d, p, index - 1, money - p[index]);
+    		long p2 = -1;
+    		if (preMaxAbility2 != -1) {
+    			p2 = d[index] + preMaxAbility2;
+    		}
+    		return Math.max(p1, p2);
+    	}
+    // 改为dp
+    	public static long func3(int[] d, int[] p) {
+    		int sum = 0;
+    		for (int num : p) {
+    			sum += num;
+    		}
+    		// dp[i][j]含义：
+    		// 能经过0～i的怪兽，且花钱为j（花钱的严格等于j）时的武力值最大是多少？
+    		// 如果dp[i][j]==-1，表示经过0～i的怪兽，花钱为j是无法通过的，或者之前的钱怎么组合也得不到正好为j的钱数
+    		int[][] dp = new int[d.length][sum + 1];
+    		for (int i = 0; i < dp.length; i++) {
+    			for (int j = 0; j <= sum; j++) {
+    				dp[i][j] = -1;
+    			}
+    		}
+    		// 经过0～i的怪兽，花钱数一定为p[0]，达到武力值d[0]的地步。其他第0行的状态一律是无效的
+    		dp[0][p[0]] = d[0];
+    		for (int i = 1; i < d.length; i++) {
+    			for (int j = 0; j <= sum; j++) {
+    				// 可能性一，为当前怪兽花钱
+    				// 存在条件：
+    				// j - p[i]要不越界，并且在钱数为j - p[i]时，要能通过0～i-1的怪兽，并且钱数组合是有效的。
+    				if (j >= p[i] && dp[i - 1][j - p[i]] != -1) {
+    					dp[i][j] = dp[i - 1][j - p[i]] + d[i];
+    				}
+    				// 可能性二，不为当前怪兽花钱
+    				// 存在条件：
+    				// 0~i-1怪兽在花钱为j的情况下，能保证通过当前i位置的怪兽
+    				if (dp[i - 1][j] >= d[i]) {
+    					// 两种可能性中，选武力值最大的
+    					dp[i][j] = Math.max(dp[i][j], dp[i - 1][j]);
+    				}
+    			}
+    		}
+    		int ans = 0;
+    		// dp表最后一行上，dp[N-1][j]代表：
+    		// 能经过0～N-1的怪兽，且花钱为j（花钱的严格等于j）时的武力值最大是多少？
+    		// 那么最后一行上，最左侧的不为-1的列数(j)，就是答案
+    		for (int j = 0; j <= sum; j++) {
+    			if (dp[d.length - 1][j] != -1) {
+    				ans = j;
+    				break;
+    			}
+    		}
+    		return ans;
+    	}
+    ```
+
+  
+
+### class39
+
+#### subsquenceMaxModM
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个非负数组arr，和一个正数m。
+  > 返回arr的所有子序列中累加和%m之后的最大值。
+
+- 思路：
+
+  > 思路1：暴力递归，所有的子序列有2^n-1种（除了一个都不选），其值%m后取最大值
+  >
+  > 思路2：动态规划，i表示arr下标，j表示和，arr[i,j]表示从0~i位置任意组合和为j是否存在（arr中的数不大，m很大）
+  >
+  > ​	转移方程
+  >
+  > ​		1、当前i不使用，则dp[i,j] = dp[i-1,j]
+  >
+  > ​		2、当前i使用，则dp[i,j] = dp[i-1,j-arr[i]]  
+  >
+  > ​		任一存在即为true
+  >
+  > 思路3：动态规划，i表示arr下标，j表示值，arr[i,j]表示从0~i位置任意组合和%m后的结果j是否存在（arr长度大，m不大）
+  >
+  > ​	转移方程：
+  >
+  > ​		dp[i,j] = dp[i-1,j]
+  >
+  > ​		dp[i,j] = dp[i - 1,j - cur] || dp[i - 1,j + m - cur]
+  >
+  > ​		任一存在即为true
+  >
+  > 思路4：分治，当arr长度相对不大，但数值大，m也大
+  >
+  > ​	将数组一分为二，每一部分先进行取值，得出最大值 (暴力递归（长度不大）)
+  >
+  > ​	再以其中一个为基，寻找另一个最接近<=最大值的数，更新最大值(O(logN))
+
+- 代码：
+
+  ```java
+  public static int max1(int[] arr, int m) {
+  		HashSet<Integer> set = new HashSet<>();
+  		process(arr, 0, 0, set);
+  		int max = 0;
+  		for (Integer sum : set) {
+  			max = Math.max(max, sum % m);
+  		}
+  		return max;
+  	}
+  
+  	public static void process(int[] arr, int index, int sum, HashSet<Integer> set) {
+  		if (index == arr.length) {
+  			set.add(sum);
+  		} else {
+  			process(arr, index + 1, sum, set);
+  			process(arr, index + 1, sum + arr[index], set);
+  		}
+  	}
+  
+  	public static int max2(int[] arr, int m) {
+  		int sum = 0;
+  		int N = arr.length;
+  		for (int i = 0; i < N; i++) {
+  			sum += arr[i];
+  		}
+  		boolean[][] dp = new boolean[N][sum + 1];
+  		for (int i = 0; i < N; i++) {
+  			dp[i][0] = true;
+  		}
+  		dp[0][arr[0]] = true;
+  		for (int i = 1; i < N; i++) {
+  			for (int j = 1; j <= sum; j++) {
+  				dp[i][j] = dp[i - 1][j];
+  				if (j - arr[i] >= 0) {
+  					dp[i][j] |= dp[i - 1][j - arr[i]];
+  				}
+  			}
+  		}
+  		int ans = 0;
+  		for (int j = 0; j <= sum; j++) {
+  			if (dp[N - 1][j]) {
+  				ans = Math.max(ans, j % m);
+  			}
+  		}
+  		return ans;
+  	}
+  
+  	public static int max3(int[] arr, int m) {
+  		int N = arr.length;
+  		// 0...m-1
+  		boolean[][] dp = new boolean[N][m];
+  		for (int i = 0; i < N; i++) {
+  			dp[i][0] = true;
+  		}
+  		dp[0][arr[0] % m] = true;
+  		for (int i = 1; i < N; i++) {
+  			for (int j = 1; j < m; j++) {
+  				// dp[i][j] T or F
+  				dp[i][j] = dp[i - 1][j];
+  				int cur = arr[i] % m;
+  				if (cur <= j) {
+  					dp[i][j] |= dp[i - 1][j - cur];
+  				} else {
+  					dp[i][j] |= dp[i - 1][m + j - cur];
+  				}
+  			}
+  		}
+  		int ans = 0;
+  		for (int i = 0; i < m; i++) {
+  			if (dp[N - 1][i]) {
+  				ans = i;
+  			}
+  		}
+  		return ans;
+  	}
+  
+  	// 如果arr的累加和很大，m也很大
+  	// 但是arr的长度相对不大
+  	public static int max4(int[] arr, int m) {
+  		if (arr.length == 1) {
+  			return arr[0] % m;
+  		}
+  		int mid = (arr.length - 1) / 2;
+  		TreeSet<Integer> sortSet1 = new TreeSet<>();
+  		process4(arr, 0, 0, mid, m, sortSet1);
+  		TreeSet<Integer> sortSet2 = new TreeSet<>();
+  		process4(arr, mid + 1, 0, arr.length - 1, m, sortSet2);
+  		int ans = 0;
+  		for (Integer leftMod : sortSet1) {
+  			ans = Math.max(ans, leftMod + sortSet2.floor(m - 1 - leftMod));
+  		}
+  		return ans;
+  	}
+  
+  	// 从index出发，最后有边界是end+1，arr[index...end]
+  	public static void process4(int[] arr, int index, int sum, int end, int m, TreeSet<Integer> sortSet) {
+  		if (index == end + 1) {
+  			sortSet.add(sum % m);
+  		} else {
+  			process4(arr, index + 1, sum, end, m, sortSet);
+  			process4(arr, index + 1, sum + arr[index], end, m, sortSet);
+  		}
+  	}
+  ```
+
+  
+
+#### snacksWays
+
+- 链接：https://www.nowcoder.com/questionTerminal/d94bb2fa461d42bcb4c0f2b94f5d4281
+
+- 内容：
+
+  > 牛牛家里一共有n袋零食,第i袋零食体积为v们，背包容量为w。
+  >
+  > 牛牛想知道在总体积不超过背包容量的情况下，一共有多少种零食放法，体积为0也算一种放法
+  >
+  > 1 <= n <= 30,1 <= w<= 2* 10^9
+  > v[i] (0<= v[i]<= 10^9)
+
+- 思路：
+
+  > 思路一：递归，从左到右的模型
+  >
+  > 思路二：动态规划：i是第几号零食，j是0~i号零食自由选择，不重复<=w，凑够j体积的零食的种类
+  >
+  > ​	转移方程
+  >
+  > ​		1、当前i不使用，则dp[i,j] += dp[i-1,j]
+  >
+  > ​		2、当前i使用，则dp[i,j] += dp[i-1,j-arr[i]]  
+  >
+  > 思路三：动态规划：i是第几号零食，j是占用的体积，dp[i,j]是0~i号零食<=Sum(v[i])，自由选择，占用j容量的种类
+  >
+  > ​	转移方程
+  >
+  > ​		1、当前i不使用，则dp[i,j] += dp[i-1,j]
+  >
+  > ​		2、当前i使用，则dp[i,j] += dp[i-1,j-arr[i]]  
+  >
+  > 但是w和sum(v)的值都很大，容易超出O(10^8)
+  >
+  > 思路四：分治
+  >
+  > ans = 0
+  >
+  > 求出每一半的体积及其种类数 ans += v1[i,1] + v2[i,1]
+  >
+  > 以其中一个为基，求<=w-v1[i,0] 的值 ans += h(v2[i,1]) （前缀和）
+
+- 代码：
+
+  ```java
+  public static int ways1(int[] arr, int w) {
+  		// arr[0...]
+  		return process(arr, 0, w);
+  	}
+  
+  	// 从左往右的经典模型
+  	// 还剩的容量是rest，arr[index...]自由选择，
+  	// 返回选择方案
+  	// index ： 0～N
+  	// rest : 0~w
+  	public static int process(int[] arr, int index, int rest) {
+  		if (rest < 0) { // 没有容量了
+  			// -1 无方案的意思
+  			return -1;
+  		}
+  		// rest>=0,
+  		if (index == arr.length) { // 无零食可选
+  			return 1;
+  		}
+  		// rest >=0
+  		// 有零食index
+  		// index号零食，要 or 不要
+  		// index, rest
+  		// (index+1, rest)
+  		// (index+1, rest-arr[i])
+  		int next1 = process(arr, index + 1, rest); // 不要
+  		int next2 = process(arr, index + 1, rest - arr[index]); // 要
+  		return next1 + (next2 == -1 ? 0 : next2);
+  	}
+  public static int ways2(int[] arr, int w) {
+  		int N = arr.length;
+  		int[][] dp = new int[N + 1][w + 1];
+  		for (int j = 0; j <= w; j++) {
+  			dp[N][j] = 1;
+  		}
+  		for (int i = N - 1; i >= 0; i--) {
+  			for (int j = 0; j <= w; j++) {
+  				dp[i][j] = dp[i + 1][j] + ((j - arr[i] >= 0) ? dp[i + 1][j - arr[i]] : 0);
+  			}
+  		}
+  		return dp[0][w];
+  	}
+  
+  	public static int ways3(int[] arr, int w) {
+  		int N = arr.length;
+  		int[][] dp = new int[N][w + 1];
+  		for (int i = 0; i < N; i++) {
+  			dp[i][0] = 1;
+  		}
+  		if (arr[0] <= w) {
+  			dp[0][arr[0]] = 1;
+  		}
+  		for (int i = 1; i < N; i++) {
+  			for (int j = 1; j <= w; j++) {
+  				dp[i][j] = dp[i - 1][j] + ((j - arr[i]) >= 0 ? dp[i - 1][j - arr[i]] : 0);
+  			}
+  		}
+  		int ans = 0;
+  		for (int j = 0; j <= w; j++) {
+  			ans += dp[N - 1][j];
+  		}
+  		return ans;
+  	}
+  ```
+
+  ```java
+  	// 分治
+  		public static long ways(int[] arr, int bag) {
+  		if (arr == null || arr.length == 0) {
+  			return 0;
+  		}
+  		if (arr.length == 1) {
+  			return arr[0] <= bag ? 2 : 1;
+  		}
+  		int mid = (arr.length - 1) >> 1;
+  		TreeMap<Long, Long> lmap = new TreeMap<>();
+  		long ways = process(arr, 0, 0, mid, bag, lmap);
+  		TreeMap<Long, Long> rmap = new TreeMap<>();
+  		ways += process(arr, mid + 1, 0, arr.length - 1, bag, rmap);
+  		TreeMap<Long, Long> rpre = new TreeMap<>();
+  		long pre = 0;
+  		for (Entry<Long, Long> entry : rmap.entrySet()) {
+  			pre += entry.getValue();
+  			rpre.put(entry.getKey(), pre);
+  		}
+  		for (Entry<Long, Long> entry : lmap.entrySet()) {
+  			long lweight = entry.getKey();
+  			long lways = entry.getValue();
+  			Long floor = rpre.floorKey(bag - lweight);
+  			if (floor != null) {
+  				long rways = rpre.get(floor);
+  				ways += lways * rways;
+  			}
+  		}
+  		return ways + 1;
+  	}
+  
+  	// arr 30
+  	// func(arr, 0, 14, 0, bag, map)
+  
+  	// func(arr, 15, 29, 0, bag, map)
+  
+  	// 从index出发，到end结束
+  	// 之前的选择，已经形成的累加和sum
+  	// 零食[index....end]自由选择，出来的所有累加和，不能超过bag，每一种累加和对应的方法数，填在map里
+  	// 最后不能什么货都没选
+  	// [3,3,3,3] bag = 6
+  	// 0 1 2 3
+  	// - - - - 0 -> （0 : 1）
+  	// - - - $ 3 -> （0 : 1）(3, 1)
+  	// - - $ - 3 -> （0 : 1）(3, 2)
+  	public static long func(int[] arr, int index, int end, long sum, long bag, TreeMap<Long, Long> map) {
+  		if (sum > bag) {
+  			return 0;
+  		}
+  		// sum <= bag
+  		if (index > end) { // 所有商品自由选择完了！
+  			// sum
+  			if (sum != 0) {
+  				if (!map.containsKey(sum)) {
+  					map.put(sum, 1L);
+  				} else {
+  					map.put(sum, map.get(sum) + 1);
+  				}
+  				return 1;
+  			} else {
+  				return 0;
+  			}
+  		}
+  		// sum <= bag 并且 index <= end(还有货)
+  		// 1) 不要当前index位置的货
+  		long ways = func(arr, index + 1, end, sum, bag, map);
+  
+  		// 2) 要当前index位置的货
+  		ways += func(arr, index + 1, end, sum + arr[index], bag, map);
+  		return ways;
+  	}
+  
+  	public static long process(int[] arr, int index, long w, int end, int bag, TreeMap<Long, Long> map) {
+  		if (w > bag) {
+  			return 0;
+  		}
+  		if (index > end) {
+  			if (w != 0) {
+  				if (!map.containsKey(w)) {
+  					map.put(w, 1L);
+  				} else {
+  					map.put(w, map.get(w) + 1);
+  				}
+  				return 1;
+  			} else {
+  				return 0;
+  			}
+  		} else {
+  			long ways = process(arr, index + 1, w, end, bag, map);
+  			ways += process(arr, index + 1, w + arr[index], end, bag, map);
+  			return ways;
+  		}
+  	}
+  ```
+
+  
+
+#### catalan
+
+卡特兰数
+
+> 卡特兰数又称卡塔兰数，英文名Catalan number，是组合数学中一个常出现在各种计数问题中出现的数列。其前几项为︰
+> 1,1,2,5,14,42,132,429,1430,4862,16796,58786,208012,742900,2674440,9694845,35357670,129644790,477638700,1767263190,6564120420,24466267020,91482563640,343059613650,1289904147324，4861946401452，...
+
+>k(0)= 1,k(1)= 1时，如果接下来的项满足︰
+>	**k(n)= k(0) * k(n - 1)+ k(1)*k(n - 2)+ ...+ k(n - 2) * k(1)+ k(n - 1)* k(0)**
+>
+>或者:**k(n)= c(2n, n) - c(2n, n-1)**
+>
+>或者: **k(n)= c(2n, n)/ (n + 1)**
+>
+>就说这个表达式，满足卡特兰数，常用的是范式1和2，3几乎不会使用到
+
+- 符合卡特兰数的例子
+
+  > **一共有n对()**,有2n个格子，每个格子放一个'('或者')',一共有多少种合法的放法，"((()))"合法，")(()))"不合法**一共有k(n)个合法的放法**
+  >
+  > **长度为n的数字任意进栈或出栈，一共有k(n)个合法的出栈序列**
+  >
+  > **股票开始为0，后以45度向左上涨，或以45度向右下降，升降各n次，求不会降到0以下的方法数（中途也不能降到0以下），也是卡特兰数**
+  >
+  > **一共有n个节点，问有多少种组成二叉树的方式？也是卡特兰数k(n) ,公式一**
 
 
-## coding-for-great-offer
+
+### class40
+
+子数组达到规定累加和的最大长度系列
+
+- 总结
+
+  > 题目一主要技巧︰利用单调性优化I
+  > 题目二主要技巧∶利用预处理结构优化+讨论开头结尾
+  > 题目三主要技巧∶假设答案法+淘汰可能性(很难，以后还会见到)
+
+#### longestSumSubArrayLengthInPositiveArray
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个正整数组成的无序数组arr，给定一个正整数值K
+  > 找到arr的所有子数组里，哪个子数组的累加和等于K，并且是长度最大的返回其长度
+
+- 思路：
+
+  > 滑动窗口 L,R初始为0，[L,R]内的值为sum
+  >
+  > 当sum < K R++
+  >
+  > 当sum = K 时记录，且R++ (arr[R+1] = 0 may be)
+  >
+  > 当sum > K时，L++
+
+- 代码：
+
+  ```java
+  public static int getMaxLength(int[] arr, int K) {
+  		if (arr == null || arr.length == 0 || K <= 0) {
+  			return 0;
+  		}
+  		int left = 0;
+  		int right = 0;
+  		int sum = arr[0];
+  		int len = 0;
+  		while (right < arr.length) {
+  			if (sum == K) {
+  				len = Math.max(len, right - left + 1);
+  				sum -= arr[left++];
+  			} else if (sum < K) {
+  				right++;
+  				if (right == arr.length) {
+  					break;
+  				}
+  				sum += arr[right];
+  			} else {
+  				sum -= arr[left++];
+  			}
+  		}
+  		return len;
+  	}
+  ```
+
+  
+
+#### longestSumSubArrayLength
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个整数组成的无序数组arr，值可能正、可能负、可能O给定一个整数值K
+  > 找到arr的所有子数组里，哪个子数组的累加和等于K，并且是长度最大的返回其长度
+
+- 思路：
+
+  > 使用前缀和，辅助
+  >
+  > 当前缀和包含K - arr[i],则记录
+  >
+  > 否则记录当前sum值及其出现最早的index
+
+- 代码：
+
+  ```java
+  public static int maxLength(int[] arr, int k) {
+  		if (arr == null || arr.length == 0) {
+  			return 0;
+  		}
+  		// key:前缀和
+  		// value : 0~value这个前缀和是最早出现key这个值的
+  		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+  		map.put(0, -1); // important
+  		int len = 0;
+  		int sum = 0;
+  		for (int i = 0; i < arr.length; i++) {
+  			sum += arr[i];
+  			if (map.containsKey(sum - k)) {
+  				len = Math.max(i - map.get(sum - k), len);
+  			}
+  			if (!map.containsKey(sum)) {
+  				map.put(sum, i);
+  			}
+  		}
+  		return len;
+  	}
+  ```
+
+  
+
+#### longestLessSumSubArrayLength
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个整数组成的无序数组arr，值可能正、可能负、可能0给定一个整数值K
+  > 找到arr的所有子数组里，哪个子数组的累加和<=K，并且是长度最大的返回其长度
+
+- 思路：
+
+  > 滑动窗口，要有辅助信息
+  >
+  > 1、生成两个和arr数组长度相等的数组，分别为minSums和minSumEnds
+  >
+  > ​	minSums[i]表示i~n-1这个区间中以i为头的，最小值
+  >
+  > ​	minSumEnds[i]表示i~n-1这个区间中以i为头的，最小值所压中的右边界位置
+  >
+  > 2、滑动窗口开始滑动（初始i=0,end=0,为窗口的左右边界）
+  >
+  > ​	1、ans默认为0，sum默认为0,end默认为0
+  >
+  > ​	2、若sum+minSums[end] <= K,且end < n,表明以当前L为首的数组，可以填充数据以end+1的数组
+  >
+  > ​	3、记录ans
+  >
+  > ​	4、sum -=arr[i],i++,查看以i开头的数据，最长能扩多远
+  >
+  > ​	5、最后返回ans
+  >
+  > **从始至终end不回退，**（**可能存在以i开头，到end结束但是<K的情况，不用管，以i开头的数据的真实答案，因为这个值肯定不可能超过之前的i~end这个区间的长度，我们只关心最长的长度**）
+  >
+  > 时间复杂度O(N)
+
+- 代码：
+
+  ```java
+  public static int maxLengthAwesome(int[] arr, int k) {
+  		if (arr == null || arr.length == 0) {
+  			return 0;
+  		}
+  		int[] minSums = new int[arr.length];
+  		int[] minSumEnds = new int[arr.length];
+  		minSums[arr.length - 1] = arr[arr.length - 1];
+  		minSumEnds[arr.length - 1] = arr.length - 1;
+  		for (int i = arr.length - 2; i >= 0; i--) {
+  			if (minSums[i + 1] < 0) {
+  				minSums[i] = arr[i] + minSums[i + 1];
+  				minSumEnds[i] = minSumEnds[i + 1];
+  			} else {
+  				minSums[i] = arr[i];
+  				minSumEnds[i] = i;
+  			}
+  		}
+  		// 迟迟扩不进来那一块儿的开头位置
+  		int end = 0;
+  		int sum = 0;
+  		int ans = 0;
+  		for (int i = 0; i < arr.length; i++) {
+  			// while循环结束之后：
+  			// 1) 如果以i开头的情况下，累加和<=k的最长子数组是arr[i..end-1]，看看这个子数组长度能不能更新res；
+  			// 2) 如果以i开头的情况下，累加和<=k的最长子数组比arr[i..end-1]短，更新还是不更新res都不会影响最终结果；
+  			while (end < arr.length && sum + minSums[end] <= k) {
+  				sum += minSums[end];
+  				end = minSumEnds[end] + 1;
+  			}
+  			ans = Math.max(ans, end - i);
+  			if (end > i) { // 还有窗口，哪怕窗口没有数字 [i~end) [4,4)
+  				sum -= arr[i];
+  			} else { // i == end,  即将 i++, i > end, 此时窗口概念维持不住了，所以end跟着i一起走
+  				end = i + 1;
+  			}
+  		}
+  		return ans;
+  	}
+  ```
+
+  
+
+#### avgLessEqualValueLongestSubarray
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个数组arr，给定一个值v
+  > 求子数组平均值小于等于v的最长子数组长度
+
+- 思路：
+
+  > 先处理一下，原数组全部-v得到一个新数组
+  >
+  > 求新数组的子数组和 <= 0 的长度
+  >
+  > 思路同**longestLessSumSubArrayLength**，把K变为0
+
+- 代码：
+
+  ```java
+  // 想实现的解法3，时间复杂度O(N)
+  	public static int ways3(int[] arr, int v) {
+  		if (arr == null || arr.length == 0) {
+  			return 0;
+  		}
+  		for (int i = 0; i < arr.length; i++) {
+  			arr[i] -= v;
+  		}
+  		return maxLengthAwesome(arr, 0);
+  	}
+  
+  	// 找到数组中累加和<=k的最长子数组
+  	public static int maxLengthAwesome(int[] arr, int k) {
+  		int N = arr.length;
+  		int[] sums = new int[N];
+  		int[] ends = new int[N];
+  		sums[N - 1] = arr[N - 1];
+  		ends[N - 1] = N - 1;
+  		for (int i = N - 2; i >= 0; i--) {
+  			if (sums[i + 1] < 0) {
+  				sums[i] = arr[i] + sums[i + 1];
+  				ends[i] = ends[i + 1];
+  			} else {
+  				sums[i] = arr[i];
+  				ends[i] = i;
+  			}
+  		}
+  		int end = 0;
+  		int sum = 0;
+  		int res = 0;
+  		for (int i = 0; i < N; i++) {
+  			while (end < N && sum + sums[end] <= k) {
+  				sum += sums[end];
+  				end = ends[end] + 1;
+  			}
+  			res = Math.max(res, end - i);
+  			if (end > i) {
+  				sum -= arr[i];
+  			} else {
+  				end = i + 1;
+  			}
+  		}
+  		return res;
+  	}
+  ```
+
+  
+
+#### rotateMatrix
+
+- 链接：
+
+- 内容：
+
+  > 给定一个正方形矩阵matrix，**原地调整**成顺时针90度转动的样子
+  >
+  > a b c
+  >
+  > d e f
+  >
+  > g h i
+  >
+  > =>
+  >
+  > g d a
+  >
+  > h e b
+  >
+  > i   f  c
+
+- 思路：
+
+  > 思路一：可以先把原数组沿对角线互换，再沿中间对称轴交换左右
+  >
+  > 思路二：分析每一层的位置变换，一共有长度-1个变换，每4个值顺序交换值。
+
+- 代码：
+
+  ```java
+  	public static void rotate(int[][] matrix) {
+  		int a = 0;
+  		int b = 0;
+  		int c = matrix.length - 1;
+  		int d = matrix[0].length - 1;
+  		while (a < c) {
+  			rotateEdge(matrix, a++, b++, c--, d--);
+  		}
+  	}
+  	public static void rotateEdge(int[][] m, int a, int b, int c, int d) {
+  		int tmp = 0;
+  		for (int i = 0; i < d - b; i++) {
+  			tmp = m[a][b + i];
+  			m[a][b + i] = m[c - i][b];
+  			m[c - i][b] = m[c][d - i];
+  			m[c][d - i] = m[a + i][d];
+  			m[a + i][d] = tmp;
+  		}
+  	}
+  ```
+
+  
+
+#### printMatrixSpiralOrder
+
+- 链接：暂无
+
+- 内容：
+
+  > 给你一个二维数组 ，要你以螺旋式打印出结果
+  >
+  > a b c d e
+  >
+  > f g  h i  j
+  >
+  > k l  m n o
+  >
+  > p q r s t
+  >
+  > =>
+  >
+  > a b c d e j o t s r q p k f g h i n m l
+
+- 思路：
+
+  > 每一层运行完后，下一层的起点就是(0,0)(1,1)...
+  >
+  > 每次以向右运行，运行不动了向下，向下不动了向左，向左不动了，向上
+  >
+  > (0,0)->(0,n-1)->(m-1,n-1)->(m-1,0)->(1,0)
+  >
+  > (i,i)->(i,n-1-i)->(m-1-i,n-1-i)->(m-1-i,i)->(i+1,i)
+
+- 代码：
+
+  ```java
+  public static void spiralOrderPrint(int[][] matrix) {
+  		int tR = 0;
+  		int tC = 0;
+  		int dR = matrix.length - 1;
+  		int dC = matrix[0].length - 1;
+  		while (tR <= dR && tC <= dC) {
+  			printEdge(matrix, tR++, tC++, dR--, dC--);
+  		}
+  	}
+  
+  	public static void printEdge(int[][] m, int tR, int tC, int dR, int dC) {
+  		if (tR == dR) {
+  			for (int i = tC; i <= dC; i++) {
+  				System.out.print(m[tR][i] + " ");
+  			}
+  		} else if (tC == dC) {
+  			for (int i = tR; i <= dR; i++) {
+  				System.out.print(m[i][tC] + " ");
+  			}
+  		} else {
+  			int curC = tC;
+  			int curR = tR;
+  			while (curC != dC) {
+  				System.out.print(m[tR][curC] + " ");
+  				curC++;
+  			}
+  			while (curR != dR) {
+  				System.out.print(m[curR][dC] + " ");
+  				curR++;
+  			}
+  			while (curC != tC) {
+  				System.out.print(m[dR][curC] + " ");
+  				curC--;
+  			}
+  			while (curR != tR) {
+  				System.out.print(m[curR][tC] + " ");
+  				curR--;
+  			}
+  		}
+  	}
+  ```
+
+  
+
+#### printStar
+
+- 链接：暂无
+
+- 内容：
+
+  >按顺序规则打印二维表中的值
+  >
+  >0 0 0 0 0 0 
+  >
+  >0 0 0 0 0 0 
+  >
+  >0 0 0 0 0 0 
+  >
+  >0 0 0 0 0 0 
+  >
+  >0 0 0 0 0 0
+  >
+  >0 0 0 0 0 0
+  >
+  >=》
+  >
+  >1 1 1 1 1 1 
+  >
+  >0 0 0 0 0 1 
+  >
+  >0 2 2 2 0 1 
+  >
+  >0 2 0 2 0 1 
+  >
+  >0 2 0 0 0 1
+  >
+  >0 1 1 1 1 1
+
+- 思路：
+
+  > 按照环的打印规则
+  >
+  > 环最后有一个边不用，只需要打印三个边即可
+
+- 代码：
+
+  ```java
+  public static void printStar(int N) {
+  		int leftUp = 0;
+  		int rightDown = N - 1;
+  		char[][] m = new char[N][N];
+  		for (int i = 0; i < N; i++) {
+  			for (int j = 0; j < N; j++) {
+  				m[i][j] = ' ';
+  			}
+  		}
+  		while (leftUp <= rightDown) {
+  			set(m, leftUp, rightDown);
+  			leftUp += 2;
+  			rightDown -= 2;
+  		}
+  		for (int i = 0; i < N; i++) {
+  			for (int j = 0; j < N; j++) {
+  				System.out.print(m[i][j] + " ");
+  			}
+  			System.out.println();
+  		}
+  	}
+  
+  	public static void set(char[][] m, int leftUp, int rightDown) {
+  		for (int col = leftUp; col <= rightDown; col++) {
+  			m[leftUp][col] = '*';
+  		}
+  		for (int row = leftUp + 1; row <= rightDown; row++) {
+  			m[row][rightDown] = '*';
+  		}
+  		for (int col = rightDown - 1; col > leftUp; col--) {
+  			m[rightDown][col] = '*';
+  		}
+  		for (int row = rightDown - 1; row > leftUp + 1; row--) {
+  			m[row][leftUp + 1] = '*';
+  		}
+  	}
+  ```
+
+  
+
+#### zigZagPrintMatrix
+
+- 链接：暂无
+
+- 内容：
+
+  >按顺序规则打印二维表中的值
+  >
+  >0 0 0 0 0 0 
+  >
+  >0 0 0 0 0 0 
+  >
+  >0 0 0 0 0 0 
+  >
+  >=》
+  >
+  >1 2 3 4 5 6 
+  >
+  >2 3 4 5 6 7 
+  >
+  >3 4 5 6 7 8 
+
+- 思路：
+
+  > 从(0,0)开始打印，以对角线为对称轴的边界上的两点连成一线
+  >
+  > 从左下到右上，从右上到左下，依次进行打印
+  >
+  > 下面一直向下，不能向下了，则一直向右
+  >
+  > 上面一直向右，不能向右了，则一直向下
+
+- 代码：
+
+  ```java
+  public static void printMatrixZigZag(int[][] matrix) {
+  		int tR = 0;
+  		int tC = 0;
+  		int dR = 0;
+  		int dC = 0;
+  		int endR = matrix.length - 1;
+  		int endC = matrix[0].length - 1;
+  		boolean fromUp = false;
+  		while (tR != endR + 1) {
+  			printLevel(matrix, tR, tC, dR, dC, fromUp);
+  			tR = tC == endC ? tR + 1 : tR;
+  			tC = tC == endC ? tC : tC + 1;
+  			dC = dR == endR ? dC + 1 : dC;
+  			dR = dR == endR ? dR : dR + 1;
+  			fromUp = !fromUp;
+  		}
+  		System.out.println();
+  	}
+  
+  	public static void printLevel(int[][] m, int tR, int tC, int dR, int dC, boolean f) {
+  		if (f) {
+  			while (tR != dR + 1) {
+  				System.out.print(m[tR++][tC--] + " ");
+  			}
+  		} else {
+  			while (dR != tR - 1) {
+  				System.out.print(m[dR--][dC++] + " ");
+  			}
+  		}
+  	}
+  ```
+
+  
+
+
+
+## coding-for-great-offer 
 
 ### class35
 
