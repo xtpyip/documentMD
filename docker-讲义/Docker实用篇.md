@@ -752,12 +752,140 @@ vi index.html
 ③ 设置MySQL密码
 
 ```dockerfile
-docker run --name mysql5.7 -e MYSQL_ROOT_PASSWORD=10086 -v /tmp/mysql/conf/hmy.conf:/etc/mysql/conf.d/hmy.conf -v /tmp/mysql/data:/var/lib/mysql -p 3306:3306 -d mysql:5.7.25
+docker run --name mysql5.7 -e MYSQL_ROOT_PASSWORD=10086 
+-v /tmp/mysql/conf/hmy.conf:/etc/mysql/conf.d/hmy.conf -
+v /tmp/mysql/data:/var/lib/mysql 
+-p 3306:3306 -d mysql:5.7.25
+```
+
+### 2.3.7 案例-给redis挂载数据卷
+
+```sh
+[root@iZ0jl9a0ebi4sgccywfspvZ ~]# pwd
+/root
+mkdir docker
+cd docker
+mkdir redis
+cd redis
+mkdir conf
+mkdir data
+mkdir logs
+mkdir /usr/local/etc/redis
+cd /usr/local/etc/redis
+vim redis.conf
+```
+
+- redis.conf配置文件（可远程）
+
+```python
+bind 0.0.0.0
+protected-mode no
+port 6379
+tcp-backlog 511
+timeout 0
+tcp-keepalive 300
+daemonize no
+supervised no
+pidfile /var/run/redis_6379.pid
+loglevel notice
+logfile ""
+databases 16
+save 900 1
+save 300 10
+save 60 10000
+stop-writes-on-bgsave-error yes
+rdbcompression yes
+rdbchecksum yes
+dbfilename dump.rdb
+dir ./
+slave-serve-stale-data yes
+slave-read-only yes
+repl-diskless-sync-delay 5
+repl-disable-tcp-nodelay no
+slave-priority 100
+appendonly yes
+appendfilename "appendonly.aof"
+appendfsync everysec
+no-appendfsync-on-rewrite no
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+aof-load-truncated yes
+lua-time-limit 5000
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+latency-monitor-threshold 0
+notify-keyspace-events ""
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+list-max-ziplist-size -2
+list-compress-depth 0
+set-max-intset-entries 512
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+hll-sparse-max-bytes 3000
+activerehashing yes
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60
+hz 10
+aof-rewrite-incremental-fsync yes
+```
+
+```dockerfile
+docker run -p 6379:6379 --name redis 
+-v /data/redis/redis.conf:/etc/redis/redis.conf  
+-v /data/redis/data:/data 
+-d redis:5.0.14 redis-server /etc/redis/redis.conf --appendonly yes 
+--requirepass "Lcp10086."
 ```
 
 
 
-### 2.3.7.小结
+### 2.3.8 案例-给nacos挂载本地目录
+
+```shell
+$ mkdir -p /mydata/nacos/log/
+$ mkdir -p /mydata/nacos/conf/
+$ docker pull nacos/nacos-server:1.4.0
+$ docker run -p 8848:8848 --name nacos -d nacos/nacos-server:1.4.0
+$ docker cp nacos:/home/nacos/logs/ /mydata/nacos/
+$ docker cp nacos:/home/nacos/conf/ /mydata/nacos/
+$ docker rm -f nacos
+$ docker run -d --name nacos -p 8848:8848  -p 9848:9848 -p 9849:9849 --privileged=true -e JVM_XMS=256m -e JVM_XMX=256m -e MODE=standalone -v /mydata/nacos/logs/:/home/nacos/logs -v /mydata/nacos/conf/:/home/nacos/conf/ --restart=always nacos/nacos-server:1.4.0
+
+
+# 阿里云服务器要开放端口 8848 9848 9849 7848
+# 访问http://xx.xx.xx.xx:8848/nacos/index.html（因为这里是公网，我们把8848改一下端口）
+# $ docker run -d --name nacos00 -p 8800:8848  -p 9848:9848 -p 9849:9849 --privileged=true -e JVM_XMS=256m -e JVM_XMX=256m -e MODE=standalone -v /mydata/nacos/logs/:/home/nacos/logs -v /mydata/nacos/conf/:/home/nacos/conf/ --restart=always nacos/nacos-server:1.4.0
+# 开放8800端口
+```
+
+- 可以在这里自定义自己的数据库和其他配置
+
+```properties
+$ vim /mydata/nacos/conf/application.properties
+# application.properties 配置文件
+
+spring.datasource.platform=mysql
+db.num=1
+db.url.0=jdbc:mysql://localhost:3306/nacos-config?characterEncoding=utf8&connectTimeout=1000&socketTimeout=30000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+db.user=root
+db.password=root
+
+
+nacos.core.auth.system.type=nacos
+# nacos 鉴权默认为 false，打开鉴权配置：将 false 改为 true
+nacos.core.auth.enabled=true
+# 以下两个配置必须得有默认值
+nacos.core.auth.server.identity.key=example
+nacos.core.auth.server.identity.value=example
+# 自定义密钥串 (这里自定义的密钥串字符长度不要低于32位)
+nacos.core.auth.plugin.nacos.token.secret.key=123456789123456789123456789
+```
+
+
+
+### 2.3.9.小结
 
 docker run的命令中通过 -v 参数挂载文件或目录到容器中：
 
