@@ -431,6 +431,3705 @@
   
   ```
 
+
+
+### class03
+
+#### reverseList
+
+- 链接：暂无
+
+- 内容：
+
+  >反转单（双）链表
+
+- 思路：
+
+  > 对于任意一个节点，我们都可以通过这种方式来进行加节点。
+  >
+  > 所谓的反转链表，无非是使用头插法添加节点数据。
+  >
+  > 
+
+  ```java
+  // 链表节点
+  	public static class Node {
+  		public int value;
+  		public Node next;
+  		public Node(int data) {value = data;}
+  	}
+  	public static class DoubleNode {
+  		public int value;
+  		public DoubleNode last;
+  		public DoubleNode next;
+  		public DoubleNode(int data) {value = data;}
+  	}
+  ```
+
+- 代码：
+
+  ```java
+  // 单链表 头插法
+  	public static Node reverseLinkedList(Node head) {
+  		Node pre = null;
+  		Node next = null;
+  		while (head != null) {
+  			next = head.next;
+  			head.next = pre;
+  			pre = head;
+  			head = next;
+  		}
+  		return pre;
+  	}
+  // 双链表 头插法
+  	public static DoubleNode reverseDoubleList(DoubleNode head) {
+  		DoubleNode pre = null;
+  		DoubleNode next = null;
+  		while (head != null) {
+  			next = head.next;
+  			head.next = pre;
+  			head.last = next;
+  			pre = head;
+  			head = next;
+  		}
+  		return pre;
+  	}
+  ```
+
+  
+
+#### deleteGivenValue
+
+- 链接：暂无 
+
+- 内容：
+
+  > 删除值为给定value的节点（可能有多个）
+
+- 思路：
+
+  > 先找到第一个值不为value的节点，以此为head
+  >
+  > pre.next = cur.next (删除cur节点，cur.val = value)
+
+- 代码：
+
+  ```java
+  	public static class Node {
+  		public int value;
+  		public Node next;
+  		public Node(int data) {this.value = data;}
+  	}
+  	// head = removeValue(head, 2);
+  	public static Node removeValue(Node head, int num) {
+  		// head来到第一个不需要删的位置
+  		while (head != null) {
+  			if (head.value != num) {
+  				break;
+  			}
+  			head = head.next;
+  		}
+  		// 1 ) head == null
+  		// 2 ) head != null
+  		Node pre = head;
+  		Node cur = head;
+  		while (cur != null) {
+  			if (cur.value == num) {
+  				pre.next = cur.next;
+  			} else {
+  				pre = cur;
+  			}
+  			cur = cur.next;
+  		}
+  		return head;
+  	}
+  ```
+
+
+#### doubleEndsQueueToStackAndQueue
+
+- 链接：暂无
+
+- 内容：
+
+  > 使用双端队列实现栈与队列
+
+- 思路：
+
+  >栈是先进后出，队列是先进后出
+
+  ```java
+  public static class Node<T> {
+  		public T value;
+  		public Node<T> last;
+  		public Node<T> next;
+  		public Node(T data) {value = data;}
+  	}
+  
+  	public static class DoubleEndsQueue<T> {
+  		public Node<T> head;
+  		public Node<T> tail;
+  
+  		public void addFromHead(T value) { // 头插法
+  			Node<T> cur = new Node<T>(value);
+  			if (head == null) {
+  				head = cur;
+  				tail = cur;
+  			} else {
+  				cur.next = head;
+  				head.last = cur;
+  				head = cur;
+  			}
+  		}
+  
+  		public void addFromBottom(T value) { // 尾插法
+  			Node<T> cur = new Node<T>(value);
+  			if (head == null) {
+  				head = cur;
+  				tail = cur;
+  			} else {
+  				cur.last = tail;
+  				tail.next = cur;
+  				tail = cur;
+  			}
+  		}
+  
+  		public T popFromHead() { // 头删法
+  			if (head == null) {
+  				return null;
+  			}
+  			Node<T> cur = head;
+  			if (head == tail) {
+  				head = null;
+  				tail = null;
+  			} else {
+  				head = head.next;
+  				cur.next = null;
+  				head.last = null;
+  			}
+  			return cur.value;
+  		}
+  
+  		public T popFromBottom() { // 尾删法
+  			if (head == null) {
+  				return null;
+  			}
+  			Node<T> cur = tail;
+  			if (head == tail) {
+  				head = null;
+  				tail = null;
+  			} else {
+  				tail = tail.last;
+  				tail.next = null;
+  				cur.last = null;
+  			}
+  			return cur.value;
+  		}
+  
+  		public boolean isEmpty() { // 判断是否为空
+  			return head == null;
+  		}
+  
+  	}
+  
+  ```
+
+  
+
+- 代码：
+
+  ```java
+  	public static class MyStack<T> { // 自定义栈
+  		private DoubleEndsQueue<T> queue;
+  
+  		public MyStack() {
+  			queue = new DoubleEndsQueue<T>();
+  		}
+  
+  		public void push(T value) {
+  			queue.addFromHead(value);
+  		}
+  
+  		public T pop() {
+  			return queue.popFromHead();
+  		}
+  
+  		public boolean isEmpty() {
+  			return queue.isEmpty();
+  		}
+  
+  	}
+  
+  	public static class MyQueue<T> { // 自定义队列
+  		private DoubleEndsQueue<T> queue;
+  
+  		public MyQueue() {
+  			queue = new DoubleEndsQueue<T>();
+  		}
+  
+  		public void push(T value) {
+  			queue.addFromHead(value);
+  		}
+  
+  		public T poll() {
+  			return queue.popFromBottom();
+  		}
+  
+  		public boolean isEmpty() {
+  			return queue.isEmpty();
+  		}
+  
+  	}
+  ```
+
+  
+
+#### ringArray
+
+- 链接：暂无 
+
+- 内容：
+
+  > 实现一个环形队列
+
+- 思路：
+
+  > 使用首尾index，及size大小判断环是否满
+
+- 代码：
+
+  ```java
+  public static class MyQueue {
+  		private int[] arr;
+  		private int pushi;// end
+  		private int polli;// begin
+  		private int size;
+  		private final int limit;
+  
+  		public MyQueue(int limit) {
+  			arr = new int[limit];
+  			pushi = 0;
+  			polli = 0;
+  			size = 0;
+  			this.limit = limit;
+  		}
+  
+  		public void push(int value) {
+  			if (size == limit) {
+  				throw new RuntimeException("队列满了，不能再加了");
+  			}
+  			size++;
+  			arr[pushi] = value;
+  			pushi = nextIndex(pushi);
+  		}
+  
+  		public int pop() {
+  			if (size == 0) {
+  				throw new RuntimeException("队列空了，不能再拿了");
+  			}
+  			size--;
+  			int ans = arr[polli];
+  			polli = nextIndex(polli);
+  			return ans;
+  		}
+  
+  		public boolean isEmpty() {
+  			return size == 0;
+  		}
+  
+  		// 如果现在的下标是i，返回下一个位置
+  		private int nextIndex(int i) {
+  			return i < limit - 1 ? i + 1 : 0;
+  		}
+  
+  	}
+  ```
+
+  
+
+#### getMinStack
+
+- 链接：暂无
+
+- 内容：
+
+  > 实现一个数据结构，在O(1)时间内返回当前栈的最小值
+
+- 思路：
+
+  > 使用两个栈来存储数据，一个存储值，一个存储最小值
+
+- 代码：
+
+  ```java
+  	public static class MyStack1 {
+  		private Stack<Integer> stackData;
+  		private Stack<Integer> stackMin;
+  		public MyStack1() {stackData = new Stack<Integer>();stackMin = new Stack<Integer>();}
+  
+  		public void push(int newNum) {
+  			if (stackMin.isEmpty() || newNum <= this.getmin()) {
+  				stackMin.push(newNum);
+  			}
+  			stackData.push(newNum);
+  		}
+  
+  		public int pop() {
+  			if (stackData.isEmpty()) {
+  				throw new RuntimeException("Your stack is empty.");
+  			}
+  			int value = stackData.pop();
+  			if (value == getmin()) {
+  				stackMin.pop();
+  			}
+  			return value;
+  		}
+  
+  		public int getmin() {
+  			if (stackMin.isEmpty()) {
+  				throw new RuntimeException("Your stack is empty.");
+  			}
+  			return stackMin.peek();
+  		}
+  	}
+  ```
+
+  
+
+#### twoStacksImplementQueue
+
+- 链接：https://leetcode.cn/problems/implement-queue-using-stacks/submissions
+
+- 内容：
+
+  > 使用两个栈实现一个队列
+
+- 思路：
+
+  > 两个栈，一个用来添加值，一个用来弹出值
+  >
+  > 无论添加还是弹出，都要保证另一个栈是空的。
+
+- 代码：
+
+  ```java
+  	class MyQueue {
+          Stack<Integer> s1,s2;
+          public MyQueue() {
+              s1 = new Stack<>();
+              s2 = new Stack<>();
+          }
+  
+          public void push(int x) {
+              while (!s2.isEmpty()){
+                  s1.push(s2.pop());
+              }
+              s1.push(x);
+          }
+  
+          public int pop() {
+              while (!s1.isEmpty()) {
+                  s2.push(s1.pop());
+              }
+             return s2.pop();
+          }
+  
+          public int peek() {
+              while (!s1.isEmpty()) {
+                  s2.push(s1.pop());
+              }
+              return s2.peek();
+          }
+  
+          public boolean empty() {
+              return s1.isEmpty() && s2.isEmpty();
+          }
+      }
+  ```
+
+  
+
+#### twoQueueImplementStack
+
+- 链接：暂无
+
+- 内容：
+
+  > 使用两个队列实现一个栈
+
+- 思路：
+
+  > 两个队列
+  >
+  > 添加元素时q2添加后，将q1的元素全部添加，再把q2与q1互换
+  >
+  > 删除元素或top时，都是对q1进行操作。
+
+- 代码：
+
+  ```java
+  class MyStack {
+      Queue<Integer> queue1 = new LinkedList<>();
+      Queue<Integer> queue2 = new LinkedList<>();
+      public MyStack() {
+  
+      }
+      public void push(int x) {
+          queue2.offer(x);
+          while(!queue1.isEmpty()){
+              queue2.offer(queue1.poll());
+          }
+          Queue<Integer> temp = queue1;
+          queue1 = queue2;
+          queue2 = temp;
+      }
+      public int pop() {
+          return queue1.poll();
+      }
+      public int top() {
+          return queue1.peek();
+      }
+      public boolean empty() {
+          return queue1.isEmpty();
+      }
+  }
+  ```
+
+  
+
+#### getMax
+
+- 链接：暂无
+
+- 内容：
+
+  > 获取数组的最大值
+
+- 思路：
+
+  > 分治(递归)
+
+- 代码：
+
+  ```java
+  	// 求arr中的最大值
+  	public static int getMax(int[] arr) {
+  		return process(arr, 0, arr.length - 1);
+  	}
+  
+  	// arr[L..R]范围上求最大值  L ... R   N
+  	public static int process(int[] arr, int L, int R) {
+  		// arr[L..R]范围上只有一个数，直接返回，base case
+  		if (L == R) { 
+  			return arr[L];
+  		}
+  		// L...R 不只一个数
+  		// mid = (L + R) / 2
+  		int mid = L + ((R - L) >> 1); // 中点   	1
+  		int leftMax = process(arr, L, mid);
+  		int rightMax = process(arr, mid + 1, R);
+  		return Math.max(leftMax, rightMax);
+  	}
+  ```
+
+  
+
+### class04
+
+- 链接：暂无
+
+- 内容：
+
+  > 将一个数组进行排序
+
+- 思路：
+
+  > 归并排序（递归，迭代）
+
+- 代码：
+
+  ```java
+  	// 递归方法实现
+  	public static void mergeSort1(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return;
+  		}
+  		process(arr, 0, arr.length - 1);
+  	}
+  
+  	// 请把arr[L..R]排有序
+  	// l...r N
+  	// T(N) = 2 * T(N / 2) + O(N)
+  	// O(N * logN)
+  	public static void process(int[] arr, int L, int R) {
+  		if (L == R) { // base case
+  			return;
+  		}
+  		int mid = L + ((R - L) >> 1);
+  		process(arr, L, mid);
+  		process(arr, mid + 1, R);
+  		merge(arr, L, mid, R);
+  	}
+  
+  	public static void merge(int[] arr, int L, int M, int R) {
+  		int[] help = new int[R - L + 1];
+  		int i = 0;
+  		int p1 = L;
+  		int p2 = M + 1;
+  		while (p1 <= M && p2 <= R) {
+  			help[i++] = arr[p1] <= arr[p2] ? arr[p1++] : arr[p2++];
+  		}
+  		// 要么p1越界了，要么p2越界了
+  		while (p1 <= M) {
+  			help[i++] = arr[p1++];
+  		}
+  		while (p2 <= R) {
+  			help[i++] = arr[p2++];
+  		}
+  		for (i = 0; i < help.length; i++) {
+  			arr[L + i] = help[i];
+  		}
+  	}
+  	// 非递归方法实现(步长控制)
+  	public static void mergeSort2(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return;
+  		}
+  		int N = arr.length;
+  		// 步长
+  		int mergeSize = 1;
+  		while (mergeSize < N) { // log N
+  			// 当前左组的，第一个位置
+  			int L = 0;
+  			while (L < N) {
+  				if (mergeSize >= N - L) {
+  					break;
+  				}
+  				int M = L + mergeSize - 1;
+  				int R = M + Math.min(mergeSize, N - M - 1);
+  				merge(arr, L, M, R);
+  				L = R + 1;
+  			}
+  			// 防止溢出
+  			if (mergeSize > N / 2) {
+  				break;
+  			}
+  			mergeSize <<= 1;
+  		}
+  	}
+  ```
+
+  
+
+#### smallSum
+
+- 链接：暂无
+
+- 内容：
+
+  > 将一个数组进行排序，并返回小和的数量。
+  >
+  > 小和： 134  ->  13 14 34有2 * 1+3 * 1
+
+- 思路：
+
+  > 归并排序（递归）
+
+- 代码：
+
+  ```java
+  	public static int smallSum(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return 0;
+  		}
+  		return process(arr, 0, arr.length - 1);
+  	}
+  
+  	// arr[L..R]既要排好序，也要求小和返回
+  	// 所有merge时，产生的小和，累加
+  	// 左 排序   merge
+  	// 右 排序  merge
+  	// merge
+  	public static int process(int[] arr, int l, int r) {
+  		if (l == r) {
+  			return 0;
+  		}
+  		// l < r
+  		int mid = l + ((r - l) >> 1);
+  		return 
+  				process(arr, l, mid) 
+  				+ 
+  				process(arr, mid + 1, r) 
+  				+ 
+  				merge(arr, l, mid, r);
+  	}
+  
+  	public static int merge(int[] arr, int L, int m, int r) {
+  		int[] help = new int[r - L + 1];
+  		int i = 0;
+  		int p1 = L;
+  		int p2 = m + 1;
+  		int res = 0;
+  		while (p1 <= m && p2 <= r) {
+  			res += arr[p1] < arr[p2] ? (r - p2 + 1) * arr[p1] : 0;
+  			help[i++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
+  		}
+  		while (p1 <= m) {
+  			help[i++] = arr[p1++];
+  		}
+  		while (p2 <= r) {
+  			help[i++] = arr[p2++];
+  		}
+  		for (i = 0; i < help.length; i++) {
+  			arr[L + i] = help[i];
+  		}
+  		return res;
+  	}
+  ```
+
+  
+
+#### reversePair
+
+- 链接：暂无
+
+- 内容：
+
+  > 将一个数组进行排序，并返回逆序对的数量。
+  >
+  > 逆序对： 134  ->  共有0个逆序对
+  >
+  > ​				214  -> 21 一个逆序对
+
+- 思路：
+
+  > 归并排序（递归）
+
+- 代码：
+
+  ```java
+  public static int reverPairNumber(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return 0;
+  		}
+  		return process(arr, 0, arr.length - 1);
+  	}
+  
+  	// arr[L..R]既要排好序，也要求逆序对数量返回
+  	// 所有merge时，产生的逆序对数量，累加，返回
+  	// 左 排序 merge并产生逆序对数量
+  	// 右 排序 merge并产生逆序对数量
+  	public static int process(int[] arr, int l, int r) {
+  		if (l == r) {
+  			return 0;
+  		}
+  		// l < r
+  		int mid = l + ((r - l) >> 1);
+  		return process(arr, l, mid) + process(arr, mid + 1, r) + merge(arr, l, mid, r);
+  	}
+  
+  	public static int merge(int[] arr, int L, int m, int r) {
+  		int[] help = new int[r - L + 1];
+  		int i = help.length - 1;
+  		int p1 = m;
+  		int p2 = r;
+  		int res = 0;
+  		while (p1 >= L && p2 > m) {
+  			res += arr[p1] > arr[p2] ? (p2 - m) : 0;
+  			help[i--] = arr[p1] > arr[p2] ? arr[p1--] : arr[p2--];
+  		}
+  		while (p1 >= L) {
+  			help[i--] = arr[p1--];
+  		}
+  		while (p2 > m) {
+  			help[i--] = arr[p2--];
+  		}
+  		for (i = 0; i < help.length; i++) {
+  			arr[L + i] = help[i];
+  		}
+  		return res;
+  	}
+  
+  ```
+
+  
+
+#### biggerThanRightTwice
+
+- 链接：https://leetcode.cn/problems/reverse-pairs/
+
+- 内容：
+
+  > 将一个数组进行排序，并返回大于2 * 右侧值的数量。
+
+- 思路：
+
+  > 归并排序（递归）
+
+- 代码：
+
+  ```java
+  public static int reversePairs(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return 0;
+  		}
+  		return process(arr, 0, arr.length - 1);
+  	}
+  
+  	public static int process(int[] arr, int l, int r) {
+  		if (l == r) {
+  			return 0;
+  		}
+  		// l < r
+  		int mid = l + ((r - l) >> 1);
+  		return process(arr, l, mid) + process(arr, mid + 1, r) + merge(arr, l, mid, r);
+  	}
+  
+  	public static int merge(int[] arr, int L, int m, int r) {
+  		// [L....M] [M+1....R]
+  		int ans = 0;
+  		// 目前囊括进来的数，是从[M+1, windowR)
+  		int windowR = m + 1;
+  		for (int i = L; i <= m; i++) {
+  			while (windowR <= r && (long) arr[i] > (long) arr[windowR] * 2) {
+  				windowR++;
+  			}
+  			ans += windowR - m - 1;
+  		}
+  		int[] help = new int[r - L + 1];
+  		int i = 0;
+  		int p1 = L;
+  		int p2 = m + 1;
+  		while (p1 <= m && p2 <= r) {
+  			help[i++] = arr[p1] <= arr[p2] ? arr[p1++] : arr[p2++];
+  		}
+  		while (p1 <= m) {
+  			help[i++] = arr[p1++];
+  		}
+  		while (p2 <= r) {
+  			help[i++] = arr[p2++];
+  		}
+  		for (i = 0; i < help.length; i++) {
+  			arr[L + i] = help[i];
+  		}
+  		return ans;
+  	}
+  ```
+
+  
+
+### class05
+
+#### countOfRangeSum
+
+- 链接：https://leetcode.cn/problems/count-of-range-sum/
+
+- 内容：
+
+  > 返回所有子数组的值在[ lower, upper]内的数量
+
+- 思路：
+
+  > 归并排序（递归）+ 前缀和加速
+
+- 代码：
+
+  ```java
+  public static int countRangeSum(int[] nums, int lower, int upper) {
+  		if (nums == null || nums.length == 0) {
+  			return 0;
+  		}
+  		long[] sum = new long[nums.length];
+  		sum[0] = nums[0];
+  		for (int i = 1; i < nums.length; i++) {
+  			sum[i] = sum[i - 1] + nums[i];
+  		}
+  		return process(sum, 0, sum.length - 1, lower, upper);
+  	}
+  
+  	public static int process(long[] sum, int L, int R, int lower, int upper) {
+  		if (L == R) {
+  			return sum[L] >= lower && sum[L] <= upper ? 1 : 0;
+  		}
+  		int M = L + ((R - L) >> 1);
+  		return process(sum, L, M, lower, upper) + process(sum, M + 1, R, lower, upper)
+  				+ merge(sum, L, M, R, lower, upper);
+  	}
+  
+  	public static int merge(long[] arr, int L, int M, int R, int lower, int upper) {
+  		int ans = 0;
+  		int windowL = L;
+  		int windowR = L;
+  		// [windowL, windowR)
+  		for (int i = M + 1; i <= R; i++) {
+  			long min = arr[i] - upper;
+  			long max = arr[i] - lower;
+  			while (windowR <= M && arr[windowR] <= max) {
+  				windowR++;
+  			}
+  			while (windowL <= M && arr[windowL] < min) {
+  				windowL++;
+  			}
+  			ans += windowR - windowL;
+  		}
+  		long[] help = new long[R - L + 1];
+  		int i = 0;
+  		int p1 = L;
+  		int p2 = M + 1;
+  		while (p1 <= M && p2 <= R) {
+  			help[i++] = arr[p1] <= arr[p2] ? arr[p1++] : arr[p2++];
+  		}
+  		while (p1 <= M) {
+  			help[i++] = arr[p1++];
+  		}
+  		while (p2 <= R) {
+  			help[i++] = arr[p2++];
+  		}
+  		for (i = 0; i < help.length; i++) {
+  			arr[L + i] = help[i];
+  		}
+  		return ans;
+  	}
+  ```
+
+  
+
+#### partitionAndQuickSort
+
+- 链接：https://leetcode.cn/problems/count-of-range-sum/
+
+- 内容：
+
+  > 快速排序
+
+- 思路：
+
+  > 快速排序，使用最右侧作划分值
+  >
+  > 快速排序+荷兰国旗
+  >
+  > 快速排序+荷兰国旗+随机数
+
+- 代码：
+
+  ```java
+  	public static void quickSort1(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return;
+  		}
+  		process1(arr, 0, arr.length - 1);
+  	}
+  
+  	public static void process1(int[] arr, int L, int R) {
+  		if (L >= R) {
+  			return;
+  		}
+  		// L..R partition arr[R] [ <=arr[R] arr[R] >arr[R] ]
+  		int M = partition(arr, L, R);
+  		process1(arr, L, M - 1);
+  		process1(arr, M + 1, R);
+  	}
+  	// arr[L..R]上，以arr[R]位置的数做划分值
+  	// <= X > X
+  	// <= X X
+  	public static int partition(int[] arr, int L, int R) {
+  		if (L > R) {
+  			return -1;
+  		}
+  		if (L == R) {
+  			return L;
+  		}
+  		int lessEqual = L - 1;
+  		int index = L;
+  		while (index < R) {
+  			if (arr[index] <= arr[R]) {
+  				swap(arr, index, ++lessEqual);
+  			}
+  			index++;
+  		}
+  		swap(arr, ++lessEqual, R);
+  		return lessEqual;
+  	}
+  	public static void swap(int[] arr, int i, int j) {
+  		int tmp = arr[i];
+  		arr[i] = arr[j];
+  		arr[j] = tmp;
+  	}
+  
+  // 2
+  	public static void quickSort2(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return;
+  		}
+  		process2(arr, 0, arr.length - 1);
+  	}
+  
+  	// arr[L...R] 排有序，快排2.0方式
+  	public static void process2(int[] arr, int L, int R) {
+  		if (L >= R) {
+  			return;
+  		}
+  		// [ equalArea[0]  ,  equalArea[0]]
+  		int[] equalArea = netherlandsFlag(arr, L, R);
+  		process2(arr, L, equalArea[0] - 1);
+  		process2(arr, equalArea[1] + 1, R);
+  	}
+  	// arr[L...R] 玩荷兰国旗问题的划分，以arr[R]做划分值
+  	// <arr[R] ==arr[R] > arr[R]
+  	public static int[] netherlandsFlag(int[] arr, int L, int R) {
+  		if (L > R) { // L...R L>R
+  			return new int[] { -1, -1 };
+  		}
+  		if (L == R) {
+  			return new int[] { L, R };
+  		}
+  		int less = L - 1; // < 区 右边界
+  		int more = R; // > 区 左边界
+  		int index = L;
+  		while (index < more) { // 当前位置，不能和 >区的左边界撞上
+  			if (arr[index] == arr[R]) {
+  				index++;
+  			} else if (arr[index] < arr[R]) {
+  //				swap(arr, less + 1, index);
+  //				less++;
+  //				index++;						
+  				swap(arr, index++, ++less);
+  			} else { // >
+  				swap(arr, index, --more);
+  			}
+  		}
+  		swap(arr, more, R); // <[R]   =[R]   >[R]
+  		return new int[] { less + 1, more };
+  	}
+  
+  	public static void quickSort3(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return;
+  		}
+  		process3(arr, 0, arr.length - 1);
+  	}
+  
+  	public static void process3(int[] arr, int L, int R) {
+  		if (L >= R) {
+  			return;
+  		}
+  		swap(arr, L + (int) (Math.random() * (R - L + 1)), R);
+  		int[] equalArea = netherlandsFlag(arr, L, R);
+  		process3(arr, L, equalArea[0] - 1);
+  		process3(arr, equalArea[1] + 1, R);
+  	}
+  ```
+
+### class06
+
+#### comparator
+
+- 略，java的比较器
+
+#### heapSort
+
+- 链接：暂无
+
+- 内容：
+
+  > 堆排序
+
+- 思路：
+
+  > 先让堆从下到上调整，再让头与最后一个数据更换后，再在这个堆上进行调整
+  >
+  > 1，先让整个数组都变成大根堆结构，建立堆的过程:
+  >
+  > ​	1)从上到下的方法，时间复杂度为O(N * logN)
+  >
+  >  	2)从下到上的方法，时间复杂度为O(N)
+  > 2，把堆的最大值和堆末尾的值交换，然后减少堆的大小之后，再去调整堆，一直周而复始,时间复杂度为O(N * logN)
+  >
+  > 3，堆的大小减小成0之后，排序完成
+
+- 代码：
+
+	```java
+        // 堆排序额外空间复杂度O(1)
+        public static void heapSort(int[] arr) {
+            if (arr == null || arr.length < 2) {
+                return;
+            }
+            // O(N*logN)
+    //		for (int i = 0; i < arr.length; i++) { // O(N)
+    //			heapInsert(arr, i); // O(logN)
+    //		}
+            // O(N)
+            for (int i = arr.length - 1; i >= 0; i--) {
+                heapify(arr, i, arr.length);
+            }
+            int heapSize = arr.length;
+            swap(arr, 0, --heapSize);
+            // O(N*logN)
+            while (heapSize > 0) { // O(N)
+                heapify(arr, 0, heapSize); // O(logN)
+                swap(arr, 0, --heapSize); // O(1)
+            }
+        }
+	
+        // arr[index]刚来的数，往上
+        public static void heapInsert(int[] arr, int index) {
+            while (arr[index] > arr[(index - 1) / 2]) {
+                swap(arr, index, (index - 1) / 2);
+                index = (index - 1) / 2;
+            }
+        }
+	
+        // arr[index]位置的数，能否往下移动
+        public static void heapify(int[] arr, int index, int heapSize) {
+            int left = index * 2 + 1; // 左孩子的下标
+            while (left < heapSize) { // 下方还有孩子的时候
+                // 两个孩子中，谁的值大，把下标给largest
+                // 1）只有左孩子，left -> largest
+                // 2) 同时有左孩子和右孩子，右孩子的值<= 左孩子的值，left -> largest
+                // 3) 同时有左孩子和右孩子并且右孩子的值> 左孩子的值， right -> largest
+                int largest = left + 1 < heapSize && arr[left + 1] > arr[left] ? left + 1 : left;
+                // 父和较大的孩子之间，谁的值大，把下标给largest
+                largest = arr[largest] > arr[index] ? largest : index;
+                if (largest == index) {
+                    break;
+                }
+                swap(arr, largest, index);
+                index = largest;
+                left = index * 2 + 1;
+            }
+        }
+	```
+
+
+
+#### sortArrayDistanceLessK
+
+- 链接：暂无
+
+- 内容：
+
+  > 已知一个几乎有序的数组。
+  >
+  > 几乎有序是指，如果把数组排好顺序的话，每个元素移动的距离一定不超过k，
+  >
+  > 并且k相对于数组长度来说是比较小的。
+  >
+  > 请选择一个合适的排序策略，对这个数组进行排序。
+
+- 思路：
+
+  > 【0，k】个元素确定第0个值，【1，k+1】确定第1个值...
+  >
+  > 创建一个长度为k的小根堆，每次堆满就pop一个值放入数组中，再添加一个值到小根堆中
+  >
+  > 最后若小根堆中还有值，则依次添加入数组中。
+
+- 代码：
+
+  ```java
+  	public static void sortedArrDistanceLessK(int[] arr, int k) {
+  		if (k == 0) {
+  			return;
+  		}
+  		// 默认小根堆
+  		PriorityQueue<Integer> heap = new PriorityQueue<>();
+  		int index = 0;
+  		// 0...K-1
+  		for (; index <= Math.min(arr.length - 1, k - 1); index++) {
+  			heap.add(arr[index]);
+  		}
+  		int i = 0;
+  		for (; index < arr.length; i++, index++) {
+  			heap.add(arr[index]);
+  			arr[i] = heap.poll();
+  		}
+  		while (!heap.isEmpty()) {
+  			arr[i++] = heap.poll();
+  		}
+  	}
+  
+  ```
+
+  
+
+### class07
+
+#### coverMax
+
+- 链接：暂无
+
+- 内容：
+
+  > 最大线段重合问题（用堆的实现)
+  >
+  > 给定很多线段，每个线段都有两个数[start, end],表示线段开始位置和结束位置，左右都是闭区间
+  >
+  > 规定︰
+  > 	1）线段的开始和结束位置一定都是整数值
+  >
+  > ​	2）线段重合区域的长度必须>=1
+  >
+  > 返回线段最多重合区域中，包含了几条线段。
+
+- 思路：
+
+  > 思路一：使用x + 0.5这个位置，任一线段的区间内包含x+0.5则一定有一条线段，把所有的x+0.5的最大值返回
+  >
+  > 思路二：排序（辅助类）+小根堆 当来到的新的线段，当堆顶<=起始位置时，说明要把堆中符合的数据弹出，再把当前线段的结尾加入，当前的最多重合区域包含的线段数即是堆的大小 
+  >
+  > 思路三：排序（二维数组）+小根堆 同思路二。
+
+- 代码：
+
+  ```java
+  	public static int maxCover1(int[][] lines) {
+  		int min = Integer.MAX_VALUE;
+  		int max = Integer.MIN_VALUE;
+  		for (int i = 0; i < lines.length; i++) {
+  			min = Math.min(min, lines[i][0]);
+  			max = Math.max(max, lines[i][1]);
+  		}
+  		int cover = 0;
+  		for (double p = min + 0.5; p < max; p += 1) {
+  			int cur = 0;
+  			for (int i = 0; i < lines.length; i++) {
+  				if (lines[i][0] < p && lines[i][1] > p) {
+  					cur++;
+  				}
+  			}
+  			cover = Math.max(cover, cur);
+  		}
+  		return cover;
+  	}
+  
+  	public static int maxCover2(int[][] m) {
+  		Line[] lines = new Line[m.length];
+  		for (int i = 0; i < m.length; i++) {
+  			lines[i] = new Line(m[i][0], m[i][1]);
+  		}
+  		Arrays.sort(lines, new StartComparator());
+  		// 小根堆，每一条线段的结尾数值，使用默认的
+  		PriorityQueue<Integer> heap = new PriorityQueue<>();
+  		int max = 0;
+  		for (int i = 0; i < lines.length; i++) {
+  			// lines[i] -> cur 在黑盒中，把<=cur.start 东西都弹出
+  			while (!heap.isEmpty() && heap.peek() <= lines[i].start) {
+  				heap.poll();
+  			}
+  			heap.add(lines[i].end);
+  			max = Math.max(max, heap.size());
+  		}
+  		return max;
+  	}
+  
+  	public static class Line {
+  		public int start;
+  		public int end;
+  
+  		public Line(int s, int e) {
+  			start = s;
+  			end = e;
+  		}
+  	}
+  
+  	public static class EndComparator implements Comparator<Line> {
+  
+  		@Override
+  		public int compare(Line o1, Line o2) {
+  			return o1.end - o2.end;
+  		}
+  
+  	}
+  
+  	// 和maxCover2过程是一样的
+  	// 只是代码更短
+  	// 不使用类定义的写法
+  	public static int maxCover3(int[][] m) {
+  		// m是二维数组，可以认为m内部是一个一个的一维数组
+  		// 每一个一维数组就是一个对象，也就是线段
+  		// 如下的code，就是根据每一个线段的开始位置排序
+  		// 比如, m = { {5,7}, {1,4}, {2,6} } 跑完如下的code之后变成：{ {1,4}, {2,6}, {5,7} }
+  		Arrays.sort(m, (a, b) -> (a[0] - b[0]));
+  		// 准备好小根堆，和课堂的说法一样
+  		PriorityQueue<Integer> heap = new PriorityQueue<>();
+  		int max = 0;
+  		for (int[] line : m) {
+  			while (!heap.isEmpty() && heap.peek() <= line[0]) {
+  				heap.poll();
+  			}
+  			heap.add(line[1]);
+  			max = Math.max(max, heap.size());
+  		}
+  		return max;
+  	}
+  ```
+
+  
+
+#### everyStepShowBoss
+
+- 链接：暂无
+
+- 内容：
+
+  > - 给定一个整型数组, int[] arr;和一个布尔类型数组, boolean[] op。
+  >   两个数组一定等长，假设长度为N, arr[i]表示客户编号，op[i]表示客户操作
+  >
+  > - arr = [ 3,3,1,2,1,2,5…
+  >   op =  [T,T, T,T,F,T,F…
+  >   依次表示∶3用户购买了一件商品，3用户购买了一件商品，1用户购买了一件商品，2用户购买了一件商品，1用户退货了一件商品，2用户购买了一件商品，5用户退货了一件商品…
+  >
+  > - 得奖系统的规则︰
+  >   - 1，如果某个用户购买商品数为0，但是又发生了退货事件，
+  >     则认为该事件无效，得奖名单和上一个事件发生后一致，例子中的5用户
+  >
+  >   - 2，某用户发生购买商品事件，购买商品数+1，发生退货事件，购买商品数-1
+  >
+  >   - 3，每次都是最多K个用户得奖，K也为传入的参数
+  >
+  >   - 4，得奖系统分为得奖区和候选区，任何用户只要购买数>0，一定在这两个区域中的一个
+  >
+  >   - 5，购买数最大的前K名用户进入得奖区，在最初时如果得奖区没有到达K个用户，那么新来的用户直接进入得奖区
+  >
+  >   - 6，如果购买数不足以进入得奖区的用户，进入候选区，如果根据全部规则，得奖人数确实不够K个，那就以不够的情况输出结果
+  >
+  >   - 7，如果候选区购买数最多的用户，已经足以进入得奖区，该用户就会替换得奖区中购买数最少的用户(大于才能替换)，如果得奖区中购买数最少的用户有多个，就替换最早进入得奖区的用户。如果候选区中购买数最多的用户有多个，机会会给最早进入候选区的用户
+  >
+  >   - 8，候选区和得奖区是两套时间，因用户只会在其中一个区域，所以只会有一个区域的时间，另一个没有从得奖区出来进入候选区的用户，得奖区时间删除，进入候选区的时间就是当前事件的时间(可以理解为arr[i]和op[i]中的i)从候选区出来进入得奖区的用户，候选区时间删除，进入得奖区的时间就是当前事件的时间（可以理解为arr[i]和op[i]中的i)
+  >
+  >   - 9，如果某用户购买数==0，不管在哪个区域都离开，区域时间删除。离开是指彻底离开，哪个区域也不会找到该用户。如果下次该用户又发生购买行为，产生>0的购买数，会再次根据之前规则回到某个区域中，进入区域的时间重记
+
+- 思路：
+
+  > 如流程表述，使用两个加强堆，一个是得将区指定长度为k为小根堆，一个是候选区无限长度为大根堆
+  >
+  > 当大根堆peek>得奖区peek，进行替换操作
+  >
+  > 触发**当大根堆peek>得奖区peek**条件的有这几个，得奖区退货，候选区买货
+
+- 代码：（几乎全是业务上的，主要运用了**加强堆**）
+
+  ```java
+  public static class Customer {
+  		public int id;
+  		public int buy;
+  		public int enterTime;
+  
+  		public Customer(int v, int b, int o) {
+  			id = v;
+  			buy = b;
+  			enterTime = 0;
+  		}
+  	}
+  
+  	public static class CandidateComparator implements Comparator<Customer> {
+  
+  		@Override
+  		public int compare(Customer o1, Customer o2) {
+  			return o1.buy != o2.buy ? (o2.buy - o1.buy) : (o1.enterTime - o2.enterTime);
+  		}
+  
+  	}
+  
+  	public static class DaddyComparator implements Comparator<Customer> {
+  
+  		@Override
+  		public int compare(Customer o1, Customer o2) {
+  			return o1.buy != o2.buy ? (o1.buy - o2.buy) : (o1.enterTime - o2.enterTime);
+  		}
+  
+  	}
+  
+  	public static class WhosYourDaddy {
+  		private HashMap<Integer, Customer> customers;
+  		private HeapGreater<Customer> candHeap;
+  		private HeapGreater<Customer> daddyHeap;
+  		private final int daddyLimit;
+  
+  		public WhosYourDaddy(int limit) {
+  			customers = new HashMap<Integer, Customer>();
+  			candHeap = new HeapGreater<>(new CandidateComparator());
+  			daddyHeap = new HeapGreater<>(new DaddyComparator());
+  			daddyLimit = limit;
+  		}
+  
+  		// 当前处理i号事件，arr[i] -> id,  buyOrRefund
+  		public void operate(int time, int id, boolean buyOrRefund) {
+  			if (!buyOrRefund && !customers.containsKey(id)) {
+  				return;
+  			}
+  			if (!customers.containsKey(id)) {
+  				customers.put(id, new Customer(id, 0, 0));
+  			}
+  			Customer c = customers.get(id);
+  			if (buyOrRefund) {
+  				c.buy++;
+  			} else {
+  				c.buy--;
+  			}
+  			if (c.buy == 0) {
+  				customers.remove(id);
+  			}
+  			if (!candHeap.contains(c) && !daddyHeap.contains(c)) {
+  				if (daddyHeap.size() < daddyLimit) {
+  					c.enterTime = time;
+  					daddyHeap.push(c);
+  				} else {
+  					c.enterTime = time;
+  					candHeap.push(c);
+  				}
+  			} else if (candHeap.contains(c)) {
+  				if (c.buy == 0) {
+  					candHeap.remove(c);
+  				} else {
+  					candHeap.resign(c);
+  				}
+  			} else {
+  				if (c.buy == 0) {
+  					daddyHeap.remove(c);
+  				} else {
+  					daddyHeap.resign(c);
+  				}
+  			}
+  			daddyMove(time);
+  		}
+  
+  		public List<Integer> getDaddies() {
+  			List<Customer> customers = daddyHeap.getAllElements();
+  			List<Integer> ans = new ArrayList<>();
+  			for (Customer c : customers) {
+  				ans.add(c.id);
+  			}
+  			return ans;
+  		}
+  
+  		private void daddyMove(int time) {
+  			if (candHeap.isEmpty()) {
+  				return;
+  			}
+  			if (daddyHeap.size() < daddyLimit) {
+  				Customer p = candHeap.pop();
+  				p.enterTime = time;
+  				daddyHeap.push(p);
+  			} else {
+  				if (candHeap.peek().buy > daddyHeap.peek().buy) {
+  					Customer oldDaddy = daddyHeap.pop();
+  					Customer newDaddy = candHeap.pop();
+  					oldDaddy.enterTime = time;
+  					newDaddy.enterTime = time;
+  					daddyHeap.push(newDaddy);
+  					candHeap.push(oldDaddy);
+  				}
+  			}
+  		}
+  
+  	}
+  
+  	public static List<List<Integer>> topK(int[] arr, boolean[] op, int k) {
+  		List<List<Integer>> ans = new ArrayList<>();
+  		WhosYourDaddy whoDaddies = new WhosYourDaddy(k);
+  		for (int i = 0; i < arr.length; i++) {
+  			whoDaddies.operate(i, arr[i], op[i]);
+  			ans.add(whoDaddies.getDaddies());
+  		}
+  		return ans;
+  	}
+  
+  	// 干完所有的事，模拟，不优化
+  	public static List<List<Integer>> compare(int[] arr, boolean[] op, int k) {
+  		HashMap<Integer, Customer> map = new HashMap<>();
+  		ArrayList<Customer> cands = new ArrayList<>();
+  		ArrayList<Customer> daddy = new ArrayList<>();
+  		List<List<Integer>> ans = new ArrayList<>();
+  		for (int i = 0; i < arr.length; i++) {
+  			int id = arr[i];
+  			boolean buyOrRefund = op[i];
+  			if (!buyOrRefund && !map.containsKey(id)) {
+  				ans.add(getCurAns(daddy));
+  				continue;
+  			}
+  			// 没有发生：用户购买数为0并且又退货了
+  			// 用户之前购买数是0，此时买货事件
+  			// 用户之前购买数>0， 此时买货
+  			// 用户之前购买数>0, 此时退货
+  			if (!map.containsKey(id)) {
+  				map.put(id, new Customer(id, 0, 0));
+  			}
+  			// 买、卖
+  			Customer c = map.get(id);
+  			if (buyOrRefund) {
+  				c.buy++;
+  			} else {
+  				c.buy--;
+  			}
+  			if (c.buy == 0) {
+  				map.remove(id);
+  			}
+  			// c
+  			// 下面做
+  			if (!cands.contains(c) && !daddy.contains(c)) {
+  				if (daddy.size() < k) {
+  					c.enterTime = i;
+  					daddy.add(c);
+  				} else {
+  					c.enterTime = i;
+  					cands.add(c);
+  				}
+  			}
+  			cleanZeroBuy(cands);
+  			cleanZeroBuy(daddy);
+  			cands.sort(new CandidateComparator());
+  			daddy.sort(new DaddyComparator());
+  			move(cands, daddy, k, i);
+  			ans.add(getCurAns(daddy));
+  		}
+  		return ans;
+  	}
+  
+  	public static void move(ArrayList<Customer> cands, ArrayList<Customer> daddy, int k, int time) {
+  		if (cands.isEmpty()) {
+  			return;
+  		}
+  		// 候选区不为空
+  		if (daddy.size() < k) {
+  			Customer c = cands.get(0);
+  			c.enterTime = time;
+  			daddy.add(c);
+  			cands.remove(0);
+  		} else { // 等奖区满了，候选区有东西
+  			if (cands.get(0).buy > daddy.get(0).buy) {
+  				Customer oldDaddy = daddy.get(0);
+  				daddy.remove(0);
+  				Customer newDaddy = cands.get(0);
+  				cands.remove(0);
+  				newDaddy.enterTime = time;
+  				oldDaddy.enterTime = time;
+  				daddy.add(newDaddy);
+  				cands.add(oldDaddy);
+  			}
+  		}
+  	}
+  
+  	public static void cleanZeroBuy(ArrayList<Customer> arr) {
+  		List<Customer> noZero = new ArrayList<Customer>();
+  		for (Customer c : arr) {
+  			if (c.buy != 0) {
+  				noZero.add(c);
+  			}
+  		}
+  		arr.clear();
+  		for (Customer c : noZero) {
+  			arr.add(c);
+  		}
+  	}
+  
+  	public static List<Integer> getCurAns(ArrayList<Customer> daddy) {
+  		List<Integer> ans = new ArrayList<>();
+  		for (Customer c : daddy) {
+  			ans.add(c.id);
+  		}
+  		return ans;
+  	}
+  ```
+
+  
+
+#### headGreater
+
+- 链接：暂无
+
+- 内容：
+
+  > 加强堆
+
+- 思路：
+
+  > 实现一个加强堆。
+  >
+  > heap 堆
+  >
+  > indexMap 堆的反向索引表
+  >
+  > heapSize 堆的长度
+  >
+  > comp 泛型T的比较器
+  >
+  > 
+
+- 代码：
+
+  ```java
+  public class HeapGreater<T> {
+  
+  	private ArrayList<T> heap;
+  	private HashMap<T, Integer> indexMap;
+  	private int heapSize;
+  	private Comparator<? super T> comp;
+  
+  	public HeapGreater(Comparator<? super T> c) {
+  		heap = new ArrayList<>();
+  		indexMap = new HashMap<>();
+  		heapSize = 0;
+  		comp = c;
+  	}
+  
+  	public boolean isEmpty() {
+  		return heapSize == 0;
+  	}
+  
+  	public int size() {
+  		return heapSize;
+  	}
+  
+  	public boolean contains(T obj) { // 是否包含这个T，直接用map判断
+  		return indexMap.containsKey(obj);
+  	}
+   
+  	public T peek() { // 堆顶，一直是list[0]
+  		return heap.get(0);
+  	}
+  
+  	public void push(T obj) { 
+          // list在末尾添加一个数据，并添加在反向索引表中，看此值与其父compare
+          // 若成功，则一直继续直到失败。成功了，则在list中把位置互换，在反向索引表中位置互换
+  		heap.add(obj);
+  		indexMap.put(obj, heapSize);
+  		heapInsert(heapSize++);
+  	}
+  
+  	public T pop() { 
+          // 弹出操作，先将list[0]与list[size-1]在list与索引表中互换，再在list和索引表中删除最后一个元素
+          // 然后将值从上到下进行调整，最后返回删除的值
+  		T ans = heap.get(0);
+  		swap(0, heapSize - 1);
+  		indexMap.remove(ans);
+  		heap.remove(--heapSize);
+  		heapify(0);
+  		return ans;
+  	}
+  
+  	public void remove(T obj) {
+          // 加强功能，删除任一obj
+          // 将删除的位置的值与最后的值的list与索引表中值互换，然后删除最后一个
+          // 在删除的位置进行重新的添加和调整(向上向下)操作
+  		T replace = heap.get(heapSize - 1);
+  		int index = indexMap.get(obj);
+  		indexMap.remove(obj);
+  		heap.remove(--heapSize);
+  		if (obj != replace) {
+  			heap.set(index, replace);
+  			indexMap.put(replace, index);
+  			resign(replace);
+  		}
+  	}
+  
+      // obj这个位置向上调整
+      // obj这个位置向下调整
+  	public void resign(T obj) {
+  		heapInsert(indexMap.get(obj));
+  		heapify(indexMap.get(obj));
+  	}
+  
+  	// 请返回堆上的所有元素
+  	public List<T> getAllElements() {
+  		List<T> ans = new ArrayList<>();
+  		for (T c : heap) {
+  			ans.add(c);
+  		}
+  		return ans;
+  	}
+  
+      // 在指定位置进行向上调整
+  	private void heapInsert(int index) {
+  		while (comp.compare(heap.get(index), heap.get((index - 1) / 2)) < 0) {
+  			swap(index, (index - 1) / 2);
+  			index = (index - 1) / 2;
+  		}
+  	}
+  
+      // 在index位置向下调整
+  	private void heapify(int index) {
+  		int left = index * 2 + 1;
+  		while (left < heapSize) {
+  			int best = left + 1 < heapSize && comp.compare(heap.get(left + 1), heap.get(left)) < 0 ? (left + 1) : left;
+  			best = comp.compare(heap.get(best), heap.get(index)) < 0 ? best : index;
+  			if (best == index) {
+  				break;
+  			}
+  			swap(best, index);
+  			index = best;
+  			left = index * 2 + 1;
+  		}
+  	}
+  
+      // 交换双方在list和索引表中的值
+  	private void swap(int i, int j) {
+  		T o1 = heap.get(i);
+  		T o2 = heap.get(j);
+  		heap.set(i, o2);
+  		heap.set(j, o1);
+  		indexMap.put(o2, i);
+  		indexMap.put(o1, j);
+  	}
+  
+  }
+  
+  ```
+
+  
+
+
+
+
+
+### class08
+
+#### trie
+
+- 链接：https://leetcode.cn/problems/implement-trie-ii-prefix-tree/
+
+- 内容：
+
+  > 前缀树。
+  
+- 思路：
+
+  > 数组实现，节点只存经过此节点的数量与以此节点结尾的数量。
+  >
+  > 字符值存在路径中。
+  
+- 代码：
+
+  ```java
+  	class Trie {
+  
+  		class Node {
+  			public int pass;
+  			public int end;
+  			public Node[] nexts;
+  
+  			public Node() {
+  				pass = 0;
+  				end = 0;
+  				nexts = new Node[26];
+  			}
+  		}
+  
+  		private Node root;
+  
+  		public Trie() {
+  			root = new Node();
+  		}
+  
+  		public void insert(String word) {
+  			if (word == null) {
+  				return;
+  			}
+  			char[] str = word.toCharArray();
+  			Node node = root;
+  			node.pass++;
+  			int path = 0;
+  			for (int i = 0; i < str.length; i++) { // 从左往右遍历字符
+  				path = str[i] - 'a'; // 由字符，对应成走向哪条路
+  				if (node.nexts[path] == null) {
+  					node.nexts[path] = new Node();
+  				}
+  				node = node.nexts[path];
+  				node.pass++;
+  			}
+  			node.end++;
+  		}
+  
+  		public void erase(String word) {
+  			if (countWordsEqualTo(word) != 0) {
+  				char[] chs = word.toCharArray();
+  				Node node = root;
+  				node.pass--;
+  				int path = 0;
+  				for (int i = 0; i < chs.length; i++) {
+  					path = chs[i] - 'a';
+  					if (--node.nexts[path].pass == 0) {
+  						node.nexts[path] = null;
+  						return;
+  					}
+  					node = node.nexts[path];
+  				}
+  				node.end--;
+  			}
+  		}
+  
+  		public int countWordsEqualTo(String word) {
+  			if (word == null) {
+  				return 0;
+  			}
+  			char[] chs = word.toCharArray();
+  			Node node = root;
+  			int index = 0;
+  			for (int i = 0; i < chs.length; i++) {
+  				index = chs[i] - 'a';
+  				if (node.nexts[index] == null) {
+  					return 0;
+  				}
+  				node = node.nexts[index];
+  			}
+  			return node.end;
+  		}
+  
+  		public int countWordsStartingWith(String pre) {
+  			if (pre == null) {
+  				return 0;
+  			}
+  			char[] chs = pre.toCharArray();
+  			Node node = root;
+  			int index = 0;
+  			for (int i = 0; i < chs.length; i++) {
+  				index = chs[i] - 'a';
+  				if (node.nexts[index] == null) {
+  					return 0;
+  				}
+  				node = node.nexts[index];
+  			}
+  			return node.pass;
+  		}
+  	}
+  
+  ```
+
+  
+
+#### countSort
+
+- 链接：暂无
+
+- 内容：
+
+  > 数量排序（非比较）。only for 0~200 value
+
+- 思路：
+
+  > 准备200容量的数组，每个数组arr[i]代表value为i的数量。
+
+- 代码：
+
+  ```java
+  	// only for 0~200 value
+  	public static void countSort(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return;
+  		}
+  		int max = Integer.MIN_VALUE;
+  		for (int i = 0; i < arr.length; i++) {
+  			max = Math.max(max, arr[i]);
+  		}
+  		int[] bucket = new int[max + 1];
+  		for (int i = 0; i < arr.length; i++) {
+  			bucket[arr[i]]++;
+  		}
+  		int i = 0;
+  		for (int j = 0; j < bucket.length; j++) {
+  			while (bucket[j]-- > 0) {
+  				arr[i++] = j;
+  			}
+  		}
+  	}
+  ```
+
+  
+
+#### radixSort
+
+- 链接：暂无
+
+- 内容：
+
+  > 基数（桶）排序，数据非负
+
+- 思路：
+
+  > 对每一位进行进桶出桶，最后的出桶顺序即是所求
+
+- 代码：
+
+  ```java
+  // only for no-negative value
+  	public static void radixSort(int[] arr) {
+  		if (arr == null || arr.length < 2) {
+  			return;
+  		}
+  		radixSort(arr, 0, arr.length - 1, maxbits(arr));
+  	}
+  
+  	public static int maxbits(int[] arr) {
+  		int max = Integer.MIN_VALUE;
+  		for (int i = 0; i < arr.length; i++) {
+  			max = Math.max(max, arr[i]);
+  		}
+  		int res = 0;
+  		while (max != 0) {
+  			res++;
+  			max /= 10;
+  		}
+  		return res;
+  	}
+  
+  	// arr[L..R]排序  ,  最大值的十进制位数digit
+  	public static void radixSort(int[] arr, int L, int R, int digit) {
+  		final int radix = 10;
+  		int i = 0, j = 0;
+  		// 有多少个数准备多少个辅助空间
+  		int[] help = new int[R - L + 1];
+  		for (int d = 1; d <= digit; d++) { // 有多少位就进出几次
+  			// 10个空间
+  		    // count[0] 当前位(d位)是0的数字有多少个
+  			// count[1] 当前位(d位)是(0和1)的数字有多少个
+  			// count[2] 当前位(d位)是(0、1和2)的数字有多少个
+  			// count[i] 当前位(d位)是(0~i)的数字有多少个
+  			int[] count = new int[radix]; // count[0..9]
+  			for (i = L; i <= R; i++) {
+  				// 103  1   3
+  				// 209  1   9
+  				j = getDigit(arr[i], d);
+  				count[j]++;
+  			}
+              // 为了使出桶顺序是以这个d位为基础的顺序
+  			for (i = 1; i < radix; i++) {
+  				count[i] = count[i] + count[i - 1];
+  			}
+  			for (i = R; i >= L; i--) {
+  				j = getDigit(arr[i], d);
+  				help[count[j] - 1] = arr[i];
+  				count[j]--;
+  			}
+  			for (i = L, j = 0; i <= R; i++, j++) {
+  				arr[i] = help[j];
+  			}
+  		}
+  	}
+  
+  	public static int getDigit(int x, int d) {
+  		return ((x / ((int) Math.pow(10, d - 1))) % 10);
+  	}
+  ```
+
+  
+
+#### shellSort
+
+- 链接：暂无
+
+- 内容：
+
+  > 希尔排序。
+
+- 思路：
+
+  > 以指定步长数据进行分批次处理，内部使用插入排序。
+  >
+  > 直到步长为1处理后结束。
+
+- 代码：
+
+  ```java
+   //希尔排序移动法
+      public static void shellSort(int[] arr) {
+          int count = 0;//记录第几轮排序
+          for (int gap = arr.length / 2; gap > 0; gap /= 2) {//gap为增量
+              for (int i = gap; i < arr.length; i++) {//按增量分组进行插入排序
+                  int index = i;
+                  int temp = arr[i];
+                  if (arr[index] < arr[index - gap]) {
+                      while (index - gap >= 0 && temp < arr[index - gap]) {
+                          arr[index] = arr[index - gap];
+                          index -= gap;
+                      }
+                      arr[index] = temp;
+                  }
+              }
+          }
+      }
+  ```
+
+  
+
+- 排序算法总结
+
+  > 1不基于比较的排序，对样本数据有严格要求，不易改写
+  > 2基于比较的排序，只要规定好两个样本怎么比大小就可以直接复用
+  > 3基于比较的排序，时间复杂度的极限是O(N*logN)
+  > 4时间复杂度O(N+logN)、额外空间复杂度低于O(N)、且稳定的基于比较的排序是不存在的。
+  > 5为了绝对的速度选快排、为了省空间选堆排、为了稳定性选归并
+
+### class09
+
+- 面试时链表解题的方法论
+
+  > 1)对于笔试，不用太在乎空间复杂度，一切为了时间复杂度
+  > 2)对于面试，时间复杂度依然放在第一位，但是一定要找到空间最省的方法
+
+- 链表面试题常用数据结构和技巧
+
+  > 1)使用容器(哈希表、数组等)
+  > 2)快慢指针
+
+#### LinkedListMid
+
+- 链接：暂无
+
+- 内容：
+
+  > 1)输入链表头节点，奇数长度返回中点，偶数长度返回上中点 midOrUpMidNode
+  > 2)输入链表头节点，奇数长度返回中点，偶数长度返回下中点 midOrDownMidNode
+  > 3)输入链表头节点，奇数长度返回中点前一个，偶数长度返回上中点前一个 midOrUpMidPreNode
+  > 4)输入链表头节点，奇数长度返回中点前一个，偶数长度返回下中点前一个 midOrDownMidPreNode
+
+- 思路：
+
+  > 快慢指针
+  
+- 代码：
+
+  ```java
+  public static class Node {
+  		public int value;
+  		public Node next;
+  
+  		public Node(int v) {
+  			value = v;
+  		}
+  	}
+  
+  	// head 头
+  	public static Node midOrUpMidNode(Node head) {
+  		if (head == null || head.next == null || head.next.next == null) {
+  			return head;
+  		}
+  		// 链表有3个点或以上
+  		Node slow = head.next;
+  		Node fast = head.next.next;
+  		while (fast.next != null && fast.next.next != null) {
+  			slow = slow.next;
+  			fast = fast.next.next;
+  		}
+  		return slow;
+  	}
+  
+  	public static Node midOrDownMidNode(Node head) {
+  		if (head == null || head.next == null) {
+  			return head;
+  		}
+  		Node slow = head.next;
+  		Node fast = head.next;
+  		while (fast.next != null && fast.next.next != null) {
+  			slow = slow.next;
+  			fast = fast.next.next;
+  		}
+  		return slow;
+  	}
+  
+  	public static Node midOrUpMidPreNode(Node head) {
+  		if (head == null || head.next == null || head.next.next == null) {
+  			return null;
+  		}
+  		Node slow = head;
+  		Node fast = head.next.next;
+  		while (fast.next != null && fast.next.next != null) {
+  			slow = slow.next;
+  			fast = fast.next.next;
+  		}
+  		return slow;
+  	}
+  
+  	public static Node midOrDownMidPreNode(Node head) {
+  		if (head == null || head.next == null) {
+  			return null;
+  		}
+  		if (head.next.next == null) {
+  			return head;
+  		}
+  		Node slow = head;
+  		Node fast = head.next;
+  		while (fast.next != null && fast.next.next != null) {
+  			slow = slow.next;
+  			fast = fast.next.next;
+  		}
+  		return slow;
+  	}
+  ```
+
+  
+
+#### IsPalindromeList
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一个单链表的头节点head，请判断该链表是否为回文结构。
+  > 1）哈希表方法特别简单（笔试用)
+  > 2）改原链表的方法就需要注意边界了（面试用)。
+
+- 思路：
+
+  > hash（栈）方法：略
+  >
+  > 改原链表：先找上中位点，将其reverse，后比较，再reverse回，返回结果
+
+- 代码：
+
+  ```java
+  // need n extra space
+  	public static boolean isPalindrome1(Node head) {
+  		Stack<Node> stack = new Stack<Node>();
+  		Node cur = head;
+  		while (cur != null) {
+  			stack.push(cur);
+  			cur = cur.next;
+  		}
+  		while (head != null) {
+  			if (head.value != stack.pop().value) {
+  				return false;
+  			}
+  			head = head.next;
+  		}
+  		return true;
+  	}
+  
+  	// need n/2 extra space
+  	public static boolean isPalindrome2(Node head) {
+  		if (head == null || head.next == null) {
+  			return true;
+  		}
+  		Node right = head.next;
+  		Node cur = head;
+  		while (cur.next != null && cur.next.next != null) {
+  			right = right.next;
+  			cur = cur.next.next;
+  		}
+  		Stack<Node> stack = new Stack<Node>();
+  		while (right != null) {
+  			stack.push(right);
+  			right = right.next;
+  		}
+  		while (!stack.isEmpty()) {
+  			if (head.value != stack.pop().value) {
+  				return false;
+  			}
+  			head = head.next;
+  		}
+  		return true;
+  	}	
+  // need O(1) extra space
+  	public static boolean isPalindrome3(Node head) {
+  		if (head == null || head.next == null) {
+  			return true;
+  		}
+  		Node n1 = head;
+  		Node n2 = head;
+  		while (n2.next != null && n2.next.next != null) { // find mid node
+  			n1 = n1.next; // n1 -> mid
+  			n2 = n2.next.next; // n2 -> end
+  		}
+  		// n1 中点
+  		
+  		n2 = n1.next; // n2 -> right part first node
+  		n1.next = null; // mid.next -> null
+  		Node n3 = null;
+  		while (n2 != null) { // right part convert
+  			n3 = n2.next; // n3 -> save next node
+  			n2.next = n1; // next of right node convert
+  			n1 = n2; // n1 move
+  			n2 = n3; // n2 move
+  		}
+  		n3 = n1; // n3 -> save last node
+  		n2 = head;// n2 -> left first node
+  		boolean res = true;
+  		while (n1 != null && n2 != null) { // check palindrome
+  			if (n1.value != n2.value) {
+  				res = false;
+  				break;
+  			}
+  			n1 = n1.next; // left to mid
+  			n2 = n2.next; // right to mid
+  		}
+  		n1 = n3.next;
+  		n3.next = null;
+  		while (n1 != null) { // recover list
+  			n2 = n1.next;
+  			n1.next = n3;
+  			n3 = n1;
+  			n1 = n2;
+  		}
+  		return res;
+  	}
+  
+  ```
+
+  
+
+
+
+#### SmallerEqualBigger
+
+- 链接：暂无
+
+- 内容：
+
+  > 将单向链表按某值划分成左边小、中间相等、右边大的形式
+  > 1)把链表放入数组里，在数组上做partition(笔试用)
+  > 2)分成小、中、大三部分，再把各个部分之间串起来(面试用)。
+
+- 思路：
+
+  > 数组法：略
+  >
+  > 三链表法：尾接头(存在)，尾接头(存在)
+
+- 代码：
+
+  ```java
+  	public static Node listPartition1(Node head, int pivot) {
+  		if (head == null) {
+  			return head;
+  		}
+  		Node cur = head;
+  		int i = 0;
+  		while (cur != null) {
+  			i++;
+  			cur = cur.next;
+  		}
+  		Node[] nodeArr = new Node[i];
+  		i = 0;
+  		cur = head;
+  		for (i = 0; i != nodeArr.length; i++) {
+  			nodeArr[i] = cur;
+  			cur = cur.next;
+  		}
+  		arrPartition(nodeArr, pivot);
+  		for (i = 1; i != nodeArr.length; i++) {
+  			nodeArr[i - 1].next = nodeArr[i];
+  		}
+  		nodeArr[i - 1].next = null;
+  		return nodeArr[0];
+  	}
+  
+  	public static void arrPartition(Node[] nodeArr, int pivot) {
+  		int small = -1;
+  		int big = nodeArr.length;
+  		int index = 0;
+  		while (index != big) {
+  			if (nodeArr[index].value < pivot) {
+  				swap(nodeArr, ++small, index++);
+  			} else if (nodeArr[index].value == pivot) {
+  				index++;
+  			} else {
+  				swap(nodeArr, --big, index);
+  			}
+  		}
+  	}
+  
+  	public static void swap(Node[] nodeArr, int a, int b) {
+  		Node tmp = nodeArr[a];
+  		nodeArr[a] = nodeArr[b];
+  		nodeArr[b] = tmp;
+  	}
+  
+  	public static Node listPartition2(Node head, int pivot) {
+  		Node sH = null; // small head
+  		Node sT = null; // small tail
+  		Node eH = null; // equal head
+  		Node eT = null; // equal tail
+  		Node mH = null; // big head
+  		Node mT = null; // big tail
+  		Node next = null; // save next node
+  		// every node distributed to three lists
+  		while (head != null) {
+  			next = head.next;
+  			head.next = null;
+  			if (head.value < pivot) {
+  				if (sH == null) {
+  					sH = head;
+  					sT = head;
+  				} else {
+  					sT.next = head;
+  					sT = head;
+  				}
+  			} else if (head.value == pivot) {
+  				if (eH == null) {
+  					eH = head;
+  					eT = head;
+  				} else {
+  					eT.next = head;
+  					eT = head;
+  				}
+  			} else {
+  				if (mH == null) {
+  					mH = head;
+  					mT = head;
+  				} else {
+  					mT.next = head;
+  					mT = head;
+  				}
+  			}
+  			head = next;
+  		}
+  		// 小于区域的尾巴，连等于区域的头，等于区域的尾巴连大于区域的头
+  		if (sT != null) { // 如果有小于区域
+  			sT.next = eH;
+  			eT = eT == null ? sT : eT; // 下一步，谁去连大于区域的头，谁就变成eT
+  		}
+  		// 下一步，一定是需要用eT 去接 大于区域的头
+  		// 有等于区域，eT -> 等于区域的尾结点
+  		// 无等于区域，eT -> 小于区域的尾结点
+  		// eT 尽量不为空的尾巴节点
+  		if (eT != null) { // 如果小于区域和等于区域，不是都没有
+  			eT.next = mH;
+  		}
+  		return sH != null ? sH : (eH != null ? eH : mH);
+  	}
+  ```
+
+  
+
+
+
+#### CopyListWithRandom
+
+- 链接：https://leetcode.cn/problems/copy-list-with-random-pointer/
+
+- 内容：
+
+  > 给你一个长度为 `n` 的链表，每个节点包含一个额外增加的随机指针 `random` ，该指针可以指向链表中的任何节点或空节点。
+  >
+  > 构造这个链表的 **[深拷贝]**。 深拷贝应该正好由 `n` 个 **全新** 节点组成，其中每个新节点的值都设为其对应的原节点的值。新节点的 `next` 指针和 `random` 指针也都应指向复制链表中的新节点，并使原链表和复制链表中的这些指针能够表示相同的链表状态。**复制链表中的指针都不应指向原链表中的节点** 。
+  >
+  > 例如，如果原链表中有 `X` 和 `Y` 两个节点，其中 `X.random --> Y` 。那么在复制链表中对应的两个节点 `x` 和 `y` ，同样有 `x.random --> y` 。
+  >
+  > 返回复制链表的头节点。
+  >
+  > 用一个由 `n` 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 `[val, random_index]` 表示：
+  >
+  > - `val`：一个表示 `Node.val` 的整数。
+  > - `random_index`：随机指针指向的节点索引（范围从 `0` 到 `n-1`）；如果不指向任何节点，则为 `null` 。
+  >
+  > 你的代码 **只** 接受原链表的头节点 `head` 作为传入参数。。
+
+- 思路：
+
+  > hash法：略
+  >
+  > 链表法：先在每一个节点后加一个新的节点与其对应。
+  >
+  > 最后将每个节点的random与其后一个节点的random指向对应
+  >
+  > 最后断开节点之间的联系，保存新的节点链表。
+
+- 代码：
+
+  ```java
+  	public static Node copyRandomList1(Node head) {
+  		// key 老节点
+  		// value 新节点
+  		HashMap<Node, Node> map = new HashMap<Node, Node>();
+  		Node cur = head;
+  		while (cur != null) {
+  			map.put(cur, new Node(cur.val));
+  			cur = cur.next;
+  		}
+  		cur = head;
+  		while (cur != null) {
+  			// cur 老
+  			// map.get(cur) 新
+  			// 新.next ->  cur.next克隆节点找到
+  			map.get(cur).next = map.get(cur.next);
+  			map.get(cur).random = map.get(cur.random);
+  			cur = cur.next;
+  		}
+  		return map.get(head);
+  	}
+  
+  	public static Node copyRandomList2(Node head) {
+  		if (head == null) {
+  			return null;
+  		}
+  		Node cur = head;
+  		Node next = null;
+  		// 1 -> 2 -> 3 -> null
+  		// 1 -> 1' -> 2 -> 2' -> 3 -> 3'
+  		while (cur != null) {
+  			next = cur.next;
+  			cur.next = new Node(cur.val);
+  			cur.next.next = next;
+  			cur = next;
+  		}
+  		cur = head;
+  		Node copy = null;
+  		// 1 1' 2 2' 3 3'
+  		// 依次设置 1' 2' 3' random指针
+  		while (cur != null) {
+  			next = cur.next.next;
+  			copy = cur.next;
+  			copy.random = cur.random != null ? cur.random.next : null;
+  			cur = next;
+  		}
+  		Node res = head.next;
+  		cur = head;
+  		// 老 新 混在一起，next方向上，random正确
+  		// next方向上，把新老链表分离
+  		while (cur != null) {
+  			next = cur.next.next;
+  			copy = cur.next;
+  			cur.next = next;
+  			copy.next = next != null ? next.next : null;
+  			cur = next;
+  		}
+  		return res;
+  	}
+  ```
+
+  
+
+### class10
+
+#### FindFirstIntersectNode
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定两个可能有环也可能无环的单链表，头节点head1和head2。
+  >
+  > 请实现一个函数，如果两个链表相交，请返回相交的第一个节点。如果不相交，返回null
+  >
+  > 【要求】
+  >
+  > ​	如果两个链表长度之和为N，时间复杂度请达到O(N)，额外空间复杂度请达到O(1)。。
+
+- 思路：
+
+  > 两个链表是否相交，可以先判断是否有环，只有两个同时有环或无环，才可能相交。
+  >
+  > 1）无环，先得到各自的长度，长度长的那个先前进n-m，然后两个链表同时向后移动，当移动过程中两个链表的节点相等，则返回，直到最后都不相等则返回null。
+  >
+  > 2）有环，
+  >
+  > ​	1、得到各自到入环节点的距离，同1）思路
+  >
+  > ​	2、如果在入环前不存在，则在环内判断，一个在入环节点处，一个遍历其本身环内，直到一圈，若相等，则返回。最后，仍不相等，则返回null
+
+- 代码：
+
+  ```java
+  public static Node getIntersectNode(Node head1, Node head2) {
+  		if (head1 == null || head2 == null) {
+  			return null;
+  		}
+  		Node loop1 = getLoopNode(head1);
+  		Node loop2 = getLoopNode(head2);
+  		if (loop1 == null && loop2 == null) {
+  			return noLoop(head1, head2);
+  		}
+  		if (loop1 != null && loop2 != null) {
+  			return bothLoop(head1, loop1, head2, loop2);
+  		}
+  		return null;
+  	}
+  
+  	// 找到链表第一个入环节点，如果无环，返回null
+  	public static Node getLoopNode(Node head) {
+  		if (head == null || head.next == null || head.next.next == null) {
+  			return null;
+  		}
+  		// n1 慢  n2 快
+  		Node slow = head.next; // n1 -> slow
+  		Node fast = head.next.next; // n2 -> fast
+  		while (slow != fast) {
+  			if (fast.next == null || fast.next.next == null) {
+  				return null;
+  			}
+  			fast = fast.next.next;
+  			slow = slow.next;
+  		}
+  		// slow fast  相遇
+  		fast = head; // n2 -> walk again from head
+  		while (slow != fast) {
+  			slow = slow.next;
+  			fast = fast.next;
+  		}
+  		return slow;
+  	}
+  
+  	// 如果两个链表都无环，返回第一个相交节点，如果不想交，返回null
+  	public static Node noLoop(Node head1, Node head2) {
+  		if (head1 == null || head2 == null) {
+  			return null;
+  		}
+  		Node cur1 = head1;
+  		Node cur2 = head2;
+  		int n = 0;
+  		while (cur1.next != null) {
+  			n++;
+  			cur1 = cur1.next;
+  		}
+  		while (cur2.next != null) {
+  			n--;
+  			cur2 = cur2.next;
+  		}
+  		if (cur1 != cur2) {
+  			return null;
+  		}
+  		// n  :  链表1长度减去链表2长度的值
+  		cur1 = n > 0 ? head1 : head2; // 谁长，谁的头变成cur1
+  		cur2 = cur1 == head1 ? head2 : head1; // 谁短，谁的头变成cur2
+  		n = Math.abs(n);
+  		while (n != 0) {
+  			n--;
+  			cur1 = cur1.next;
+  		}
+  		while (cur1 != cur2) {
+  			cur1 = cur1.next;
+  			cur2 = cur2.next;
+  		}
+  		return cur1;
+  	}
+  
+  	// 两个有环链表，返回第一个相交节点，如果不想交返回null
+  	public static Node bothLoop(Node head1, Node loop1, Node head2, Node loop2) {
+  		Node cur1 = null;
+  		Node cur2 = null;
+  		if (loop1 == loop2) {
+  			cur1 = head1;
+  			cur2 = head2;
+  			int n = 0;
+  			while (cur1 != loop1) {
+  				n++;
+  				cur1 = cur1.next;
+  			}
+  			while (cur2 != loop2) {
+  				n--;
+  				cur2 = cur2.next;
+  			}
+  			cur1 = n > 0 ? head1 : head2;
+  			cur2 = cur1 == head1 ? head2 : head1;
+  			n = Math.abs(n);
+  			while (n != 0) {
+  				n--;
+  				cur1 = cur1.next;
+  			}
+  			while (cur1 != cur2) {
+  				cur1 = cur1.next;
+  				cur2 = cur2.next;
+  			}
+  			return cur1;
+  		} else {
+  			cur1 = loop1.next;
+  			while (cur1 != loop1) {
+  				if (cur1 == loop2) {
+  					return loop1;
+  				}
+  				cur1 = cur1.next;
+  			}
+  			return null;
+  		}
+  	}
+  ```
+
+  
+
+#### recursiveTraversalBT
+
+- 链接：暂无
+
+- 内容：
+
+  > 递归遍历二叉树。
+
+- 思路：
+
+  > 前中后序打印
+
+- 代码：
+
+  ```java
+  	// 先序打印所有节点
+  	public static void pre(Node head) {
+  		if (head == null) {
+  			return;
+  		}
+  		System.out.println(head.value);
+  		pre(head.left);
+  		pre(head.right);
+  	}
+  
+  	public static void in(Node head) {
+  		if (head == null) {
+  			return;
+  		}
+  		in(head.left);
+  		System.out.println(head.value);
+  		in(head.right);
+  	}
+  
+  	public static void pos(Node head) {
+  		if (head == null) {
+  			return;
+  		}
+  		pos(head.left);
+  		pos(head.right);
+  		System.out.println(head.value);
+  	}
+  ```
+
+#### unRecursiveTraversalBT
+
+- 链接：暂无
+
+- 内容：
+
+  > 非递归遍历二叉树。
+
+- 思路：
+
+  > 前中后序打印
+
+- 代码：
+
+  ```java
+  public static void pre(Node head) {
+  		System.out.print("pre-order: ");
+  		if (head != null) {
+  			Stack<Node> stack = new Stack<Node>();
+  			stack.push(head);
+  			while (!stack.isEmpty()) {
+  				head = stack.pop();
+  				System.out.print(head.value + " ");
+  				if (head.right != null) {
+  					stack.push(head.right);
+  				}
+  				if (head.left != null) {
+  					stack.push(head.left);
+  				}
+  			}
+  		}
+  		System.out.println();
+  	}
+  
+  	public static void in(Node cur) {
+  		System.out.print("in-order: ");
+  		if (cur != null) {
+  			Stack<Node> stack = new Stack<Node>();
+  			while (!stack.isEmpty() || cur != null) {
+  				if (cur != null) {
+  					stack.push(cur);
+  					cur = cur.left;
+  				} else {
+  					cur = stack.pop();
+  					System.out.print(cur.value + " ");
+  					cur = cur.right;
+  				}
+  			}
+  		}
+  		System.out.println();
+  	}
+  
+  	public static void pos1(Node head) {
+  		System.out.print("pos-order: ");
+  		if (head != null) {
+  			Stack<Node> s1 = new Stack<Node>();
+  			Stack<Node> s2 = new Stack<Node>();
+  			s1.push(head);
+  			while (!s1.isEmpty()) {
+  				head = s1.pop(); // 头 右 左
+  				s2.push(head);
+  				if (head.left != null) {
+  					s1.push(head.left);
+  				}
+  				if (head.right != null) {
+  					s1.push(head.right);
+  				}
+  			}
+  			// 左 右 头
+  			while (!s2.isEmpty()) {
+  				System.out.print(s2.pop().value + " ");
+  			}
+  		}
+  		System.out.println();
+  	}
+  
+  	public static void pos2(Node h) {
+  		System.out.print("pos-order: ");
+  		if (h != null) {
+  			Stack<Node> stack = new Stack<Node>();
+  			stack.push(h);
+  			Node c = null;
+  			while (!stack.isEmpty()) {
+  				c = stack.peek();
+  				if (c.left != null && h != c.left && h != c.right) {
+  					stack.push(c.left);
+  				} else if (c.right != null && h != c.right) {
+  					stack.push(c.right);
+  				} else {
+  					System.out.print(stack.pop().value + " ");
+  					h = c;
+  				}
+  			}
+  		}
+  		System.out.println();
+  	}
+  ```
+
+  
+
+### class11
+
+#### levelTraversalBT
+
+- 链接：暂无
+
+- 内容：
+
+  > 实现二叉树的按层遍历
+  > 1)其实就是宽度优先遍历，用队列
+  > 2)可以通过设置flag变量的方式，来发现某一层的结束（看题目)
+
+- 思路：
+
+  > 队列
+
+- 代码：
+
+  ```java
+  	public static void level(Node head) {
+  		if (head == null) {
+  			return;
+  		}
+  		Queue<Node> queue = new LinkedList<>();
+  		queue.add(head);
+  		while (!queue.isEmpty()) {
+  			Node cur = queue.poll();
+  			System.out.println(cur.value);
+  			if (cur.left != null) {
+  				queue.add(cur.left);
+  			}
+  			if (cur.right != null) {
+  				queue.add(cur.right);
+  			}
+  		}
+  	}
+  ```
+
+  
+
+
+
+
+
+#### serializeAndReconstructTree
+
+- 链接：暂无
+
+- 内容：
+
+  > 实现二叉树的序列化和反序列化
+  > 1)先序方式序列化和反序列化
+  > 2)按层方式序列化和反序列化。
+
+- 思路：
+
+  > 先序后序序列化与反序列化
+  >
+  > 层序列化与反序列化
+
+- 代码：
+
+  ```java
+  	public static Queue<String> preSerial(Node head) {
+  		Queue<String> ans = new LinkedList<>();
+  		pres(head, ans);
+  		return ans;
+  	}
+  
+  	public static void pres(Node head, Queue<String> ans) {
+  		if (head == null) {
+  			ans.add(null);
+  		} else {
+  			ans.add(String.valueOf(head.value));
+  			pres(head.left, ans);
+  			pres(head.right, ans);
+  		}
+  	}
+  
+  
+  	public static Queue<String> posSerial(Node head) {
+  		Queue<String> ans = new LinkedList<>();
+  		poss(head, ans);
+  		return ans;
+  	}
+  
+  	public static void poss(Node head, Queue<String> ans) {
+  		if (head == null) {
+  			ans.add(null);
+  		} else {
+  			poss(head.left, ans);
+  			poss(head.right, ans);
+  			ans.add(String.valueOf(head.value));
+  		}
+  	}
+  
+  	public static Node buildByPreQueue(Queue<String> prelist) {
+  		if (prelist == null || prelist.size() == 0) {
+  			return null;
+  		}
+  		return preb(prelist);
+  	}
+  
+  	public static Node preb(Queue<String> prelist) {
+  		String value = prelist.poll();
+  		if (value == null) {
+  			return null;
+  		}
+  		Node head = new Node(Integer.valueOf(value));
+  		head.left = preb(prelist);
+  		head.right = preb(prelist);
+  		return head;
+  	}
+  
+  	public static Node buildByPosQueue(Queue<String> poslist) {
+  		if (poslist == null || poslist.size() == 0) {
+  			return null;
+  		}
+  		// 左右中  ->  stack(中右左)
+  		Stack<String> stack = new Stack<>();
+  		while (!poslist.isEmpty()) {
+  			stack.push(poslist.poll());
+  		}
+  		return posb(stack);
+  	}
+  
+  	public static Node posb(Stack<String> posstack) {
+  		String value = posstack.pop();
+  		if (value == null) {
+  			return null;
+  		}
+  		Node head = new Node(Integer.valueOf(value));
+  		head.right = posb(posstack);
+  		head.left = posb(posstack);
+  		return head;
+  	}
+  
+  	public static Queue<String> levelSerial(Node head) {
+  		Queue<String> ans = new LinkedList<>();
+  		if (head == null) {
+  			ans.add(null);
+  		} else {
+  			ans.add(String.valueOf(head.value));
+  			Queue<Node> queue = new LinkedList<Node>();
+  			queue.add(head);
+  			while (!queue.isEmpty()) {
+  				head = queue.poll(); // head 父   子
+  				if (head.left != null) {
+  					ans.add(String.valueOf(head.left.value));
+  					queue.add(head.left);
+  				} else {
+  					ans.add(null);
+  				}
+  				if (head.right != null) {
+  					ans.add(String.valueOf(head.right.value));
+  					queue.add(head.right);
+  				} else {
+  					ans.add(null);
+  				}
+  			}
+  		}
+  		return ans;
+  	}
+  
+  	public static Node buildByLevelQueue(Queue<String> levelList) {
+  		if (levelList == null || levelList.size() == 0) {
+  			return null;
+  		}
+  		Node head = generateNode(levelList.poll());
+  		Queue<Node> queue = new LinkedList<Node>();
+  		if (head != null) {
+  			queue.add(head);
+  		}
+  		Node node = null;
+  		while (!queue.isEmpty()) {
+  			node = queue.poll();
+  			node.left = generateNode(levelList.poll());
+  			node.right = generateNode(levelList.poll());
+  			if (node.left != null) {
+  				queue.add(node.left);
+  			}
+  			if (node.right != null) {
+  				queue.add(node.right);
+  			}
+  		}
+  		return head;
+  	}
+  	public static Node generateNode(String val) {
+  		if (val == null) {
+  			return null;
+  		}
+  		return new Node(Integer.valueOf(val));
+  	}
+  ```
+
+#### encodeNaryTreeToBinaryTree
+
+- 链接：https://leetcode.cn/problems/encode-n-ary-tree-to-binary-tree
+
+- 内容：
+
+  > 将n叉树编码为二叉树。
+
+- 思路：
+
+  > 递归调用
+
+- 代码：
+
+  ```java
+  class Codec {
+  		// Encodes an n-ary tree to a binary tree.
+  		public TreeNode encode(Node root) {
+  			if (root == null) {
+  				return null;
+  			}
+  			TreeNode head = new TreeNode(root.val);
+  			head.left = en(root.children);
+  			return head;
+  		}
+  
+  		private TreeNode en(List<Node> children) {
+  			TreeNode head = null;
+  			TreeNode cur = null;
+  			for (Node child : children) {
+  				TreeNode tNode = new TreeNode(child.val);
+  				if (head == null) {
+  					head = tNode;
+  				} else {
+  					cur.right = tNode;
+  				}
+  				cur = tNode;
+  				cur.left = en(child.children);
+  			}
+  			return head;
+  		}
+  
+  		// Decodes your binary tree to an n-ary tree.
+  		public Node decode(TreeNode root) {
+  			if (root == null) {
+  				return null;
+  			}
+  			return new Node(root.val, de(root.left));
+  		}
+  
+  		public List<Node> de(TreeNode root) {
+  			List<Node> children = new ArrayList<>();
+  			while (root != null) {
+  				Node cur = new Node(root.val, de(root.left));
+  				children.add(cur);
+  				root = root.right;
+  			}
+  			return children;
+  		}
+  
+  	}
+  ```
+
+
+
+#### treeMaxWidth
+
+- 链接：暂无
+
+- 内容：
+
+  > 求二叉树最宽的层有多少个节点。
+
+- 思路：
+
+  > map法：略
+  >
+  > 队列法：层序遍历+size flag
+
+- 代码：
+
+  ```java
+  public static int maxWidthUseMap(Node head) {
+  		if (head == null) {
+  			return 0;
+  		}
+  		Queue<Node> queue = new LinkedList<>();
+  		queue.add(head);
+  		// key 在 哪一层，value
+  		HashMap<Node, Integer> levelMap = new HashMap<>();
+  		levelMap.put(head, 1);
+  		int curLevel = 1; // 当前你正在统计哪一层的宽度
+  		int curLevelNodes = 0; // 当前层curLevel层，宽度目前是多少
+  		int max = 0;
+  		while (!queue.isEmpty()) {
+  			Node cur = queue.poll();
+  			int curNodeLevel = levelMap.get(cur);
+  			if (cur.left != null) {
+  				levelMap.put(cur.left, curNodeLevel + 1);
+  				queue.add(cur.left);
+  			}
+  			if (cur.right != null) {
+  				levelMap.put(cur.right, curNodeLevel + 1);
+  				queue.add(cur.right);
+  			}
+  			if (curNodeLevel == curLevel) {
+  				curLevelNodes++;
+  			} else {
+  				max = Math.max(max, curLevelNodes);
+  				curLevel++;
+  				curLevelNodes = 1;
+  			}
+  		}
+  		max = Math.max(max, curLevelNodes);
+  		return max;
+  	}
+  
+  	public static int maxWidthNoMap(Node head) {
+  		if (head == null) {
+  			return 0;
+  		}
+  		Queue<Node> queue = new LinkedList<>();
+  		queue.add(head);
+  		Node curEnd = head; // 当前层，最右节点是谁
+  		Node nextEnd = null; // 下一层，最右节点是谁
+  		int max = 0;
+  		int curLevelNodes = 0; // 当前层的节点数
+  		while (!queue.isEmpty()) {
+  			Node cur = queue.poll();
+  			if (cur.left != null) {
+  				queue.add(cur.left);
+  				nextEnd = cur.left;
+  			}
+  			if (cur.right != null) {
+  				queue.add(cur.right);
+  				nextEnd = cur.right;
+  			}
+  			curLevelNodes++;
+  			if (cur == curEnd) {
+  				max = Math.max(max, curLevelNodes);
+  				curLevelNodes = 0;
+  				curEnd = nextEnd;
+  			}
+  		}
+  		return max;
+  	}
+  ```
+
+  
+
+
+
+#### successorNode
+
+- 链接：暂无
+
+- 内容：
+
+  > 给你二叉树中的某个节点，返回该节点的后继节点。
+
+- 思路：
+
+  > 有右子树，一定在右子树的最左节点上
+  >
+  > 无右子树，其后继是 某第一个节点为根的子树，该节点为其左子树中的节点
+
+- 代码：
+
+  ```java
+  public static class Node {
+  		public int value;
+  		public Node left;
+  		public Node right;
+  		public Node parent;
+  
+  		public Node(int data) {
+  			this.value = data;
+  		}
+  	}
+  
+  	public static Node getSuccessorNode(Node node) {
+  		if (node == null) {
+  			return node;
+  		}
+  		if (node.right != null) {
+  			return getLeftMost(node.right);
+  		} else { // 无右子树
+  			Node parent = node.parent;
+  			while (parent != null && parent.right == node) { // 当前节点是其父亲节点右孩子
+  				node = parent;
+  				parent = node.parent;
+  			}
+  			return parent;
+  		}
+  	}
+  
+  	public static Node getLeftMost(Node node) {
+  		if (node == null) {
+  			return node;
+  		}
+  		while (node.left != null) {
+  			node = node.left;
+  		}
+  		return node;
+  	}
+  ```
+
+  
+
+#### paperFolding
+
+- 链接：暂无
+
+- 内容：
+
+  > 请把一段纸条竖着放在桌子上，然后从纸条的下边向上方对折1次，压出折痕后展开。此时折痕是凹下去的，即折痕突起的方向指向纸条的背面。
+  >
+  > 如果从纸条的下边向上方连续对折2次，压出折痕后展开，此时有三条折痕，从上到下依次是下折痕、下折痕和上折痕。
+  >
+  > 给定一个输入参数N，代表纸条都从下边向上方连续对折N次。请从上到下打印所有折痕的方向。
+  >
+  > 例如:N=1时，打印: down N=2时，打印: down down up。
+
+- 思路：
+
+  > 单纯的二叉树的中序遍历问题
+
+- 代码：
+
+  ```java
+  public static void printAllFolds(int N) {
+  		process(1, N, true);
+  		System.out.println();
+  	}
+  
+  	// 当前你来了一个节点，脑海中想象的！
+  	// 这个节点在第i层，一共有N层，N固定不变的
+  	// 这个节点如果是凹的话，down = T
+  	// 这个节点如果是凸的话，down = F
+  	// 函数的功能：中序打印以你想象的节点为头的整棵树！
+  	public static void process(int i, int N, boolean down) {
+  		if (i > N) {
+  			return;
+  		}
+  		process(i + 1, N, true);
+  		System.out.print(down ? "凹 " : "凸 ");
+  		process(i + 1, N, false);
+  	}
+  ```
+
+  
+
+### class12
+
+#### isCBT
+
+- 链接：暂无
+
+- 内容：
+
+  > 判断一个二叉树是否为完全二叉树
+
+- 思路：
+
+  > 队列法 + null值
+  >
+  > 二叉树的递归套路
+
+- 代码：
+
+  ```java
+  public static boolean isCBT1(Node head) {
+  		if (head == null) {
+  			return true;
+  		}
+  		LinkedList<Node> queue = new LinkedList<>();
+  		// 是否遇到过左右两个孩子不双全的节点
+  		boolean leaf = false;
+  		Node l = null;
+  		Node r = null;
+  		queue.add(head);
+  		while (!queue.isEmpty()) {
+  			head = queue.poll();
+  			l = head.left;
+  			r = head.right;
+  			if (
+  			// 如果遇到了不双全的节点之后，又发现当前节点不是叶节点
+  			    (leaf && (l != null || r != null)) 
+  			    || 
+  			    (l == null && r != null)
+  
+  			) {
+  				return false;
+  			}
+  			if (l != null) {
+  				queue.add(l);
+  			}
+  			if (r != null) {
+  				queue.add(r);
+  			}
+  			if (l == null || r == null) {
+  				leaf = true;
+  			}
+  		}
+  		return true;
+  	}
+  
+  public static boolean isCBT2(Node head) {
+  		if (head == null) {
+  			return true;
+  		}
+  		return process(head).isCBT;
+  	}
+  
+  	// 对每一棵子树，是否是满二叉树、是否是完全二叉树、高度
+  	public static class Info {
+  		public boolean isFull;
+  		public boolean isCBT;
+  		public int height;
+  
+  		public Info(boolean full, boolean cbt, int h) {
+  			isFull = full;
+  			isCBT = cbt;
+  			height = h;
+  		}
+  	}
+  
+  	public static Info process(Node X) {
+  		if (X == null) {
+  			return new Info(true, true, 0);
+  		}
+  		Info leftInfo = process(X.left);
+  		Info rightInfo = process(X.right);
+  		
+  		
+  		
+  		int height = Math.max(leftInfo.height, rightInfo.height) + 1;
+  		
+  		
+  		boolean isFull = leftInfo.isFull 
+  				&& 
+  				rightInfo.isFull 
+  				&& leftInfo.height == rightInfo.height;
+  		
+  		
+  		boolean isCBT = false;
+  		if (isFull) {
+  			isCBT = true;
+  		} else { // 以x为头整棵树，不满
+  			if (leftInfo.isCBT && rightInfo.isCBT) {
+  				
+  				
+  				if (leftInfo.isCBT 
+  						&& rightInfo.isFull 
+  						&& leftInfo.height == rightInfo.height + 1) {
+  					isCBT = true;
+  				}
+  				if (leftInfo.isFull 
+  						&& 
+  						rightInfo.isFull 
+  						&& leftInfo.height == rightInfo.height + 1) {
+  					isCBT = true;
+  				}
+  				if (leftInfo.isFull 
+  						&& rightInfo.isCBT && leftInfo.height == rightInfo.height) {
+  					isCBT = true;
+  				}
+  				
+  				
+  			}
+  		}
+  		return new Info(isFull, isCBT, height);
+  	}
+  ```
+
+  
+
+
+
+#### isBST
+
+- 链接：暂无
+
+- 内容：
+
+  > 是否为搜索二叉树。
+
+- 思路：
+
+  > 思路一：转list
+  >
+  > 思路二：二叉树的递归套路
+
+- 代码：
+
+  ```java
+  	public static boolean isBST1(Node head) {
+  		if (head == null) {
+  			return true;
+  		}
+  		ArrayList<Node> arr = new ArrayList<>();
+  		in(head, arr);
+  		for (int i = 1; i < arr.size(); i++) {
+  			if (arr.get(i).value <= arr.get(i - 1).value) {
+  				return false;
+  			}
+  		}
+  		return true;
+  	}
+  
+  	public static void in(Node head, ArrayList<Node> arr) {
+  		if (head == null) {
+  			return;
+  		}
+  		in(head.left, arr);
+  		arr.add(head);
+  		in(head.right, arr);
+  	}
+  
+  	public static boolean isBST2(Node head) {
+  		if (head == null) {
+  			return true;
+  		}
+  		return process(head).isBST;
+  	}
+  
+  	public static class Info {
+  		public boolean isBST;
+  		public int max;
+  		public int min;
+  
+  		public Info(boolean i, int ma, int mi) {
+  			isBST = i;
+  			max = ma;
+  			min = mi;
+  		}
+  
+  	}
+  
+  	public static Info process(Node x) {
+  		if (x == null) {
+  			return null;
+  		}
+  		Info leftInfo = process(x.left);
+  		Info rightInfo = process(x.right);
+  		int max = x.value;
+  		if (leftInfo != null) {
+  			max = Math.max(max, leftInfo.max);
+  		}
+  		if (rightInfo != null) {
+  			max = Math.max(max, rightInfo.max);
+  		}
+  		int min = x.value;
+  		if (leftInfo != null) {
+  			min = Math.min(min, leftInfo.min);
+  		}
+  		if (rightInfo != null) {
+  			min = Math.min(min, rightInfo.min);
+  		}
+  		boolean isBST = true;
+  		if (leftInfo != null && !leftInfo.isBST) {
+  			isBST = false;
+  		}
+  		if (rightInfo != null && !rightInfo.isBST) {
+  			isBST = false;
+  		}
+  		if (leftInfo != null && leftInfo.max >= x.value) {
+  			isBST = false;
+  		}
+  		if (rightInfo != null && rightInfo.min <= x.value) {
+  			isBST = false;
+  		}
+  		return new Info(isBST, max, min);
+  	}
+  ```
+
+  
+
+#### isBalanced
+
+- 链接：暂无
+
+- 内容：
+
+  > 是否为平衡二叉树。
+
+- 思路：
+
+  > 思路一：递归
+  >
+  > 思路二：二叉树递归套路
+
+- 代码：
+
+  ```java
+  public static boolean isBalanced1(Node head) {
+  		boolean[] ans = new boolean[1];
+  		ans[0] = true;
+  		process1(head, ans);
+  		return ans[0];
+  	}
+  
+  	public static int process1(Node head, boolean[] ans) {
+  		if (!ans[0] || head == null) {
+  			return -1;
+  		}
+  		int leftHeight = process1(head.left, ans);
+  		int rightHeight = process1(head.right, ans);
+  		if (Math.abs(leftHeight - rightHeight) > 1) {
+  			ans[0] = false;
+  		}
+  		return Math.max(leftHeight, rightHeight) + 1;
+  	}
+  
+  	public static boolean isBalanced2(Node head) {
+  		return process(head).isBalanced;
+  	}
+  	
+  	public static class Info{
+  		public boolean isBalanced;
+  		public int height;
+  		
+  		public Info(boolean i, int h) {
+  			isBalanced = i;
+  			height = h;
+  		}
+  	}
+  	
+  	public static Info process(Node x) {
+  		if(x == null) {
+  			return new Info(true, 0);
+  		}
+  		Info leftInfo = process(x.left);
+  		Info rightInfo = process(x.right);
+  		int height = Math.max(leftInfo.height, rightInfo.height)  + 1;
+  		boolean isBalanced = true;
+  		if(!leftInfo.isBalanced) {
+  			isBalanced = false;
+  		}
+  		if(!rightInfo.isBalanced) {
+  			isBalanced = false;
+  		}
+  		if(Math.abs(leftInfo.height - rightInfo.height) > 1) {
+  			isBalanced = false;
+  		}
+  		return new Info(isBal);
+      }            
+  ```
+
+  
+
+
+
+#### isFull
+
+- 链接：暂无
+
+- 内容：
+
+  > 是否为满二叉树。
+
+- 思路：
+
+  > 思路一：统计高度及节点数量
+  >
+  > 思路二：二叉树的递归套路
+
+- 代码：
+
+  ```java
+  // 第一种方法
+  	// 收集整棵树的高度h，和节点数n
+  	// 只有满二叉树满足 : 2 ^ h - 1 == n
+  	public static boolean isFull1(Node head) {
+  		if (head == null) {
+  			return true;
+  		}
+  		Info1 all = process1(head);
+  		return (1 << all.height) - 1 == all.nodes;
+  	}
+  
+  	public static class Info1 {
+  		public int height;
+  		public int nodes;
+  
+  		public Info1(int h, int n) {
+  			height = h;
+  			nodes = n;
+  		}
+  	}
+  
+  	public static Info1 process1(Node head) {
+  		if (head == null) {
+  			return new Info1(0, 0);
+  		}
+  		Info1 leftInfo = process1(head.left);
+  		Info1 rightInfo = process1(head.right);
+  		int height = Math.max(leftInfo.height, rightInfo.height) + 1;
+  		int nodes = leftInfo.nodes + rightInfo.nodes + 1;
+  		return new Info1(height, nodes);
+  	}
+  
+  	// 第二种方法
+  	// 收集子树是否是满二叉树
+  	// 收集子树的高度
+  	// 左树满 && 右树满 && 左右树高度一样 -> 整棵树是满的
+  	public static boolean isFull2(Node head) {
+  		if (head == null) {
+  			return true;
+  		}
+  		return process2(head).isFull;
+  	}
+  
+  	public static class Info2 {
+  		public boolean isFull;
+  		public int height;
+  
+  		public Info2(boolean f, int h) {
+  			isFull = f;
+  			height = h;
+  		}
+  	}
+  
+  	public static Info2 process2(Node h) {
+  		if (h == null) {
+  			return new Info2(true, 0);
+  		}
+  		Info2 leftInfo = process2(h.left);
+  		Info2 rightInfo = process2(h.right);
+  		boolean isFull = leftInfo.isFull && rightInfo.isFull && leftInfo.height == rightInfo.height;
+  		int height = Math.max(leftInfo.height, rightInfo.height) + 1;
+  		return new Info2(isFull, height);
+  	}
+  ```
+
+  
+
+#### maxSubBSTSize
+
+- 链接：https://leetcode.cn/problems/largest-bst-subtree
+
+- 内容：
+
+  > 找到最大的子树为搜索二叉树的节点数返回
+
+- 思路：
+
+  > 二叉树的递归套路
+
+- 代码：
+
+  ```java
+  public static int largestBSTSubtree(TreeNode head) {
+  		if (head == null) {
+  			return 0;
+  		}
+  		return process(head).maxBSTSubtreeSize;
+  	}
+  
+  	public static class Info {
+  		public int maxBSTSubtreeSize;
+  		public int allSize;
+  		public int max;
+  		public int min;
+  
+  		public Info(int m, int a, int ma, int mi) {
+  			maxBSTSubtreeSize = m;
+  			allSize = a;
+  			max = ma;
+  			min = mi;
+  		}
+  	}
+  
+  	public static Info process(TreeNode x) {
+  		if (x == null) {
+  			return null;
+  		}
+  		Info leftInfo = process(x.left);
+  		Info rightInfo = process(x.right);
+  		int max = x.val;
+  		int min = x.val;
+  		int allSize = 1;
+  		if (leftInfo != null) {
+  			max = Math.max(leftInfo.max, max);
+  			min = Math.min(leftInfo.min, min);
+  			allSize += leftInfo.allSize;
+  		}
+  		if (rightInfo != null) {
+  			max = Math.max(rightInfo.max, max);
+  			min = Math.min(rightInfo.min, min);
+  			allSize += rightInfo.allSize;
+  		}
+  		int p1 = -1;
+  		if (leftInfo != null) {
+  			p1 = leftInfo.maxBSTSubtreeSize;
+  		}
+  		int p2 = -1;
+  		if (rightInfo != null) {
+  			p2 = rightInfo.maxBSTSubtreeSize;
+  		}
+  		int p3 = -1;
+  		boolean leftBST = leftInfo == null ? true : (leftInfo.maxBSTSubtreeSize == leftInfo.allSize);
+  		boolean rightBST = rightInfo == null ? true : (rightInfo.maxBSTSubtreeSize == rightInfo.allSize);
+  		if (leftBST && rightBST) {
+  			boolean leftMaxLessX = leftInfo == null ? true : (leftInfo.max < x.val);
+  			boolean rightMinMoreX = rightInfo == null ? true : (x.val < rightInfo.min);
+  			if (leftMaxLessX && rightMinMoreX) {
+  				int leftSize = leftInfo == null ? 0 : leftInfo.allSize;
+  				int rightSize = rightInfo == null ? 0 : rightInfo.allSize;
+  				p3 = leftSize + rightSize + 1;
+  			}
+  		}
+  		return new Info(Math.max(p1, Math.max(p2, p3)), allSize, max, min);
+  	}
+  ```
+
+  
+
+#### maxDistance
+
+- 链接：暂无
+
+- 内容：
+
+  > 给定一棵二叉树的头节点head，任何两个节点之间都存在距离，返回整棵二叉树的最大距离。
+
+- 思路：
+
+  > 思路一：记录每个节点及其父，遍历list，找到两个节点的最大值大的返回 
+  >
+  > 思路二：二叉树的递归套路
+
+- 代码：
+
+  ```java
+  	public static int maxDistance1(Node head) {
+  		if (head == null) {
+  			return 0;
+  		}
+  		ArrayList<Node> arr = getPrelist(head);
+  		HashMap<Node, Node> parentMap = getParentMap(head);
+  		int max = 0;
+  		for (int i = 0; i < arr.size(); i++) {
+  			for (int j = i; j < arr.size(); j++) {
+  				max = Math.max(max, distance(parentMap, arr.get(i), arr.get(j)));
+  			}
+  		}
+  		return max;
+  	}
+  
+  	public static ArrayList<Node> getPrelist(Node head) {
+  		ArrayList<Node> arr = new ArrayList<>();
+  		fillPrelist(head, arr);
+  		return arr;
+  	}
+  
+  	public static void fillPrelist(Node head, ArrayList<Node> arr) {
+  		if (head == null) {
+  			return;
+  		}
+  		arr.add(head);
+  		fillPrelist(head.left, arr);
+  		fillPrelist(head.right, arr);
+  	}
+  
+  	public static HashMap<Node, Node> getParentMap(Node head) {
+  		HashMap<Node, Node> map = new HashMap<>();
+  		map.put(head, null);
+  		fillParentMap(head, map);
+  		return map;
+  	}
+  
+  	public static void fillParentMap(Node head, HashMap<Node, Node> parentMap) {
+  		if (head.left != null) {
+  			parentMap.put(head.left, head);
+  			fillParentMap(head.left, parentMap);
+  		}
+  		if (head.right != null) {
+  			parentMap.put(head.right, head);
+  			fillParentMap(head.right, parentMap);
+  		}
+  	}
+  
+  	public static int distance(HashMap<Node, Node> parentMap, Node o1, Node o2) {
+  		HashSet<Node> o1Set = new HashSet<>();
+  		Node cur = o1;
+  		o1Set.add(cur);
+  		while (parentMap.get(cur) != null) {
+  			cur = parentMap.get(cur);
+  			o1Set.add(cur);
+  		}
+  		cur = o2;
+  		while (!o1Set.contains(cur)) {
+  			cur = parentMap.get(cur);
+  		}
+  		Node lowestAncestor = cur;
+  		cur = o1;
+  		int distance1 = 1;
+  		while (cur != lowestAncestor) {
+  			cur = parentMap.get(cur);
+  			distance1++;
+  		}
+  		cur = o2;
+  		int distance2 = 1;
+  		while (cur != lowestAncestor) {
+  			cur = parentMap.get(cur);
+  			distance2++;
+  		}
+  		return distance1 + distance2 - 1;
+  	}
+  
+  	public static int maxDistance2(Node head) {
+  		return process(head).maxDistance;
+  	}
+  
+  	public static class Info {
+  		public int maxDistance;
+  		public int height;
+  
+  		public Info(int m, int h) {
+  			maxDistance = m;
+  			height = h;
+  		}
+  
+  	}
+  
+  	public static Info process(Node x) {
+  		if (x == null) {
+  			return new Info(0, 0);
+  		}
+  		Info leftInfo = process(x.left);
+  		Info rightInfo = process(x.right);
+  		int height = Math.max(leftInfo.height, rightInfo.height) + 1;
+  		int p1 = leftInfo.maxDistance;
+  		int p2 = rightInfo.maxDistance;
+  		int p3 = leftInfo.height + rightInfo.height + 1;
+  		int maxDistance = Math.max(Math.max(p1, p2), p3);
+  		return new Info(maxDistance, height);
+  	}
+  ```
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### class28
 
 #### Manacher

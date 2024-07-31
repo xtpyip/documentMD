@@ -885,7 +885,43 @@ nacos.core.auth.plugin.nacos.token.secret.key=123456789123456789123456789
 
 
 
-### 2.3.9.小结
+### 2.3.9 案例-给rabbitmq创建
+
+```shell
+$ docker pull rabbitmq:3.8.1-management
+$ docker run -id --name=rabbitmq -p 5672:5672  -p 15672:15672 -e RABBITMQ_DEFAULT_USER=pyip -e RABBITMQ_DEFAULT_PASS=10086. rabbitmq:3.8.1-management
+```
+
+- 创建新用户，并为之分配管理员权限
+
+  ```shell
+  # 进入容器
+  [root@iZ0jl9a0ebi4sgccywfspvZ ~]# docker exec -it 95f bin/bash 
+  # 添加用户srbuser，密码为123456
+  root@95f133319c1e:/# rabbitmqctl add_user srbuser 123456
+  Adding user "srbuser" ...
+  # 为用户srbuser添加访问权限
+  root@95f133319c1e:/# rabbitmqctl set_permissions -p / srbuser ".*" ".*" ".*"
+  Setting permissions for user "srbuser" in vhost "/" ...
+  # 为用户添加管理员权限
+  root@95f133319c1e:/# rabbitmqctl set_user_tags srbuser administrator
+  Setting tags for user "srbuser" to [administrator] ...
+  # 展示所有的用户信息
+  root@95f133319c1e:/# rabbitmqctl list_users
+  Listing users ...
+  user    tags
+  srbuser [administrator]
+  pyip    [administrator]
+  
+  ```
+
+  
+
+- 
+
+
+
+### 2.3.10.小结
 
 docker run的命令中通过 -v 参数挂载文件或目录到容器中：
 
